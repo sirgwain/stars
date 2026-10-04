@@ -97,6 +97,12 @@ storage harmlessly. They don't change game behavior and should stay.
   measures `szT`. Display only. **Revert to:** `psz` (a wild pointer read in
   native).
 
+- **PszFromLong count pointer** (`utilgen.c`, marked `NATIVE`): the
+  original tested `*pcch` instead of `pcch` (`utilgen.c:462`; `PszFromInt`
+  tests the pointer). The report dumps pass NULL, so Win16 read, and could
+  write, DS:0. Native tests the pointer. **Revert to:** `*pcch != 0`
+  (a NULL dereference in native).
+
 ## Native record and message boundaries (keep)
 
 - **Player-message links** (`log.c` FWriteLogFile/FLoadLogFile and `msg.c`

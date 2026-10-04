@@ -556,7 +556,7 @@ char *PszFromLong(int32_t l, int16_t *pcch) {
     int16_t cch;
 
     cch = _wsprintf(szFormatNumber, PCTLD, l);
-    if (*pcch != 0) {
+    if (pcch) { /* NATIVE: the original tested *pcch and read DS:0 for NULL; see WIN16-PARITY.md. */
         *pcch = cch;
     }
     return szFormatNumber;
