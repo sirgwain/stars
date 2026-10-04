@@ -698,7 +698,7 @@ void DrawProductionDlg(HWND hwnd, HDC hdc, RECT *prc, int16_t iDraw) {
         GetWindowRect(GetDlgItem(hwnd, idc), &rc);
         ScreenToClient(hwnd, (POINT *)&rc);
         ScreenToClient(hwnd, (POINT *)&rc.right);
-        lSel = SendMessage(GetDlgItem(hwnd, idc), 1033, 0, 0);
+        lSel = SendMessage(GetDlgItem(hwnd, idc), LB_GETCURSEL, 0, 0);
         if (lSel >= 0 && (lSel != 0 || i != 1)) {
             if (i == 0) {
                 for (iSrc = 0; iSrc < cProdGlob && (pProdGlob[iSrc].cItem == 0 || lSel-- != 0); iSrc++) {

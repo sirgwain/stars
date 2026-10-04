@@ -2995,7 +2995,7 @@ void DumpPlanets() {
                 if (lppl->det == detAll) {
                     CalcPctSurvive(lppl, &pct, NULL);
                     pct = (float)((long double)1.0 - pct);
-                    _wsprintf(&szForm[1], "%ld\t%ld\t%d.%d%%", lppl->cMines, 0, lppl->cFactories, 0, LOWORD((int32_t)((long double)pct * 100)),
+                    _wsprintf(&szForm[1], "%ld\t%ld\t%d.%d%%", (int32_t)lppl->cMines, (int32_t)lppl->cFactories, LOWORD((int32_t)((long double)pct * 100)),
                               LOWORD((int32_t)((pct - (long double)(int16_t)LOWORD((int32_t)((long double)pct * 100)) / 100.0) * 10000)));
                 } else {
                     szForm[2] = '\t';

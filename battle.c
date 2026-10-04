@@ -244,17 +244,17 @@ INT_PTR CALLBACK BattlePlansDlg(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
             rglpbtlplan[idPlayer][iPlanSelDlg] = btlplan;
             break;
         case IDC_BATTLE_PLAN_PRIMARY_TARGET:
-            i = LOWORD(SendMessage(GetDlgItem(hwnd, GET_WM_COMMAND_ID(wParam, lParam)), 1031, 0, 0));
+            i = LOWORD(SendMessage(GetDlgItem(hwnd, GET_WM_COMMAND_ID(wParam, lParam)), CB_GETCURSEL, 0, 0));
             btlplan.mdTarget1 = i;
             fDirtyPlan = TRUE;
             break;
         case IDC_BATTLE_PLAN_SECONDARY_TARGET:
-            i = LOWORD(SendMessage(GetDlgItem(hwnd, GET_WM_COMMAND_ID(wParam, lParam)), 1031, 0, 0));
+            i = LOWORD(SendMessage(GetDlgItem(hwnd, GET_WM_COMMAND_ID(wParam, lParam)), CB_GETCURSEL, 0, 0));
             btlplan.mdTarget2 = i;
             fDirtyPlan = TRUE;
             break;
         case IDC_BATTLE_PLAN_ATTACK_WHO:
-            i = LOWORD(SendMessage(GetDlgItem(hwnd, GET_WM_COMMAND_ID(wParam, lParam)), 1031, 0, 0));
+            i = LOWORD(SendMessage(GetDlgItem(hwnd, GET_WM_COMMAND_ID(wParam, lParam)), CB_GETCURSEL, 0, 0));
             if (game.fSinglePlr) {
                 i = 3;
             } else if (i >= idPlayer + 4) {
@@ -264,7 +264,7 @@ INT_PTR CALLBACK BattlePlansDlg(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
             fDirtyPlan = TRUE;
             break;
         case IDC_BATTLE_PLAN_TACTIC:
-            i = LOWORD(SendMessage(GetDlgItem(hwnd, GET_WM_COMMAND_ID(wParam, lParam)), 1031, 0, 0));
+            i = LOWORD(SendMessage(GetDlgItem(hwnd, GET_WM_COMMAND_ID(wParam, lParam)), CB_GETCURSEL, 0, 0));
             btlplan.mdTactic = i;
             fDirtyPlan = TRUE;
             break;
