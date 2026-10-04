@@ -331,7 +331,7 @@ int16_t FGenerateTurn() {
             }
             remove(szT);
             if (i >= 0 && rgfNoXFile[i]) {
-                StarsCopyFile(szT, szBase);
+                StarsCopyFile(szBase, szT);
             } else {
                 rename(szBase, szT);
             }
