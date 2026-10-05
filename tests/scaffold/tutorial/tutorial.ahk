@@ -75,12 +75,14 @@ try {
         if StepCount > 1500
             throw Error("Exceeded 1500 actions without completing the tutorial")
         LogEvent("begin", StepName)
+        LogEvent("state-before", "sel=" state["selection"] " scan=" state.Get("scanSelection", "?") " shift=" state.Get("keyShift", "?"))
         before := state["turn"] "|" state["page"] "|" state["bold"] "|" state["selection"] "|" state["message"]
         RunInstruction(bold, state)
         Sleep 50
         CheckDialogs()
         after := ReadState()
         LogEvent("end", StepName)
+        LogEvent("state-after", "sel=" after["selection"] " scan=" after.Get("scanSelection", "?") " shift=" after.Get("keyShift", "?"))
         FileOpen(Artifacts "\last-state.txt", "w", "UTF-8-RAW").Write(WinGetText(StateHwnd))
         if before = after["turn"] "|" after["page"] "|" after["bold"] "|" after["selection"] "|" after["message"] {
             ; Some instruction sequences need several UI actions; their handlers
