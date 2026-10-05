@@ -15,29 +15,16 @@ jobs:
   tutorial:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
-    env:
-      # A new Wine 11 prefix offers to install Wine Mono and Gecko, which
-      # waits for an answer under Xvfb; the game needs neither.
-      WINEDLLOVERRIDES: 'mscoree,mshtml='
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      # WineHQ's current stable Wine, not Ubuntu 24.04's 9.0: under Wine 9.0
-      # the shift-click after the QuikLoad popup menu (2406, page 21) adds no
-      # waypoint, at v2.8.0 too. The tutorial passes under Wine 11.
       - name: Install Wine, MinGW and virtual display
         run: |
-          sudo dpkg --add-architecture i386
-          sudo mkdir -pm755 /etc/apt/keyrings
-          sudo wget -qO /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
-          sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
           sudo apt-get update
-          sudo apt-get install -y --install-recommends winehq-stable
-          sudo apt-get install -y gcc-mingw-w64-x86-64 cmake ninja-build xvfb xauth
-          wine --version
+          sudo apt-get install -y wine64 wine gcc-mingw-w64-x86-64 cmake ninja-build xvfb xauth
 
       - name: Walk every tutorial year
         run: xvfb-run -a -s '-screen 0 1600x1200x24' make tutorial TUTORIAL_ARGS='--build-preset mingw-release'

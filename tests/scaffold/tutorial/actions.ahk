@@ -59,6 +59,21 @@ WaitDialog(title, seconds := 10) {
     }
 }
 
+; SendModifier presses or releases Shift, Ctrl or Alt and waits until Wine
+; reports the new state. Under Xvfb, Wine can deliver a click before the
+; key event that preceded it, so the game saw shift-clicks as plain clicks
+; and the next plain click as a shift-click.
+SendModifier(modifier, down) {
+    static vks := Map("Shift", 0x10, "Ctrl", 0x11, "Alt", 0x12)
+    SendEvent "{" modifier (down ? " down}" : " up}")
+    deadline := A_TickCount + 2000
+    while ((DllCall("GetAsyncKeyState", "int", vks[modifier], "short") & 0x8000) != 0) != down {
+        if A_TickCount > deadline
+            throw Error(modifier (down ? " did not go down" : " did not come up"))
+        Sleep 10
+    }
+}
+
 ; ClickControl clicks an initialized, visible and enabled control by HWND.
 ClickControl(control, modifier := "") {
     control := Integer(control)
@@ -70,13 +85,13 @@ ClickControl(control, modifier := "") {
         throw Error("Cannot activate control's window")
     try {
         if modifier != "" {
-            SendEvent "{" modifier " down}"
+            SendModifier(modifier, true)
             Sleep 50
         }
         ControlClick control
     } finally {
         if modifier != ""
-            SendEvent "{" modifier " up}"
+            SendModifier(modifier, false)
     }
     Sleep 100
     ReadState()
@@ -166,7 +181,7 @@ ClickPoint(hwnd, x, y, modifier := "", button := "Left", count := 1) {
         throw Error("Click target is covered: " WinGetClass(hit) " " WinGetTitle(hit))
     try {
         if modifier != "" {
-            SendEvent "{" modifier " down}"
+            SendModifier(modifier, true)
             Sleep 50
         }
         MouseClick button, point[1], point[2], count, 0
@@ -174,7 +189,7 @@ ClickPoint(hwnd, x, y, modifier := "", button := "Left", count := 1) {
             Sleep 100
     } finally {
         if modifier != ""
-            SendEvent "{" modifier " up}"
+            SendModifier(modifier, false)
     }
     Sleep 50
     ReadState()
