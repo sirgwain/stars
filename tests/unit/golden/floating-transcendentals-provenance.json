@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-09",
+  "oracle": "MPFR 4.2.2; offline test tool only",
+  "method": "MPFR_RNDD and MPFR_RNDU bounds at 128 bits, doubling up to 4096; accept only identical nearest-even binary64 endpoints",
+  "seed": "53a27bcd01876f09",
+  "rows": 14000,
+  "rows_per_operation": 2000,
+  "operations": [
+    "sqrt",
+    "floor",
+    "hypot",
+    "atan2",
+    "sin",
+    "cos",
+    "pow"
+  ],
+  "domains": "sqrt: finite nonnegative binary64 bit patterns; pow: bases [0.5,1), exponents [-2048,2048); others: x [-32768,32768), y [-2048,2048)",
+  "generator": "tests/scaffold/softfloat_reference.c",
+  "generator_sha256_lf": "c7629583ddb1bda9d4198bbd276e324ce5f29bba0e468e0b87ca13ce5e1f676a",
+  "fixture": "floating-transcendentals.txt",
+  "fixture_sha256_lf": "fc1c3a6e1977e4d30ab5f56955ea8a7acc1f36726edccebee96c2433e021702a",
+  "update_policy": "Read only during tests; regenerate offline and review independently"
+}

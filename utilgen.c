@@ -582,7 +582,10 @@ int16_t FIntersectCircleLine(POINT16 ptL1, POINT16 ptL2, POINT16 ptC, int32_t r2
     dx2 = (uint32_t)(dx * dx);
     dy2 = (uint32_t)(dy * dy);
     if (dxdy > 500000 || dx2 > 500000 || dy2 > 500000) {
-        dxI = (double)(((long double)dxdy * (int16_t)(ptC.y - ptL1.y) + (long double)dx2 * ptC.x + (long double)dy2 * ptL1.x) / (dx2 + dy2));
+        dxI = Sf64ToI32(Sf64From80(
+            (Sf80Div((Sf80Add(Sf80Add(Sf80Mul(Sf80FromI32(dxdy), Sf80FromI32((int16_t)(ptC.y - ptL1.y))), Sf80Mul(Sf80FromI32(dx2), Sf80FromI32(ptC.x))),
+                              Sf80Mul(Sf80FromI32(dy2), Sf80FromI32(ptL1.x)))),
+                     Sf80FromI32((dx2 + dy2))))));
         xI = (int32_t)dxI;
     } else {
         xI = (int32_t)((int32_t)((uint32_t)(dxdy * (int16_t)(ptC.y - ptL1.y)) + (uint32_t)(dx2 * ptC.x) + (uint32_t)(dy2 * ptL1.x)) / (dx2 + dy2));
@@ -603,12 +606,12 @@ int16_t FIntersectCircleLine(POINT16 ptL1, POINT16 ptL2, POINT16 ptC, int32_t r2
     dxT = xI - ptL1.x;
     dyT = yI - ptL1.y;
     lT = (uint32_t)(dxT * dxT) + (uint32_t)(dyT * dyT);
-    dCtr = LOWORD((int32_t)sqrt((double)lT));
+    dCtr = LOWORD(Sf64ToI32(Sf64Sqrt(Sf64FromI32(lT))));
     lT = r2 - r2I;
     if (lT <= 0) {
         return FALSE;
     }
-    dOff = LOWORD((int32_t)sqrt((double)lT));
+    dOff = LOWORD(Sf64ToI32(Sf64Sqrt(Sf64FromI32(lT))));
     if (ptL1.x < ptL2.x) {
         if (xI < ptL1.x) {
             dCtr = -dCtr;

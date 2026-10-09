@@ -1,0 +1,30 @@
+0000 automatic route warp     0000000000000002
+0001 ETA                      1 year
+0002 distance long            0.0  Light Years
+0003 distance short           0.0  l.y.
+0004 automatic route warp     0000000000000002
+0005 ETA                      1 year
+0006 distance long            1.0  Light Years
+0007 distance short           1.0  l.y.
+0008 automatic route warp     0000000000000003
+0009 ETA                      1 year
+0010 distance long            5.0  Light Years
+0011 distance short           5.0  l.y.
+0012 automatic route warp     0000000000000003
+0013 ETA                      1 year
+0014 distance long            7.7  Light Years
+0015 distance short           7.7  l.y.
+0016 automatic route warp     0000000000000006
+0017 ETA                      3 years
+0018 distance long            80.1  Light Years
+0019 distance short           80.1  l.y.
+0020 automatic route warp     0000000000000006
+0021 ETA                      3 years
+0022 distance long            81.1  Light Years
+0023 distance short           81.1  l.y.
+0024 automatic route warp     0000000000000006
+0025 ETA                      4 years
+0026 distance long            111.80  Light Years
+0027 distance short           111.80  l.y.
+0028 tutorial scanner         0000000000000028
+0029 tutorial penetrating     0000000000000014

@@ -50,6 +50,11 @@ jobs:
           cmake --build dist/regression-build --parallel 2
           make save-cli
 
+      - name: Check that game arithmetic uses software floating point
+        run: |
+          python3 tests/scaffold/test_check_software_float.py --cc x86_64-w64-mingw32-gcc --objdump x86_64-w64-mingw32-objdump
+          python3 tests/scaffold/check_software_float.py --build dist/regression-build --objdump x86_64-w64-mingw32-objdump
+
       - name: Generate native checkpoints through turn 150
         env:
           WINEPREFIX: ${{ runner.temp }}/stars-regression

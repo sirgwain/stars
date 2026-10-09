@@ -47,14 +47,15 @@ detail in [WIN16-PARITY.md](WIN16-PARITY.md).
   and rounds with `LMulDiv`, which matches Win32 `MulDiv`. Every format in
   the string table formats the same through both.
 - **Platforms:** the game code (`common.h`) builds without Windows headers;
-  `stars-host` links it alone. Its turns match `stars.exe`'s where
-  `long double` is x87 extended precision: x86-64 Linux and macOS (on
-  Apple silicon, built for x86_64 and run by Rosetta). ARM's `long double`
-  is 64 bits (macOS) or 128 bits (Linux), so the rounding casts round
-  differently; CMake warns about such builds.
+  `stars-host` links it alone. Floating arithmetic now uses Berkeley
+  SoftFloat through `sfnum.h`, including software x87 extended precision.
+  Native `long double` is no longer a production requirement. ARM and
+  macOS still need their platform regression runs; see
+  [SOFTFLOAT-IMPLEMENTATION.md](SOFTFLOAT-IMPLEMENTATION.md).
 - **Toolchain parity (keep):** `qsort16` (`native.c`) reproduces the
-  Win16 CRT's tie order, and the x87 rounding casts to `double`/`float` are
-  deliberate, so don't simplify them.
+  Win16 CRT's tie order. The `Sf80` operations and explicit `Sf64From80` /
+  `Sf32From80` conversions preserve the former x87 rounding boundaries;
+  do not simplify or reassociate them.
 - **Warnings kept** (`-Wall -Wextra -Wno-unused-parameter`, 118):
   - **Unused-but-set (79):** debug-info locals the original also stores to,
     probably for asserts or debug output that was compiled out.

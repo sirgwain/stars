@@ -321,7 +321,7 @@ int32_t LInnateRaceHabitability(PLAYER *pplr) {
     int16_t pctTerra;
 
     plrT = rgplr[0];
-    lInnate = (double)0;
+    lInnate = Sf64FromI32(0);
     fTotalTerra = GetRaceGrbit(pplr, ibitRaceTT);
     rgplr[0] = *pplr;
     rgDelta[2] = 0;
@@ -362,7 +362,7 @@ int32_t LInnateRaceHabitability(PLAYER *pplr) {
                 rgSteps[i] = 11;
             }
         }
-        l3 = (double)0;
+        l3 = Sf64FromI32(0);
         for (i = 0; i < rgSteps[0]; i++) {
             if (i == 0 || rgSteps[0] <= 1) {
                 iTry = rgBase[0];
@@ -382,7 +382,7 @@ int32_t LInnateRaceHabitability(PLAYER *pplr) {
                 iTry = pplr->rgEnvVar[0] - iDelta;
             }
             pl.rgEnvVar[0] = iTry;
-            l2 = (double)0;
+            l2 = Sf64FromI32(0);
             for (j = 0; j < rgSteps[1]; j++) {
                 if (j == 0 || rgSteps[1] <= 1) {
                     iTry = rgBase[1];
@@ -445,26 +445,26 @@ int32_t LInnateRaceHabitability(PLAYER *pplr) {
                 } else {
                     l1 = (uint32_t)(l1 * 11);
                 }
-                l2 = (double)((long double)l1 + l2);
+                l2 = Sf64From80((Sf80Add(Sf80FromI32(l1), Sf80From64(l2))));
             }
             if (pplr->rgEnvVar[1] >= 0) {
-                l2 = (double)((long double)l2 * rgInc[1] / 100);
+                l2 = Sf64From80((Sf80Div(Sf80Mul(Sf80From64(l2), Sf80FromI32(rgInc[1])), Sf80FromI32(100))));
             } else {
-                l2 = (double)((long double)l2 * 11);
+                l2 = Sf64From80((Sf80Mul(Sf80From64(l2), Sf80FromI32(11))));
             }
-            l3 = (double)((long double)l3 + l2);
+            l3 = Sf64From80((Sf80Add(Sf80From64(l3), Sf80From64(l2))));
         }
         if (pplr->rgEnvVar[0] >= 0) {
-            l3 = (double)((long double)l3 * rgInc[0] / 100);
+            l3 = Sf64From80((Sf80Div(Sf80Mul(Sf80From64(l3), Sf80FromI32(rgInc[0])), Sf80FromI32(100))));
         } else {
-            l3 = (double)((long double)l3 * 11);
+            l3 = Sf64From80((Sf80Mul(Sf80From64(l3), Sf80FromI32(11))));
         }
-        lInnate = (double)((long double)lInnate + l3);
+        lInnate = Sf64From80((Sf80Add(Sf80From64(lInnate), Sf80From64(l3))));
     }
     if (pplr != rgplr) {
         rgplr[0] = plrT;
     }
-    return (int32_t)((long double)lInnate / 10.0 + 0.5);
+    return Sf80ToI32((Sf80Add(Sf80Div(Sf80From64(lInnate), Sf80From64(10.0)), Sf80From64(0.5))));
 }
 
 uint16_t IRaceChecksum(PLAYER *pplr) {

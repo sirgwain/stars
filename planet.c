@@ -412,7 +412,7 @@ int16_t PctPlanetDesirability(PLANET *lppl, int16_t iPlr) {
     if (pctNeg != 0) {
         return -LOWORD(pctNeg);
     }
-    pctPos = (int32_t)((long double)sqrt((double)((long double)pctPos / 3.0)) + 0.9);
+    pctPos = Sf80ToI32((Sf80Add(Sf80From64(Sf64Sqrt(Sf64From80((Sf80Div(Sf80FromI32(pctPos), Sf80From64(3.0)))))), Sf80From64(0.9))));
     pctPos = (int32_t)(pctPos * pctMod) / 10000;
     return LOWORD(pctPos);
 }
@@ -499,7 +499,7 @@ int16_t CMinesOperating(PLANET *lppl) {
         return 0;
     }
     if (GetRaceStat(&rgplr[iplr], rsMajorAdv) == raMacintosh) {
-        return LOWORD((int32_t)sqrt((double)lppl->rgwtMin[3]));
+        return LOWORD(Sf64ToI32(Sf64Sqrt(Sf64FromI32(lppl->rgwtMin[3]))));
     }
     cMines = lppl->cMines;
     cMinesOp = CMaxOperableMines(lppl, lppl->iPlayer, FALSE);
@@ -632,7 +632,11 @@ int16_t CResourcesAtPlanet(PLANET *lppl, int16_t iplr) {
         if (pctVal < 25) {
             pctVal = 25;
         }
-        cRes = LOWORD((int32_t)((long double)sqrt((double)((long double)lPop * iEnergy / iEff)) * pctVal / 10 + 0.999));
+        cRes = LOWORD(
+            Sf80ToI32((Sf80Add(Sf80Div(Sf80Mul(Sf80From64(Sf64Sqrt(Sf64From80((Sf80Div(Sf80Mul(Sf80FromI32(lPop), Sf80FromI32(iEnergy)), Sf80FromI32(iEff)))))),
+                                               Sf80FromI32(pctVal)),
+                                       Sf80FromI32(10)),
+                               Sf80From64(0.999)))));
         goto LFinishUp;
     }
     cRes = LOWORD((int32_t)(lPop / iEff));

@@ -386,7 +386,7 @@ char *PszFormatString(char *pszFormat, int16_t *pParamsReal) {
                 pchT = rgszMineField[*pParams];
                 goto FinishString;
             case 'P':
-                if ((long double)(int16_t)(*pParams / 100) >= (long double)10.0) {
+                if (Sf80Le(Sf80From64(10.0), Sf80FromI32((int16_t)(*pParams / 100)))) {
                     c = CchSprintf(pch, PCTDPCTPCT, *pParams / 100);
                 } else {
                     c = CchSprintf(pch, PCTDXPCTDPCTPCT, *pParams / 100, *pParams - *pParams / 100 * 100);

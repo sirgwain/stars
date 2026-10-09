@@ -794,7 +794,7 @@ void DropColonists() {
                 FLookupPlanet(idPlanet, &pl);
                 iplrOldOwner = pl.iPlayer;
                 CalcPctSurvive(&pl, &pctSurvive, NULL);
-                pctSurvive = (float)(pctSurvive + ((long double)1.0 - pctSurvive) / 4.0);
+                pctSurvive = Sf32From80((Sf80Add(Sf80From32(pctSurvive), Sf80Div((Sf80Sub(Sf80From64(1.0), Sf80From32(pctSurvive))), Sf80From64(4.0)))));
                 for (lpcdLook = lpcdCur; lpcdLook < lpcdMax; lpcdLook++) {
                     if (idPlanet == lpcdLook->idPlanetDst) {
                         if (GetRaceStat(&rgplr[lpcdLook->idPlr], rsMajorAdv) == raMacintosh && (!lpcdLook->fCanColonize || pl.iPlayer != iplrNone)) {
@@ -814,7 +814,7 @@ void DropColonists() {
                             } else {
                                 lPower = 110;
                             }
-                            lPower = (int32_t)((long double)((int32_t)(lpcdLook->cColonist * lPower) / 100) * pctSurvive);
+                            lPower = Sf80ToI32((Sf80Mul(Sf80FromI32(((int32_t)(lpcdLook->cColonist * lPower) / 100)), Sf80From32(pctSurvive))));
                             cPowerTot += lPower;
                             rgcPower[lpcdLook->idPlr] = rgcPower[lpcdLook->idPlr] + lPower;
                         }
@@ -831,14 +831,15 @@ void DropColonists() {
                     if (lDefensePower > cPowerTot) {
                         for (i = 0; i < 16; i++) {
                             if (rgcCol[i] != 0) {
-                                if ((long double)pctSurvive == (long double)1.0) {
+                                if (Sf80Eq(Sf80From32(pctSurvive), Sf80From64(1.0))) {
                                     FSendPlrMsg(i, idmColonistsDroppedMassacredGroundTroops, pl.id, LOWORD(rgcCol[i]), HIWORD(rgcCol[i]), pl.id,
                                                 pl.iPlayer | 0x30, 0, 0, 0);
                                     FSendPlrMsg(pl.iPlayer, idmGroundTroopsValiantlyDestroyedAttackingBarbarian, pl.id, pl.id, LOWORD(rgcCol[i]),
                                                 HIWORD(rgcCol[i]), i | 0x30, 0, 0, 0);
                                 } else {
                                     FSendPlrMsg(i, idmColonistsDroppedDestroyedPlanetaryDefensesRestMa, pl.id, LOWORD(rgcCol[i]), HIWORD(rgcCol[i]), pl.id,
-                                                (int32_t)(((long double)1.0 - pctSurvive) * 10000), pl.iPlayer | 0x30, 0, 0);
+                                                Sf80ToI32((Sf80Mul((Sf80Sub(Sf80From64(1.0), Sf80From32(pctSurvive))), Sf80FromI32(10000)))), pl.iPlayer | 0x30,
+                                                0, 0);
                                     FSendPlrMsg(pl.iPlayer, idmPlanetaryDefensesGroundTroopsDestroyedInvadingTr, pl.id, pl.id, LOWORD(rgcCol[i]),
                                                 HIWORD(rgcCol[i]), i | 0x30, 0, 0, 0);
                                 }
@@ -1279,7 +1280,7 @@ void UpdateGuesses() {
                 lppl->uDefGuess = 0;
             } else {
                 CalcPctSurvive(lppl, &pct, NULL);
-                l = 100 - (int32_t)((long double)pct * 100.0 + 0.5) + 4;
+                l = 100 - Sf80ToI32((Sf80Add(Sf80Mul(Sf80From32(pct), Sf80From64(100.0)), Sf80From64(0.5)))) + 4;
                 l = (int32_t)(l / 6);
                 if (l < 1) {
                     l = 1;

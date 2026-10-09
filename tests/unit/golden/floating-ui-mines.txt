@@ -1,0 +1,408 @@
+0000 UI text                  The Humanoids
+0001 UI text x                00000000000000be
+0002 UI text y                0000000000000032
+0003 UI text                  Owns 
+0004 UI text x                000000000000004c
+0005 UI text y                0000000000000058
+0006 UI text                  4
+0007 UI text x                0000000000000074
+0008 UI text y                0000000000000058
+0009 UI text                   planets.
+0010 UI text x                00000000000000a0
+0011 UI text y                0000000000000058
+0012 UI text                  Attains Tech 
+0013 UI text x                000000000000fff8
+0014 UI text y                000000000000006a
+0015 UI text                  8
+0016 UI text x                0000000000000020
+0017 UI text y                000000000000006a
+0018 UI text                  in 
+0019 UI text x                000000000000004c
+0020 UI text y                000000000000006a
+0021 UI text                  2
+0022 UI text x                0000000000000074
+0023 UI text y                000000000000006a
+0024 UI text                  fields.
+0025 UI text x                00000000000000a0
+0026 UI text y                000000000000006a
+0027 UI text                  Exceeds a score of 
+0028 UI text x                0000000000000050
+0029 UI text y                000000000000007c
+0030 UI text                  1000
+0031 UI text x                0000000000000078
+0032 UI text y                000000000000007c
+0033 UI text                  .
+0034 UI text x                00000000000000a0
+0035 UI text y                000000000000007c
+0036 UI text                  Exceeds second place score by 
+0037 UI text x                0000000000000050
+0038 UI text y                000000000000008e
+0039 UI text                  20%
+0040 UI text x                0000000000000078
+0041 UI text y                000000000000008e
+0042 UI text                  .
+0043 UI text x                00000000000000a0
+0044 UI text y                000000000000008e
+0045 UI text                  Has a production capacity of 
+0046 UI text x                000000000000004c
+0047 UI text y                00000000000000a0
+0048 UI text                  10
+0049 UI text x                0000000000000074
+0050 UI text y                00000000000000a0
+0051 UI text                  thousand.
+0052 UI text x                00000000000000a0
+0053 UI text y                00000000000000a0
+0054 UI text                  Owns 
+0055 UI text x                000000000000004c
+0056 UI text y                00000000000000b2
+0057 UI text                  10
+0058 UI text x                0000000000000074
+0059 UI text y                00000000000000b2
+0060 UI text                  capital ships.
+0061 UI text x                00000000000000a0
+0062 UI text y                00000000000000b2
+0063 UI text                  Has the highest score after 
+0064 UI text x                000000000000004c
+0065 UI text y                00000000000000c4
+0066 UI text                  30
+0067 UI text x                0000000000000074
+0068 UI text y                00000000000000c4
+0069 UI text                  years.
+0070 UI text x                00000000000000a0
+0071 UI text y                00000000000000c4
+0072 UI text                  Winner must meet 
+0073 UI text x                0000000000000008
+0074 UI text y                00000000000000dc
+0075 UI text                  0
+0076 UI text x                0000000000000030
+0077 UI text y                00000000000000dc
+0078 UI text                  of the above selected criteria.
+0079 UI text x                000000000000005c
+0080 UI text y                00000000000000dc
+0081 UI text                  At least 
+0082 UI text x                0000000000000008
+0083 UI text y                00000000000000ee
+0084 UI text                  30
+0085 UI text x                0000000000000030
+0086 UI text y                00000000000000ee
+0087 UI text                   years must pass before a winner is declared.
+0088 UI text x                000000000000005c
+0089 UI text y                00000000000000ee
+0090 UI text                  Location:  (1200, 1200)
+0091 UI text x                0000000000000056
+0092 UI text y                0000000000000006
+0093 UI text                  Field Type:  Standard
+0094 UI text x                0000000000000056
+0095 UI text y                0000000000000014
+0096 UI text                  Field Radius:  9 l.y. (99 mines)
+0097 UI text x                0000000000000056
+0098 UI text y                0000000000000022
+0099 UI text                  Decay rate:  10 / year
+0100 UI text x                0000000000000056
+0101 UI text y                0000000000000030
+0102 UI text                  Field: 1 of 1
+0103 UI text x                0000000000000056
+0104 UI text y                000000000000003e
+0105 ellipse left             00000000000000bf
+0106 ellipse top              00000000000000bf
+0107 ellipse right            00000000000000d2
+0108 ellipse bottom           00000000000000d2
+0109 ellipse left             00000000000000bf
+0110 ellipse top              00000000000000bf
+0111 ellipse right            00000000000000d2
+0112 ellipse bottom           00000000000000d2
+0113 redraw left              00000000000000bd
+0114 redraw top               00000000000000bd
+0115 redraw right             00000000000000d3
+0116 redraw bottom            00000000000000d3
+0117 UI text                  X: 1200
+0118 UI text x                0000000000000039
+0119 UI text y                00000000000001e6
+0120 UI text                  Y: 1200
+0121 UI text x                000000000000006b
+0122 UI text y                00000000000001e6
+0123 ellipse left             00000000000000bf
+0124 ellipse top              00000000000000bf
+0125 ellipse right            00000000000000d2
+0126 ellipse bottom           00000000000000d2
+0127 ellipse left             00000000000000bf
+0128 ellipse top              00000000000000bf
+0129 ellipse right            00000000000000d2
+0130 ellipse bottom           00000000000000d2
+0131 redraw left              00000000000000bd
+0132 redraw top               00000000000000bd
+0133 redraw right             00000000000000d3
+0134 redraw bottom            00000000000000d3
+0135 ellipse left             00000000000000bf
+0136 ellipse top              00000000000000bf
+0137 ellipse right            00000000000000d2
+0138 ellipse bottom           00000000000000d2
+0139 ellipse left             00000000000000bf
+0140 ellipse top              00000000000000bf
+0141 ellipse right            00000000000000d2
+0142 ellipse bottom           00000000000000d2
+0143 UI text                  Location:  (1200, 1200)
+0144 UI text x                0000000000000056
+0145 UI text y                0000000000000006
+0146 UI text                  Field Type:  Standard
+0147 UI text x                0000000000000056
+0148 UI text y                0000000000000014
+0149 UI text                  Field Radius:  10 l.y. (100 mines)
+0150 UI text x                0000000000000056
+0151 UI text y                0000000000000022
+0152 UI text                  Decay rate:  10 / year
+0153 UI text x                0000000000000056
+0154 UI text y                0000000000000030
+0155 UI text                  Field: 1 of 1
+0156 UI text x                0000000000000056
+0157 UI text y                000000000000003e
+0158 ellipse left             00000000000000be
+0159 ellipse top              00000000000000be
+0160 ellipse right            00000000000000d3
+0161 ellipse bottom           00000000000000d3
+0162 ellipse left             00000000000000be
+0163 ellipse top              00000000000000be
+0164 ellipse right            00000000000000d3
+0165 ellipse bottom           00000000000000d3
+0166 redraw left              00000000000000bc
+0167 redraw top               00000000000000bc
+0168 redraw right             00000000000000d4
+0169 redraw bottom            00000000000000d4
+0170 UI text                  X: 1200
+0171 UI text x                0000000000000039
+0172 UI text y                00000000000001e6
+0173 UI text                  Y: 1200
+0174 UI text x                000000000000006b
+0175 UI text y                00000000000001e6
+0176 ellipse left             00000000000000be
+0177 ellipse top              00000000000000be
+0178 ellipse right            00000000000000d3
+0179 ellipse bottom           00000000000000d3
+0180 ellipse left             00000000000000be
+0181 ellipse top              00000000000000be
+0182 ellipse right            00000000000000d3
+0183 ellipse bottom           00000000000000d3
+0184 redraw left              00000000000000bc
+0185 redraw top               00000000000000bc
+0186 redraw right             00000000000000d4
+0187 redraw bottom            00000000000000d4
+0188 ellipse left             00000000000000be
+0189 ellipse top              00000000000000be
+0190 ellipse right            00000000000000d3
+0191 ellipse bottom           00000000000000d3
+0192 ellipse left             00000000000000be
+0193 ellipse top              00000000000000be
+0194 ellipse right            00000000000000d3
+0195 ellipse bottom           00000000000000d3
+0196 UI text                  Location:  (1200, 1200)
+0197 UI text x                0000000000000056
+0198 UI text y                0000000000000006
+0199 UI text                  Field Type:  Standard
+0200 UI text x                0000000000000056
+0201 UI text y                0000000000000014
+0202 UI text                  Field Radius:  10 l.y. (101 mines)
+0203 UI text x                0000000000000056
+0204 UI text y                0000000000000022
+0205 UI text                  Decay rate:  10 / year
+0206 UI text x                0000000000000056
+0207 UI text y                0000000000000030
+0208 UI text                  Field: 1 of 1
+0209 UI text x                0000000000000056
+0210 UI text y                000000000000003e
+0211 ellipse left             00000000000000be
+0212 ellipse top              00000000000000be
+0213 ellipse right            00000000000000d3
+0214 ellipse bottom           00000000000000d3
+0215 ellipse left             00000000000000be
+0216 ellipse top              00000000000000be
+0217 ellipse right            00000000000000d3
+0218 ellipse bottom           00000000000000d3
+0219 redraw left              00000000000000bc
+0220 redraw top               00000000000000bc
+0221 redraw right             00000000000000d4
+0222 redraw bottom            00000000000000d4
+0223 UI text                  X: 1200
+0224 UI text x                0000000000000039
+0225 UI text y                00000000000001e6
+0226 UI text                  Y: 1200
+0227 UI text x                000000000000006b
+0228 UI text y                00000000000001e6
+0229 ellipse left             00000000000000be
+0230 ellipse top              00000000000000be
+0231 ellipse right            00000000000000d3
+0232 ellipse bottom           00000000000000d3
+0233 ellipse left             00000000000000be
+0234 ellipse top              00000000000000be
+0235 ellipse right            00000000000000d3
+0236 ellipse bottom           00000000000000d3
+0237 redraw left              00000000000000bc
+0238 redraw top               00000000000000bc
+0239 redraw right             00000000000000d4
+0240 redraw bottom            00000000000000d4
+0241 ellipse left             00000000000000be
+0242 ellipse top              00000000000000be
+0243 ellipse right            00000000000000d3
+0244 ellipse bottom           00000000000000d3
+0245 ellipse left             00000000000000be
+0246 ellipse top              00000000000000be
+0247 ellipse right            00000000000000d3
+0248 ellipse bottom           00000000000000d3
+0249 UI text                  Location:  (1200, 1200)
+0250 UI text x                0000000000000056
+0251 UI text y                0000000000000006
+0252 UI text                  Field Type:  Standard
+0253 UI text x                0000000000000056
+0254 UI text y                0000000000000014
+0255 UI text                  Field Radius:  99 l.y. (9999 mines)
+0256 UI text x                0000000000000056
+0257 UI text y                0000000000000022
+0258 UI text                  Decay rate:  2999 / year
+0259 UI text x                0000000000000056
+0260 UI text y                0000000000000030
+0261 UI text                  Field: 1 of 1
+0262 UI text x                0000000000000056
+0263 UI text y                000000000000003e
+0264 ellipse left             0000000000000065
+0265 ellipse top              0000000000000065
+0266 ellipse right            000000000000012c
+0267 ellipse bottom           000000000000012c
+0268 ellipse left             0000000000000065
+0269 ellipse top              0000000000000065
+0270 ellipse right            000000000000012c
+0271 ellipse bottom           000000000000012c
+0272 redraw left              0000000000000063
+0273 redraw top               0000000000000063
+0274 redraw right             000000000000012d
+0275 redraw bottom            000000000000012d
+0276 UI text                  X: 1200
+0277 UI text x                0000000000000039
+0278 UI text y                00000000000001e6
+0279 UI text                  Y: 1200
+0280 UI text x                000000000000006b
+0281 UI text y                00000000000001e6
+0282 ellipse left             0000000000000065
+0283 ellipse top              0000000000000065
+0284 ellipse right            000000000000012c
+0285 ellipse bottom           000000000000012c
+0286 ellipse left             0000000000000065
+0287 ellipse top              0000000000000065
+0288 ellipse right            000000000000012c
+0289 ellipse bottom           000000000000012c
+0290 redraw left              0000000000000063
+0291 redraw top               0000000000000063
+0292 redraw right             000000000000012d
+0293 redraw bottom            000000000000012d
+0294 ellipse left             0000000000000065
+0295 ellipse top              0000000000000065
+0296 ellipse right            000000000000012c
+0297 ellipse bottom           000000000000012c
+0298 ellipse left             0000000000000065
+0299 ellipse top              0000000000000065
+0300 ellipse right            000000000000012c
+0301 ellipse bottom           000000000000012c
+0302 UI text                  Location:  (1200, 1200)
+0303 UI text x                0000000000000056
+0304 UI text y                0000000000000006
+0305 UI text                  Field Type:  Standard
+0306 UI text x                0000000000000056
+0307 UI text y                0000000000000014
+0308 UI text                  Field Radius:  100 l.y. (10000 mines)
+0309 UI text x                0000000000000056
+0310 UI text y                0000000000000022
+0311 UI text                  Decay rate:  3000 / year
+0312 UI text x                0000000000000056
+0313 UI text y                0000000000000030
+0314 UI text                  Field: 1 of 1
+0315 UI text x                0000000000000056
+0316 UI text y                000000000000003e
+0317 ellipse left             0000000000000064
+0318 ellipse top              0000000000000064
+0319 ellipse right            000000000000012d
+0320 ellipse bottom           000000000000012d
+0321 ellipse left             0000000000000064
+0322 ellipse top              0000000000000064
+0323 ellipse right            000000000000012d
+0324 ellipse bottom           000000000000012d
+0325 redraw left              0000000000000062
+0326 redraw top               0000000000000062
+0327 redraw right             000000000000012e
+0328 redraw bottom            000000000000012e
+0329 UI text                  X: 1200
+0330 UI text x                0000000000000039
+0331 UI text y                00000000000001e6
+0332 UI text                  Y: 1200
+0333 UI text x                000000000000006b
+0334 UI text y                00000000000001e6
+0335 ellipse left             0000000000000064
+0336 ellipse top              0000000000000064
+0337 ellipse right            000000000000012d
+0338 ellipse bottom           000000000000012d
+0339 ellipse left             0000000000000064
+0340 ellipse top              0000000000000064
+0341 ellipse right            000000000000012d
+0342 ellipse bottom           000000000000012d
+0343 redraw left              0000000000000062
+0344 redraw top               0000000000000062
+0345 redraw right             000000000000012e
+0346 redraw bottom            000000000000012e
+0347 ellipse left             0000000000000064
+0348 ellipse top              0000000000000064
+0349 ellipse right            000000000000012d
+0350 ellipse bottom           000000000000012d
+0351 ellipse left             0000000000000064
+0352 ellipse top              0000000000000064
+0353 ellipse right            000000000000012d
+0354 ellipse bottom           000000000000012d
+0355 UI text                  Location:  (1200, 1200)
+0356 UI text x                0000000000000056
+0357 UI text y                0000000000000006
+0358 UI text                  Field Type:  Standard
+0359 UI text x                0000000000000056
+0360 UI text y                0000000000000014
+0361 UI text                  Field Radius:  100 l.y. (10001 mines)
+0362 UI text x                0000000000000056
+0363 UI text y                0000000000000022
+0364 UI text                  Decay rate:  3000 / year
+0365 UI text x                0000000000000056
+0366 UI text y                0000000000000030
+0367 UI text                  Field: 1 of 1
+0368 UI text x                0000000000000056
+0369 UI text y                000000000000003e
+0370 ellipse left             0000000000000064
+0371 ellipse top              0000000000000064
+0372 ellipse right            000000000000012d
+0373 ellipse bottom           000000000000012d
+0374 ellipse left             0000000000000064
+0375 ellipse top              0000000000000064
+0376 ellipse right            000000000000012d
+0377 ellipse bottom           000000000000012d
+0378 redraw left              0000000000000062
+0379 redraw top               0000000000000062
+0380 redraw right             000000000000012e
+0381 redraw bottom            000000000000012e
+0382 UI text                  X: 1200
+0383 UI text x                0000000000000039
+0384 UI text y                00000000000001e6
+0385 UI text                  Y: 1200
+0386 UI text x                000000000000006b
+0387 UI text y                00000000000001e6
+0388 ellipse left             0000000000000064
+0389 ellipse top              0000000000000064
+0390 ellipse right            000000000000012d
+0391 ellipse bottom           000000000000012d
+0392 ellipse left             0000000000000064
+0393 ellipse top              0000000000000064
+0394 ellipse right            000000000000012d
+0395 ellipse bottom           000000000000012d
+0396 redraw left              0000000000000062
+0397 redraw top               0000000000000062
+0398 redraw right             000000000000012e
+0399 redraw bottom            000000000000012e
+0400 ellipse left             0000000000000064
+0401 ellipse top              0000000000000064
+0402 ellipse right            000000000000012d
+0403 ellipse bottom           000000000000012d
+0404 ellipse left             0000000000000064
+0405 ellipse top              0000000000000064
+0406 ellipse right            000000000000012d
+0407 ellipse bottom           000000000000012d

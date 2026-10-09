@@ -1,0 +1,247 @@
+[
+  {
+    "file": "ai4.c",
+    "name": "DoCyberPackets",
+    "layer": "core"
+  },
+  {
+    "file": "ai4.c",
+    "name": "IdGetBestScannerDest",
+    "layer": "core"
+  },
+  {
+    "file": "ai4.c",
+    "name": "FEnumNeedMinerals",
+    "layer": "core"
+  },
+  {
+    "file": "ai4.c",
+    "name": "FEnumPktAttack",
+    "layer": "core"
+  },
+  {
+    "file": "aiutil.c",
+    "name": "IdTargetFreighter",
+    "layer": "core"
+  },
+  {
+    "file": "aiutil.c",
+    "name": "FSalvageTargetFreighter2",
+    "layer": "core"
+  },
+  {
+    "file": "aiutil.c",
+    "name": "IncreaseAIMinefieldSizes",
+    "layer": "core"
+  },
+  {
+    "file": "battle.c",
+    "name": "FAttack",
+    "layer": "core"
+  },
+  {
+    "file": "battle.c",
+    "name": "DoBombing",
+    "layer": "core"
+  },
+  {
+    "file": "msg.c",
+    "name": "PszFormatString",
+    "layer": "core"
+  },
+  {
+    "file": "planet.c",
+    "name": "PctPlanetDesirability",
+    "layer": "core"
+  },
+  {
+    "file": "planet.c",
+    "name": "CMinesOperating",
+    "layer": "core"
+  },
+  {
+    "file": "planet.c",
+    "name": "CResourcesAtPlanet",
+    "layer": "core"
+  },
+  {
+    "file": "race.c",
+    "name": "LInnateRaceHabitability",
+    "layer": "core"
+  },
+  {
+    "file": "report.c",
+    "name": "DumpPlanets",
+    "layer": "core"
+  },
+  {
+    "file": "ship.c",
+    "name": "EstFuelUse",
+    "layer": "core"
+  },
+  {
+    "file": "ship.c",
+    "name": "IWarpForWaypoint",
+    "layer": "core"
+  },
+  {
+    "file": "ship.c",
+    "name": "LFuelUseToWaypoint",
+    "layer": "core"
+  },
+  {
+    "file": "ship.c",
+    "name": "FleetTransferCargoBalance",
+    "layer": "core"
+  },
+  {
+    "file": "ship2.c",
+    "name": "AutoRouteFleet",
+    "layer": "core"
+  },
+  {
+    "file": "ship2.c",
+    "name": "PctCloakFromLpfl",
+    "layer": "core"
+  },
+  {
+    "file": "thing.c",
+    "name": "CPlanetsInCircle",
+    "layer": "core"
+  },
+  {
+    "file": "turn.c",
+    "name": "MoveThings",
+    "layer": "core"
+  },
+  {
+    "file": "turn.c",
+    "name": "MoveFleets",
+    "layer": "core"
+  },
+  {
+    "file": "turn.c",
+    "name": "FTravelThroughMineFields",
+    "layer": "core"
+  },
+  {
+    "file": "turn2.c",
+    "name": "DropColonists",
+    "layer": "core"
+  },
+  {
+    "file": "turn2.c",
+    "name": "UpdateGuesses",
+    "layer": "core"
+  },
+  {
+    "file": "util.c",
+    "name": "CalcPctSurvive",
+    "layer": "core"
+  },
+  {
+    "file": "util.c",
+    "name": "FCalcFleetBombDamage",
+    "layer": "core"
+  },
+  {
+    "file": "util.c",
+    "name": "PszGetDistance",
+    "layer": "core"
+  },
+  {
+    "file": "util.c",
+    "name": "DGetDistance",
+    "layer": "core"
+  },
+  {
+    "file": "util.c",
+    "name": "GetPlanetScannerRange",
+    "layer": "core"
+  },
+  {
+    "file": "util.c",
+    "name": "GetShdefScannerRange",
+    "layer": "core"
+  },
+  {
+    "file": "util.c",
+    "name": "FCanFleetUseStargates",
+    "layer": "core"
+  },
+  {
+    "file": "util.c",
+    "name": "CchGetETA",
+    "layer": "core"
+  },
+  {
+    "file": "utilgen.c",
+    "name": "FIntersectCircleLine",
+    "layer": "core"
+  },
+  {
+    "file": "mineui.c",
+    "name": "DrawMineSurvey",
+    "layer": "ui"
+  },
+  {
+    "file": "planetui.c",
+    "name": "DrawPlanetStats",
+    "layer": "ui"
+  },
+  {
+    "file": "reportui.c",
+    "name": "DrawVCReport",
+    "layer": "ui"
+  },
+  {
+    "file": "reportui.c",
+    "name": "DrawScoreReport",
+    "layer": "ui"
+  },
+  {
+    "file": "reportui.c",
+    "name": "DrawReportItem",
+    "layer": "ui"
+  },
+  {
+    "file": "reportui.c",
+    "name": "ICompReport",
+    "layer": "ui"
+  },
+  {
+    "file": "scan.c",
+    "name": "DrawScanner",
+    "layer": "ui"
+  },
+  {
+    "file": "scan.c",
+    "name": "DrawRadarCircle",
+    "layer": "ui"
+  },
+  {
+    "file": "scan.c",
+    "name": "DrawPathYearTicks",
+    "layer": "ui"
+  },
+  {
+    "file": "scan.c",
+    "name": "DrawShipScanPath",
+    "layer": "ui"
+  },
+  {
+    "file": "scan.c",
+    "name": "GetDxDyOrientation",
+    "layer": "ui"
+  },
+  {
+    "file": "scan.c",
+    "name": "ShowScanSelChange",
+    "layer": "ui"
+  },
+  {
+    "file": "utilgenui.c",
+    "name": "DiaganolTextOut",
+    "layer": "ui"
+  }
+]

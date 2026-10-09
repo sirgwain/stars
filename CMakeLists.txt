@@ -18,6 +18,24 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(STARS_TEST_POW_SOURCE "" CACHE FILEPATH "Optional source defining double DStarsTestPow(double, double) for pow tests")
+set(STARS_TEST_POW_LIBRARIES "" CACHE STRING "Libraries needed by the candidate pow adapter")
+set(STARS_TEST_POW_MAX_ULP "0" CACHE STRING "Maximum pow error versus correctly rounded MPFR reference (0 for correct rounding)")
+function(stars_configure_pow_test target)
+    if(target STREQUAL "test_pow")
+        target_compile_definitions(${target} PRIVATE STARS_TEST_POW_MAX_ULP=${STARS_TEST_POW_MAX_ULP})
+        if(STARS_TEST_POW_SOURCE)
+            target_sources(${target} PRIVATE "${STARS_TEST_POW_SOURCE}")
+            target_compile_definitions(${target} PRIVATE STARS_TEST_POW_CUSTOM)
+            target_link_libraries(${target} PRIVATE ${STARS_TEST_POW_LIBRARIES})
+        endif()
+    elseif(target STREQUAL "test_floating_point" AND STARS_TEST_POW_SOURCE AND NOT APPLE)
+        target_sources(${target} PRIVATE "${STARS_TEST_POW_SOURCE}" tests/unit/pow_game_adapter.c)
+        target_link_options(${target} PRIVATE "LINKER:--wrap=Sf64Pow")
+        target_link_libraries(${target} PRIVATE ${STARS_TEST_POW_LIBRARIES})
+    endif()
+endfunction()
+
 # The game: rules, turn generation, AI and file I/O. A source file belongs
 # here only if the command-line host needs it; Windows dialogs and drawing go
 # in STARS_UI_SOURCES. Some of these files still hold UI functions; the 2.9
@@ -26,7 +44,7 @@ set(STARS_CORE_SOURCES
     ai.c ai2.c ai3.c ai4.c aiutil.c battle.c build.c create.c file.c globals.c
     log.c memory.c mine.c msg.c native.c parts.c planet.c produce.c race.c
     report.c research.c save.c ship.c ship2.c strings.c
-    thing.c turn.c turn2.c turn3.c util.c utilgen.c
+    thing.c turn.c turn2.c turn3.c util.c utilgen.c sfnum.c
 )
 
 # The Windows game's user interface.
@@ -38,7 +56,10 @@ set(STARS_UI_SOURCES
 )
 
 # Settings every target that compiles game code shares.
+add_subdirectory(third_party/softfloat)
 add_library(stars_options INTERFACE)
+target_link_libraries(stars_options INTERFACE stars_softfloat)
+configure_file(third_party/softfloat/COPYING.txt bin/SoftFloat-COPYING.txt COPYONLY)
 
 # Each set is built once for stars.exe and the unit tests.
 add_library(stars_core OBJECT ${STARS_CORE_SOURCES})
@@ -154,21 +175,6 @@ target_compile_options(stars_options INTERFACE
 
 if(NOT WIN32)
     target_link_libraries(stars_options INTERFACE m)
-    # Turn generation rounds through long double as the original's x87 code
-    # did (docs/NATIVE-PORT.md). Without x87 extended precision (a 64-bit
-    # mantissa), as on Apple silicon or other ARM, some turns differ from
-    # the Windows game's.
-    include(CheckCSourceCompiles)
-    check_c_source_compiles("
-        #include <float.h>
-        #if LDBL_MANT_DIG != 64
-        #error not x87 extended precision
-        #endif
-        int main(void) { return 0; }" STARS_X87_LONG_DOUBLE)
-    if(NOT STARS_X87_LONG_DOUBLE)
-        message(WARNING "long double is not x87 extended precision here, so stars-host's turns can differ "
-                        "from the Windows game's. On Apple silicon, use the macos-host presets (x86_64, run by Rosetta).")
-    endif()
     # Unit tests (tests/unit) that need no windows, with hostui.c for the
     # user interface. The Windows build below runs them all under Wine.
     option(STARS_BUILD_TESTS "Build the unit tests in tests/unit" ON)
@@ -184,6 +190,11 @@ if(NOT WIN32)
         foreach(STARS_UNIT_TEST ${STARS_UNIT_TESTS})
             get_filename_component(STARS_TEST_NAME "${STARS_UNIT_TEST}" NAME_WE)
             add_executable(${STARS_TEST_NAME} "${STARS_UNIT_TEST}" tests/unit/stars_test.c hostui.c)
+            stars_configure_pow_test(${STARS_TEST_NAME})
+            if(STARS_TEST_NAME STREQUAL "test_floating_point" AND NOT APPLE)
+                target_link_options(${STARS_TEST_NAME} PRIVATE "LINKER:--wrap=Random,--wrap=FSendPlrMsg")
+                target_compile_definitions(${STARS_TEST_NAME} PRIVATE STARS_TEST_RANDOM_WRAP)
+            endif()
             target_link_libraries(${STARS_TEST_NAME} PRIVATE stars_core)
             target_include_directories(${STARS_TEST_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit")
             target_compile_definitions(${STARS_TEST_NAME} PRIVATE STARS_TEST_GOLDEN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/golden")
@@ -265,6 +276,11 @@ if(STARS_BUILD_TESTS)
     foreach(STARS_UNIT_TEST ${STARS_UNIT_TESTS})
         get_filename_component(STARS_TEST_NAME "${STARS_UNIT_TEST}" NAME_WE)
         add_executable(${STARS_TEST_NAME} "${STARS_UNIT_TEST}" tests/unit/stars_test.c res/stars.rc)
+        stars_configure_pow_test(${STARS_TEST_NAME})
+        if(STARS_TEST_NAME STREQUAL "test_floating_point")
+            target_link_options(${STARS_TEST_NAME} PRIVATE "LINKER:--wrap=Random,--wrap=FSendPlrMsg,--wrap=GetTextExtent,--wrap=__imp_TextOutA,--wrap=__imp_Ellipse,--wrap=__imp_InflateRect")
+            target_compile_definitions(${STARS_TEST_NAME} PRIVATE STARS_TEST_RANDOM_WRAP)
+        endif()
         target_link_libraries(${STARS_TEST_NAME} PRIVATE stars_core stars_ui)
         # Message boxes would wait for a click; stars_test.c records them.
         target_link_options(${STARS_TEST_NAME} PRIVATE "LINKER:--wrap=AlertSz")

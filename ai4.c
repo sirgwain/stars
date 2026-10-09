@@ -605,17 +605,20 @@ void DoCyberPackets() {
                         iWarpDst = 0;
                     }
                     iWarp = IWarpMAFromLppl(lppl, &fTwoMA) + 3;
-                    dDistance = (double)(int16_t)(iWarp * iWarp);
+                    dDistance = Sf64FromI32((int16_t)(iWarp * iWarp));
                     dDistanceTgt = DGetDistance(rgptPlan[lppl->id].x, rgptPlan[lppl->id].y, rgptPlan[lpplDst->id].x, rgptPlan[lpplDst->id].y);
-                    dMod = (double)((long double)(uint32_t)((iWarp * iWarp - iWarpDst * iWarpDst) * (100 - (lpplDst->uDefGuess + 5))) / 16000.0);
-                    lMinNeeded = (int32_t)((1000 >= (uint16_t)((lpplDst->uPopGuess + 25) * 4) ? (long double)(uint32_t)((lpplDst->uPopGuess + 25) * 4)
-                                                                                              : (long double)1000) /
-                                           dMod);
+                    dMod = Sf64From80(
+                        (Sf80Div(Sf80FromU32((uint32_t)((iWarp * iWarp - iWarpDst * iWarpDst) * (100 - (lpplDst->uDefGuess + 5)))), Sf80From64(16000.0))));
+                    lMinNeeded = Sf80ToI32((Sf80Div(
+                        (1000 >= (uint16_t)((lpplDst->uPopGuess + 25) * 4) ? Sf80FromU32((uint32_t)((lpplDst->uPopGuess + 25) * 4)) : Sf80FromI32(1000)),
+                        Sf80From64(dMod))));
                     lMineral = lMinNeeded < lMineral ? lMinNeeded : lMineral;
                     if (fTwoMA) {
-                        lMineral = (int32_t)((long double)lMineral / pow(0.875, (double)((long double)dDistanceTgt / dDistance)));
+                        lMineral = Sf80ToI32((Sf80Div(Sf80FromI32(lMineral),
+                                                      Sf80From64(Sf64Pow(0.875, Sf64From80((Sf80Div(Sf80From64(dDistanceTgt), Sf80From64(dDistance)))))))));
                     } else {
-                        lMineral = (int32_t)((long double)lMineral / pow(0.75, (double)((long double)dDistanceTgt / dDistance)));
+                        lMineral = Sf80ToI32((
+                            Sf80Div(Sf80FromI32(lMineral), Sf80From64(Sf64Pow(0.75, Sf64From80((Sf80Div(Sf80From64(dDistanceTgt), Sf80From64(dDistance)))))))));
                     }
                     for (; lMineral > 0; lMineral -= 70) {
                         iMin = 0;
@@ -641,7 +644,7 @@ void DoCyberPackets() {
                     sel.pl.idFling = lpplDst->id + 1;
                     FLookupPlanet(idWriteBack, &sel.pl);
                     lpciPlanDst->iPktTarget = 3;
-                    if ((long double)dDistance < (long double)dDistanceTgt) {
+                    if (Sf80Lt(Sf80From64(dDistance), Sf80From64(dDistanceTgt))) {
                         lpciPlan->fNeedScanPkt = TRUE;
                     }
                     lpciPlan->fLaunchedPkt = FALSE;
@@ -754,8 +757,8 @@ int16_t IdGetBestScannerDest(PLANET *lppl, CompassDir iDir) {
             ptEdge.y = iSize;
         }
     }
-    dAdjust = Random((int32_t)((long double)iSize * 0.3));
-    dAdjust -= LOWORD((int32_t)((long double)iSize * 0.15));
+    dAdjust = Random(Sf80ToI32((Sf80Mul(Sf80FromI32(iSize), Sf80From64(0.3)))));
+    dAdjust -= LOWORD(Sf80ToI32((Sf80Mul(Sf80FromI32(iSize), Sf80From64(0.15)))));
     if (ptEdge.x == 0 || ptEdge.x == iSize) {
         ptEdge.y += dAdjust;
         if (ptEdge.y > iSize) {
@@ -1153,9 +1156,9 @@ int16_t FEnumNeedMinerals(PLANET *lpplSrc, PLANET *lpplTest) {
         if (fTwoMA) {
             iWarpDst++;
         }
-        dDistance = (double)(iWarpSrc >= iWarpDst ? (long double)iWarpDst : (long double)iWarpSrc);
-        dDistance = (double)((long double)dDistance * dDistance * 3.5);
-        if ((long double)LDistance2(rgptPlan[lpplSrc->id], rgptPlan[lpplTest->id]) <= (long double)dDistance * dDistance) {
+        dDistance = Sf64From80((iWarpSrc >= iWarpDst ? Sf80FromI32(iWarpDst) : Sf80FromI32(iWarpSrc)));
+        dDistance = Sf64From80((Sf80Mul(Sf80Mul(Sf80From64(dDistance), Sf80From64(dDistance)), Sf80From64(3.5))));
+        if (Sf80Le(Sf80FromI32(LDistance2(rgptPlan[lpplSrc->id], rgptPlan[lpplTest->id])), Sf80Mul(Sf80From64(dDistance), Sf80From64(dDistance)))) {
             return TRUE;
         }
         return FALSE;
@@ -1194,25 +1197,27 @@ int16_t FEnumPktAttack(PLANET *lpplSrc, PLANET *lpplTest) {
             iWarpDst++;
         }
     }
-    dDistance = iWarp = IWarpMAFromLppl(lpplSrc, &fTwoMA) + 3;
+    dDistance = Sf64FromI32(iWarp = IWarpMAFromLppl(lpplSrc, &fTwoMA) + 3);
     if (iWarp == iWarpDst) {
         return FALSE;
     }
-    dDistance = (double)((long double)dDistance * dDistance);
+    dDistance = Sf64From80((Sf80Mul(Sf80From64(dDistance), Sf80From64(dDistance))));
     dDistanceTgt = DGetDistance(rgptPlan[lpplSrc->id].x, rgptPlan[lpplSrc->id].y, rgptPlan[lpplTest->id].x, rgptPlan[lpplTest->id].y);
-    if ((long double)dDistanceTgt <= (long double)dDistance * 2.5) {
+    if (Sf80Le(Sf80From64(dDistanceTgt), Sf80Mul(Sf80From64(dDistance), Sf80From64(2.5)))) {
         if (fTwoMA) {
-            lMineral = (int32_t)((long double)*plMinMax * pow(0.875, (double)((long double)dDistanceTgt / dDistance)));
+            lMineral = Sf80ToI32(
+                (Sf80Mul(Sf80FromI32(*plMinMax), Sf80From64(Sf64Pow(0.875, Sf64From80((Sf80Div(Sf80From64(dDistanceTgt), Sf80From64(dDistance)))))))));
         } else {
-            lMineral = (int32_t)((long double)*plMinMax * pow(0.75, (double)((long double)dDistanceTgt / dDistance)));
+            lMineral =
+                Sf80ToI32((Sf80Mul(Sf80FromI32(*plMinMax), Sf80From64(Sf64Pow(0.75, Sf64From80((Sf80Div(Sf80From64(dDistanceTgt), Sf80From64(dDistance)))))))));
         }
         if (lpplTest->uDefGuess > 99 || lpplTest->uPopGuess == 0) {
             return FALSE;
         }
-        dMod = (double)((long double)(uint32_t)((iWarp * iWarp - iWarpDst * iWarpDst) * (100 - (lpplTest->uDefGuess + 5))) / 16000.0);
-        lMinNeeded =
-            (int32_t)((1000 >= (uint16_t)((lpplTest->uPopGuess + 25) * 4) ? (long double)(uint32_t)((lpplTest->uPopGuess + 25) * 4) : (long double)1000) /
-                      dMod);
+        dMod = Sf64From80((Sf80Div(Sf80FromU32((uint32_t)((iWarp * iWarp - iWarpDst * iWarpDst) * (100 - (lpplTest->uDefGuess + 5)))), Sf80From64(16000.0))));
+        lMinNeeded = Sf80ToI32(
+            (Sf80Div((1000 >= (uint16_t)((lpplTest->uPopGuess + 25) * 4) ? Sf80FromU32((uint32_t)((lpplTest->uPopGuess + 25) * 4)) : Sf80FromI32(1000)),
+                     Sf80From64(dMod))));
         if (lMinNeeded <= lMineral) {
             return TRUE;
         }

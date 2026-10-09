@@ -457,7 +457,7 @@ void DrawMineSurvey(HDC hdc, RECT *prc) {
         TextOut(hdc, xLeft, yTop, szWork, c);
         yTop += dyArial8 + 2;
         CchGetString(idsFieldRadiusDLYLdMines, szT);
-        c = wsprintf(szWork, szT, LOWORD((int32_t)sqrt((double)lpth->thm.cMines)), lpth->thm.cMines);
+        c = wsprintf(szWork, szT, LOWORD(Sf64ToI32(Sf64Sqrt(Sf64FromI32(lpth->thm.cMines)))), lpth->thm.cMines);
         TextOut(hdc, xLeft, yTop, szWork, c);
         yTop += dyArial8 + 2;
         pctDecay = (int16_t)(((GetRaceStat(&rgplr[lpth->iplr], rsMajorAdv) != raMines) * 3 + 1) * CPlanetsInCircle(lpth->pt, lpth->thm.cMines) + 2);

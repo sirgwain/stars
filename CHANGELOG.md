@@ -34,6 +34,13 @@ produce different results from a 2.6j host for the same turn.
 
 ### Changed
 
+- Floating arithmetic in the core and UI now uses Berkeley SoftFloat 3e,
+  preserving the existing 80-, 64- and 32-bit rounding boundaries without
+  requiring native x87 `long double`. Software `pow` and UI transcendental
+  functions have independent oracle tests; MPFR is used only by offline
+  test generators. `Sf64Pow(0.75, 0x1.9ffffffffffffp+3)` deliberately fixes
+  the reference GCC library's one-ULP error. Frozen game baselines are
+  retained; see `docs/SOFTFLOAT-IMPLEMENTATION.md` for validation details.
 - The game's text and static data are now built from source files rather
   than checked-in C tables: the strings, messages, tutorial and planet names
   from `text/*.txt`, and the hulls, parts, starting designs, predefined and

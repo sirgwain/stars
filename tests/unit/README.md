@@ -54,6 +54,58 @@ the Windows build and commit them with the change:
 cd dist/mingw-debug/tests && STARS_UPDATE_GOLDEN=1 wine ./test_report.exe
 ```
 
+## Floating point migration references
+
+`test_floating_point.c` freezes the current MinGW arithmetic in sixteen test
+cases, including Windows UI geometry and sorting. Its fourteen
+`golden/floating-*.txt` files use LF and record float/double bits, integer
+results and text. They are read-only expectations; failures leave
+`floating-*.actual.txt` in the test working directory. Do not replace these
+references to make a SoftFloat migration pass. See
+[the validation audit](../../docs/SOFTFLOAT-VALIDATION.md) for provenance,
+coverage limits, the deliberately failing double-precision control, and
+the full before/after procedure.
+
+The AI case observes `Random` and the bombing case observes `FSendPlrMsg`
+with GNU ld's `--wrap`; CMake omits those two cases on Apple hosts. Windows additionally wraps text output and supplies
+fixed text metrics to isolate diagonal-text arithmetic from font rendering.
+These wrappers belong only to this test executable. UI tests are omitted
+from non-Windows builds.
+
+`test_pow.c` adds four cases: exact native compatibility, MPFR-referenced
+accuracy, packet integer truncation, and special values. The 2,117-row
+`floating-pow.txt` stores binary64 input, exponent, native result and correctly
+rounded result bits. It is not a runtime-generated expectation. The offline
+capture program is `tests/scaffold/pow_reference.c` (requires MPFR/GMP).
+MPFR/GMP are restricted to offline test tooling. They must not be linked,
+bundled, or copied into the game, host or production `pow` implementation,
+including as a fallback. Normal builds and unit tests use the frozen numeric
+references and require neither library.
+
+The default backend is now `Sf64Pow`. To test a candidate, configure a separate build with
+`-DSTARS_TEST_POW_SOURCE=/absolute/path/to/adapter.c`. The adapter defines
+`double DStarsTestPow(double x, double y)`; preserve the binary64 interface
+using bit conversions when calling SoftFloat. `STARS_TEST_POW_LIBRARIES` can
+supply its link dependencies. This replaces the backend in `test_pow` and,
+with GNU ld, wraps game `Sf64Pow` calls in `test_floating_point` too. It does not
+change the production executables. An adapter must not call wrapped `Sf64Pow`
+recursively; GNU adapters forwarding to the software backend use `__real_Sf64Pow`
+in the game test (only `test_pow` defines `STARS_TEST_POW_CUSTOM`).
+
+`STARS_TEST_POW_MAX_ULP` defaults to 0. The compatibility test requires exact
+native bits except for the single explicitly identified GCC rounding error,
+where it requires the oracle's exact result. Both original values remain in
+the frozen file. Do not loosen tolerances or rewrite references to hide differences.
+
+`test_sfnum.c` adds three cases: 14,000 frozen independent reference results
+for all seven mathematical functions, 10,000 extended-precision operation
+sequences compared with native x87 when available, and special-value handling.
+The offline generator is `tests/scaffold/softfloat_reference.c`. Neither it
+nor MPFR/GMP is part of CMake's production or unit-test build. Run
+`tests/scaffold/check_software_float.py --build BUILD --objdump OBJDUMP` to
+reject native x86 floating arithmetic in the compiled game/UI objects.
+See [the implementation report](../../docs/SOFTFLOAT-IMPLEMENTATION.md).
+
 ## Bug fixes
 
 A bug fix in [docs/ROADMAP.md](../../docs/ROADMAP.md) step 5 adds a test that

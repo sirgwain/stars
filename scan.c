@@ -770,7 +770,7 @@ int16_t DrawScanner(HDC hdc, RECT *prc) {
                                 }
                                 if (lpth->thm.fDetonate == fDetonating) {
                                     pt = lpth->pt;
-                                    dRange = LOWORD((int32_t)sqrt((double)lpth->thm.cMines));
+                                    dRange = LOWORD(Sf64ToI32(Sf64Sqrt(Sf64FromI32(lpth->thm.cMines))));
                                     rc.left = PtToScan(xOff + pt.x - dRange);
                                     rc.top = PtToScan(yOff - pt.y - dRange);
                                     rc.right = PtToScan(xOff + pt.x + dRange);
@@ -807,7 +807,7 @@ int16_t DrawScanner(HDC hdc, RECT *prc) {
                 SelectObject(hdc, rghbrPat[lpth->thm.iType]);
                 SetTextColor(hdc, 16776960);
                 pt = lpth->pt;
-                dRange = LOWORD((int32_t)sqrt((double)lpth->thm.cMines));
+                dRange = LOWORD(Sf64ToI32(Sf64Sqrt(Sf64FromI32(lpth->thm.cMines))));
                 rc.left = PtToScan(xOff + pt.x - dRange);
                 rc.top = PtToScan(yOff - pt.y - dRange);
                 rc.right = PtToScan(xOff + pt.x + dRange);
@@ -1464,12 +1464,12 @@ void DrawRadarCircle(DRAWCIR *pdc, RECT *prc) {
                         dy = y - y2;
                         l = (uint32_t)(dx * dx) + (uint32_t)(dy * dy);
                         if (pdc->rgrad[i] < rad) {
-                            if ((long double)sqrt((double)l) + pdc->rgrad[i] <= (long double)rad) {
+                            if (Sf80Le(Sf80Add(Sf80From64(Sf64Sqrt(Sf64FromI32(l))), Sf80FromI32(pdc->rgrad[i])), Sf80FromI32(rad))) {
                                 pdc->rgrad[i] = 0;
                                 iFree = i;
                             }
                         } else if (pdc->rgrad[i] > rad) {
-                            if ((long double)sqrt((double)l) + rad <= (long double)pdc->rgrad[i]) {
+                            if (Sf80Le(Sf80Add(Sf80From64(Sf64Sqrt(Sf64FromI32(l))), Sf80FromI32(rad)), Sf80FromI32(pdc->rgrad[i]))) {
                                 return;
                             }
                         } else if (x2 == x && y2 == y) {
@@ -1539,18 +1539,20 @@ static void DrawPathYearTicks(HDC hdc, POINT16 ptFrom, POINT16 ptTo, int16_t iWa
     LogicalToScan(&ptB);
     if (iWarp >= 1 && iWarp <= 10) {
         dYear = iWarp * iWarp;
-        dLeg = hypot(ptTo.x - ptFrom.x, ptTo.y - ptFrom.y);
-        dScan = hypot(ptB.x - ptA.x, ptB.y - ptA.y);
-        if (dLeg > dYear && dScan * dYear / dLeg >= 6) {
+        dLeg = Sf64Hypot(Sf64FromI32(ptTo.x - ptFrom.x), Sf64FromI32(ptTo.y - ptFrom.y));
+        dScan = Sf64Hypot(Sf64FromI32(ptB.x - ptA.x), Sf64FromI32(ptB.y - ptA.y));
+        if (Sf64Lt(Sf64FromI32(dYear), dLeg) && Sf64Le(Sf64FromI32(6), Sf64Div(Sf64Mul(dScan, Sf64FromI32(dYear)), dLeg))) {
             // A unit step across the leg on screen.
-            dxTick = -(ptB.y - ptA.y) / dScan;
-            dyTick = (ptB.x - ptA.x) / dScan;
-            for (i = 1; i * dYear < dLeg; i++) {
-                pt.x = (int16_t)floor(ptA.x + (ptB.x - ptA.x) * i * dYear / dLeg + 0.5);
-                pt.y = (int16_t)floor(ptA.y + (ptB.y - ptA.y) * i * dYear / dLeg + 0.5);
+            dxTick = Sf64Div(Sf64FromI32(-(ptB.y - ptA.y)), dScan);
+            dyTick = Sf64Div(Sf64FromI32((ptB.x - ptA.x)), dScan);
+            for (i = 1; Sf64Lt(Sf64FromI32(i * dYear), dLeg); i++) {
+                pt.x = (int16_t)Sf64ToI32(Sf64Floor(Sf64Add(Sf64Add(Sf64FromI32(ptA.x), Sf64Div(Sf64FromI32((ptB.x - ptA.x) * i * dYear), dLeg)), 0.5)));
+                pt.y = (int16_t)Sf64ToI32(Sf64Floor(Sf64Add(Sf64Add(Sf64FromI32(ptA.y), Sf64Div(Sf64FromI32((ptB.y - ptA.y) * i * dYear), dLeg)), 0.5)));
                 for (iSide = -1; iSide <= 1; iSide += 2) {
-                    MoveToEx(hdc, pt.x + (int16_t)floor(iSide * dxTick + 0.5), pt.y + (int16_t)floor(iSide * dyTick + 0.5), NULL);
-                    LineTo(hdc, pt.x + (int16_t)floor(iSide * 4 * dxTick + 0.5), pt.y + (int16_t)floor(iSide * 4 * dyTick + 0.5));
+                    MoveToEx(hdc, pt.x + (int16_t)Sf64ToI32(Sf64Floor(Sf64Add(Sf64Mul(Sf64FromI32(iSide), dxTick), 0.5))),
+                             pt.y + (int16_t)Sf64ToI32(Sf64Floor(Sf64Add(Sf64Mul(Sf64FromI32(iSide), dyTick), 0.5))), NULL);
+                    LineTo(hdc, pt.x + (int16_t)Sf64ToI32(Sf64Floor(Sf64Add(Sf64Mul(Sf64FromI32(iSide * 4), dxTick), 0.5))),
+                           pt.y + (int16_t)Sf64ToI32(Sf64Floor(Sf64Add(Sf64Mul(Sf64FromI32(iSide * 4), dyTick), 0.5))));
                 }
             }
         }
@@ -1654,8 +1656,8 @@ void DrawShipScanPath(HDC hdc, int16_t fShow) {
             dy5 = dy >= 0 ? LOWORD(lWarp2) : -LOWORD(lWarp2);
         } else {
             lWarp2 = (uint32_t)(lWarp2 * lWarp2);
-            m = (double)((long double)dy / dx);
-            dx5 = LOWORD((int32_t)sqrt((double)(lWarp2 / ((long double)m * m + 1))));
+            m = Sf64From80((Sf80Div(Sf80FromI32(dy), Sf80FromI32(dx))));
+            dx5 = LOWORD(Sf64ToI32(Sf64Sqrt(Sf64From80((Sf80Div(Sf80FromI32(lWarp2), (Sf80Add(Sf80Mul(Sf80From64(m), Sf80From64(m)), Sf80FromI32(1)))))))));
             if (dx < 0) {
                 dx5 = -dx5;
             }
@@ -1670,8 +1672,8 @@ void DrawShipScanPath(HDC hdc, int16_t fShow) {
             ptTick.x = 0;
             ptTick.y = dx >= 0 ? 4 : -4;
         } else {
-            m = (double)((long double)(int16_t)-dx / dy);
-            ptTick.x = LOWORD((int32_t)sqrt((double)(24.0 / ((long double)m * m + 1))));
+            m = Sf64From80((Sf80Div(Sf80FromI32((int16_t)-dx), Sf80FromI32(dy))));
+            ptTick.x = LOWORD(Sf64ToI32(Sf64Sqrt(Sf64From80((Sf80Div(Sf80From64(24.0), (Sf80Add(Sf80Mul(Sf80From64(m), Sf80From64(m)), Sf80FromI32(1)))))))));
             if (ptTick.x == 0) {
                 ptTick.y = dy >= 0 ? 4 : -4;
             } else {
@@ -1681,11 +1683,11 @@ void DrawShipScanPath(HDC hdc, int16_t fShow) {
                 ptTick.y = LOWORD((int32_t)((int32_t)(ptTick.x * dx) / dy));
             }
         }
-        dAngle = (double)((long double)atan2((double)(int16_t)-dy, (double)(int16_t)-dx) - 0.7853982);
+        dAngle = Sf64From80((Sf80Sub(Sf80From64(Sf64Atan2(Sf64FromI32((int16_t)-dy), Sf64FromI32((int16_t)-dx))), Sf80From64(0.7853982))));
         for (i = 0; i < 2; i++) {
-            rgptArrow[i].x = LOWORD((int32_t)((long double)5 * cos(dAngle) + 0.5));
-            rgptArrow[i].y = LOWORD((int32_t)((long double)5 * sin(dAngle) + 0.5));
-            dAngle = (double)((long double)dAngle + 1.5707964);
+            rgptArrow[i].x = LOWORD(Sf80ToI32((Sf80Add(Sf80Mul(Sf80FromI32(5), Sf80From64(Sf64Cos(dAngle))), Sf80From64(0.5)))));
+            rgptArrow[i].y = LOWORD(Sf80ToI32((Sf80Add(Sf80Mul(Sf80FromI32(5), Sf80From64(Sf64Sin(dAngle))), Sf80From64(0.5)))));
+            dAngle = Sf64From80((Sf80Add(Sf80From64(dAngle), Sf80From64(1.5707964))));
         }
         j = -5;
         for (i = -5; i <= 5; i++) {
@@ -2862,9 +2864,11 @@ void GetDxDyOrientation(int16_t dx, int16_t dy, POINT16 *ppt, POINT16 *pptD) {
     if (dx == 0 && dy == 0)
         goto LFinishUp;
 
-    dbl = (double)(((long double)atan2((double)dy, (double)dx) + 3.1415927) * 4.0 / 3.141592654 + 0.5);
-    iBmp = 8 - (LOWORD((int32_t)dbl) & 7);
-    iBmp = (8 - (LOWORD((int32_t)dbl) & 7) + 1) & 7;
+    dbl = Sf64From80((Sf80Add(
+        Sf80Div(Sf80Mul((Sf80Add(Sf80From64(Sf64Atan2(Sf64FromI32(dy), Sf64FromI32(dx))), Sf80From64(3.1415927))), Sf80From64(4.0)), Sf80From64(3.141592654)),
+        Sf80From64(0.5))));
+    iBmp = 8 - (LOWORD(Sf64ToI32(dbl)) & 7);
+    iBmp = (8 - (LOWORD(Sf64ToI32(dbl)) & 7) + 1) & 7;
 
 LFinishUp:
     pptD->x = pptD->y = iScanZoom < zoom100 ? 7 : 9;
@@ -2984,7 +2988,7 @@ void ShowScanSelChange(SCAN *pscanOld, SCAN *pscan, int16_t fChgWp) {
 
     fMineFieldSel = pscanOld->grobj == grobjThing && lpThings[pscanOld->ith].ith == ithMinefield;
     if (fMineFieldSel) {
-        iRad = LOWORD((int32_t)((long double)sqrt((double)lpThings[pscanOld->ith].thm.cMines) + 1.0));
+        iRad = LOWORD(Sf80ToI32((Sf80Add(Sf80From64(Sf64Sqrt(Sf64FromI32(lpThings[pscanOld->ith].thm.cMines))), Sf80From64(1.0)))));
         rcMine.left = lpThings[pscanOld->ith].pt.x;
         rcMine.top = lpThings[pscanOld->ith].pt.y;
         rcMine.right = rcMine.left + iRad;
@@ -3024,7 +3028,7 @@ void ShowScanSelChange(SCAN *pscanOld, SCAN *pscan, int16_t fChgWp) {
     }
     fMineFieldSel = sel.scan.grobj == grobjThing && lpThings[sel.scan.ith].ith == ithMinefield;
     if (fMineFieldSel) {
-        iRad = LOWORD((int32_t)((long double)sqrt((double)lpThings[sel.scan.ith].thm.cMines) + 1.0));
+        iRad = LOWORD(Sf80ToI32((Sf80Add(Sf80From64(Sf64Sqrt(Sf64FromI32(lpThings[sel.scan.ith].thm.cMines))), Sf80From64(1.0)))));
         rcMine.left = lpThings[sel.scan.ith].pt.x;
         rcMine.top = lpThings[sel.scan.ith].pt.y;
         rcMine.right = rcMine.left + iRad;

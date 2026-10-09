@@ -10,6 +10,7 @@
 #include <setjmp.h>
 #include <string.h>
 #include <time.h>
+#include "sfnum.h"
 
 // Raw Win16 storage is byte-addressed and may be unaligned, so scalar
 // accesses through it copy bytes instead of dereferencing a cast pointer.

@@ -1,0 +1,121 @@
+{
+  "game_revision": "e7245dd3599e3a5dcf5e6ba74e90896321a251a5",
+  "branch": "softfloat",
+  "reference_date": "2026-10-09",
+  "compiler": "gcc (Rev4, Built by MSYS2 project) 16.2.0",
+  "platform": "Windows x64, MSYS2 UCRT64",
+  "reference_builds": [
+    "mingw-debug",
+    "mingw-release"
+  ],
+  "floating_contract": {
+    "float_bits": 32,
+    "double_bits": 64,
+    "long_double_significand_bits": 64,
+    "long_double_max_exp": 16384
+  },
+  "format": "LF records; hexadecimal float/double bit patterns or integer values; literal display strings",
+  "update_policy": "Read-only during migration; failures write actual files, never replace references.",
+  "game_source_sha256": {
+    "ai4.c": "f0f1f5dd8959d9f9487dae454447d54f4a365739a84a9ed9b761b981fc2977a1",
+    "aiutil.c": "a94648b4ed9e4ce2a147cfbc7bb031e73607c606cba65a9acc279a3a40a62329",
+    "battle.c": "b1bca0a3559c8d9785c9a916127d0e724b8ae00e4f7d541b3713d3c9af4d36ac",
+    "mineui.c": "c0acd295e39e27078328f27cafef7b91d9cb9676600f2755796de97308142246",
+    "msg.c": "a9fcbc35bf32126e3d9241dd2ce5d51298b72798be618be4347d4a32edfa21b9",
+    "planet.c": "862cde13af658e7326b47137efb6bd0fb31230092da50e6a88015cfe06e3764a",
+    "planetui.c": "a5054f25c645fa3661588e386870692ef9a93838afc75138f2952dc4f11d69c1",
+    "race.c": "31819d6bf9fb8a791ee9991d2158355118afc40555ac06c3d23e62d4216f5600",
+    "report.c": "ec46fbd9995b66e6f4754342a5afd55eb30e1664c173925714f56e511316c41f",
+    "reportui.c": "090557b92072678f6c7c2a29b5e19df5fbde3a56922213593efa7cce52258434",
+    "scan.c": "223a3f71b9d357cb0978cc1c7ccf317dbb942cdd47539a7db7b1c2f157e56cfb",
+    "ship.c": "c627ceb9c4426dc3aa2660c5129834ef3f1bf8ba096ea027c6243009cfff2f61",
+    "ship2.c": "43c2d463f3598b048d9dd987ea59231766421f80348fdb39d4d0e22dd623f8e7",
+    "thing.c": "114adbf897ef7d131b03f4e817c0cd0cd7c9774eab63c3bd77d99f19da45902d",
+    "turn.c": "4c36500d7fad0b346b58c1b0a07616e457fa66b8d7c3ba408e003d94bca7ac7a",
+    "turn2.c": "df10c5594f5c5a8481c2434c8bc7634c2af5405df654d4d37e936d82ccb430ff",
+    "util.c": "d5c9b73b09dfdbf4b6e0fd7349f7fba18bdcd32efc1ff05e29f96bf5c5363b5e",
+    "utilgen.c": "32f03d127be241290fcfaeb54ac921665da143318b6c615dc6f35298bba5391b",
+    "utilgenui.c": "4073704994bf980d3de667634637a6cc9b6afe3cce1c00a8113bfae69e9624d8"
+  },
+  "test_source_sha256_lf": "d39ef8b5237230a46a60b08190799e65ab023c256b82cdef481910f8b6f9cdb2",
+  "fixtures": {
+    "floating-cargo.txt": {
+      "rows": 30,
+      "sha256": "576b8bb2100990e5fe4432a01002d2ef78bea4cf06f05d9eecc0d0af4c1579c4"
+    },
+    "floating-defense.txt": {
+      "rows": 1240,
+      "sha256": "64b5de2d9d85005ae0a9d79812059462f926c8096e7b0a3f9ceb830138b0823e"
+    },
+    "floating-distance.txt": {
+      "rows": 112,
+      "sha256": "95f28894c2b1cc183a83d538f4e2d8d2e2baa9cf9de9abe3541aa640787b5bc1"
+    },
+    "floating-geometry.txt": {
+      "rows": 42,
+      "sha256": "8b6ad1c26ac58039ab06f879f3c546f0f443c3420f3dec5c9156db177eedc34f"
+    },
+    "floating-planet.txt": {
+      "rows": 342,
+      "sha256": "81e7fc7f7e1f8225acd3e3fdaa31b197b06e2c47212a71f2a13a5fd1366c0d33"
+    },
+    "floating-route.txt": {
+      "rows": 30,
+      "sha256": "1679fb68f39e69e8d3fac2ce0a521d4a3ffc88353457a0b4be81654d23d64115"
+    },
+    "floating-scanner.txt": {
+      "rows": 276,
+      "sha256": "a6952d88da9c44fb46e06f8769ac3f2195775995016ae8d4ad9a882d8b7c99cd"
+    },
+    "floating-ui-text.txt": {
+      "rows": 32,
+      "sha256": "c7654978a36f9865570eb0723f2d824e7f9813374af94ce0782cd4c4759bc9c4"
+    },
+    "floating-ui.txt": {
+      "rows": 414,
+      "sha256": "79d6193b84353c1b4da5e6ccbc16765b7eda8755440f531656dde6cc14a2563c"
+    },
+    "floating-beam.txt": {
+      "rows": 8,
+      "sha256": "d4e4106444692a85c3987f713a3b7329344a49c663dfaceb4719d32782232483"
+    },
+    "floating-bombing.txt": {
+      "rows": 204,
+      "sha256": "2551d9aeaee93be237f52a7d1295e03258e8c6bdb83ed146c9861eabc11fb3cb"
+    },
+    "floating-freighter.txt": {
+      "rows": 12,
+      "sha256": "8dc029fc2fd9c1c2789365b3f584876a4574d036be127b42c5cd512c7a97e0f5"
+    },
+    "floating-gates.txt": {
+      "rows": 30,
+      "sha256": "91a085a1c1ba9cf71e4d6051fcb39d6dc55b68f5138231dcc165f8432bc93fd8"
+    },
+    "floating-pow.txt": {
+      "rows": 2117,
+      "sha256": "5e4f550de4d1b70292c455ff2a08897cbd87c02e4aa7be365a68b06eb20b8563"
+    },
+    "floating-ui-mines.txt": {
+      "rows": 408,
+      "sha256": "a107a198b0cb02190eb88678a750a9b93e9796c47d47e86850ceba39b2d5c249"
+    }
+  },
+  "additional_test_sources_sha256_lf": {
+    "tests\\unit\\test_pow.c": "62d9d48d9326aeb3e2bb6110a248f2cd00ea83fd62863d94322958a8658ef915",
+    "tests\\unit\\pow_game_adapter.c": "351e412f65a46172e404eec903d60d1cad28f4433b6c538aae2a2ff758f6396a",
+    "tests\\scaffold\\pow_reference.c": "866e5af46c22a770eed727dd15c9a5ced834583b1a25ea17531b0dcff4dc7415"
+  },
+  "pow_oracle": {
+    "library": "MPFR 4.2.2",
+    "method": "Directed lower/upper pow bounds, starting at 128 bits and doubling until both round to the same binary64 value (maximum 4096).",
+    "columns": [
+      "input_bits",
+      "exponent_bits",
+      "native_GCC_result_bits",
+      "correctly_rounded_result_bits"
+    ],
+    "cases": 2117,
+    "native_differences": 1,
+    "maximum_native_error_ULP": 1
+  }
+}

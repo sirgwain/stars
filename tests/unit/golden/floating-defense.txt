@@ -1,0 +1,1240 @@
+0000 defense bits             000000003f800000
+0001 smart defense bits       000000003f800000
+0002 defense bits             000000003f7d70a4
+0003 smart defense bits       000000003f7eb852
+0004 defense bits             000000003f7ae7d5
+0005 smart defense bits       000000003f7d7247
+0006 defense bits             000000003f786584
+0007 smart defense bits       000000003f7c2dde
+0008 defense bits             000000003f75e99f
+0009 smart defense bits       000000003f7aeb14
+0010 defense bits             000000003f737415
+0011 smart defense bits       000000003f79a9e7
+0012 defense bits             000000003f7104d8
+0013 smart defense bits       000000003f786a55
+0014 defense bits             000000003f6e9bd6
+0015 smart defense bits       000000003f772c5c
+0016 defense bits             000000003f6c38ff
+0017 smart defense bits       000000003f75effb
+0018 defense bits             000000003f69dc44
+0019 smart defense bits       000000003f74b52e
+0020 defense bits             000000003f678595
+0021 smart defense bits       000000003f737bf4
+0022 defense bits             000000003f6534e3
+0023 smart defense bits       000000003f72444b
+0024 defense bits             000000003f62ea1e
+0025 smart defense bits       000000003f710e31
+0026 defense bits             000000003f60a538
+0027 smart defense bits       000000003f6fd9a4
+0028 defense bits             000000003f5e6620
+0029 smart defense bits       000000003f6ea6a2
+0030 defense bits             000000003f5c2cc9
+0031 smart defense bits       000000003f6d7529
+0032 defense bits             000000003f59f923
+0033 smart defense bits       000000003f6c4537
+0034 defense bits             000000003f57cb20
+0035 smart defense bits       000000003f6b16ca
+0036 defense bits             000000003f55a2b2
+0037 smart defense bits       000000003f69e9e0
+0038 defense bits             000000003f537fc9
+0039 smart defense bits       000000003f68be77
+0040 defense bits             000000003f516259
+0041 smart defense bits       000000003f67948d
+0042 defense bits             000000003f4f4a53
+0043 smart defense bits       000000003f666c21
+0044 defense bits             000000003f4d37aa
+0045 smart defense bits       000000003f654530
+0046 defense bits             000000003f4b2a4e
+0047 smart defense bits       000000003f641fb9
+0048 defense bits             000000003f492234
+0049 smart defense bits       000000003f62fbb9
+0050 defense bits             000000003f471f4d
+0051 smart defense bits       000000003f61d930
+0052 defense bits             000000003f45218c
+0053 smart defense bits       000000003f60b81a
+0054 defense bits             000000003f4328e4
+0055 smart defense bits       000000003f5f9876
+0056 defense bits             000000003f413549
+0057 smart defense bits       000000003f5e7a42
+0058 defense bits             000000003f3f46ac
+0059 smart defense bits       000000003f5d5d7c
+0060 defense bits             000000003f3d5d01
+0061 smart defense bits       000000003f5c4223
+0062 defense bits             000000003f3b783c
+0063 smart defense bits       000000003f5b2835
+0064 defense bits             000000003f399850
+0065 smart defense bits       000000003f5a0fb0
+0066 defense bits             000000003f37bd30
+0067 smart defense bits       000000003f58f891
+0068 defense bits             000000003f35e6d1
+0069 smart defense bits       000000003f57e2d8
+0070 defense bits             000000003f341526
+0071 smart defense bits       000000003f56ce83
+0072 defense bits             000000003f324823
+0073 smart defense bits       000000003f55bb8f
+0074 defense bits             000000003f307fbc
+0075 smart defense bits       000000003f54a9fb
+0076 defense bits             000000003f2ebbe6
+0077 smart defense bits       000000003f5399c5
+0078 defense bits             000000003f2cfc94
+0079 smart defense bits       000000003f528aec
+0080 defense bits             000000003f2b41bc
+0081 smart defense bits       000000003f517d6d
+0082 defense bits             000000003f298b51
+0083 smart defense bits       000000003f507148
+0084 defense bits             000000003f27d948
+0085 smart defense bits       000000003f4f6679
+0086 defense bits             000000003f262b97
+0087 smart defense bits       000000003f4e5d00
+0088 defense bits             000000003f248232
+0089 smart defense bits       000000003f4d54db
+0090 defense bits             000000003f22dd0d
+0091 smart defense bits       000000003f4c4e08
+0092 defense bits             000000003f213c1f
+0093 smart defense bits       000000003f4b4886
+0094 defense bits             000000003f1f9f5c
+0095 smart defense bits       000000003f4a4452
+0096 defense bits             000000003f1e06ba
+0097 smart defense bits       000000003f49416b
+0098 defense bits             000000003f1c722e
+0099 smart defense bits       000000003f483fd0
+0100 defense bits             000000003f1ae1ad
+0101 smart defense bits       000000003f473f7e
+0102 defense bits             000000003f19552e
+0103 smart defense bits       000000003f464074
+0104 defense bits             000000003f17cca6
+0105 smart defense bits       000000003f4542b1
+0106 defense bits             000000003f16480b
+0107 smart defense bits       000000003f444633
+0108 defense bits             000000003f14c752
+0109 smart defense bits       000000003f434af8
+0110 defense bits             000000003f134a73
+0111 smart defense bits       000000003f4250fe
+0112 defense bits             000000003f11d162
+0113 smart defense bits       000000003f415845
+0114 defense bits             000000003f105c17
+0115 smart defense bits       000000003f4060c9
+0116 defense bits             000000003f0eea88
+0117 smart defense bits       000000003f3f6a8b
+0118 defense bits             000000003f0d7caa
+0119 smart defense bits       000000003f3e7588
+0120 defense bits             000000003f0c1275
+0121 smart defense bits       000000003f3d81be
+0122 defense bits             000000003f0aabe0
+0123 smart defense bits       000000003f3c8f2c
+0124 defense bits             000000003f0948e0
+0125 smart defense bits       000000003f3b9dd1
+0126 defense bits             000000003f07e96d
+0127 smart defense bits       000000003f3aadab
+0128 defense bits             000000003f068d7e
+0129 smart defense bits       000000003f39beb8
+0130 defense bits             000000003f053509
+0131 smart defense bits       000000003f38d0f7
+0132 defense bits             000000003f03e007
+0133 smart defense bits       000000003f37e467
+0134 defense bits             000000003f028e6d
+0135 smart defense bits       000000003f36f905
+0136 defense bits             000000003f014034
+0137 smart defense bits       000000003f360ed1
+0138 defense bits             000000003effeaa4
+0139 smart defense bits       000000003f3525c8
+0140 defense bits             000000003efd5b7e
+0141 smart defense bits       000000003f343de9
+0142 defense bits             000000003efad2e6
+0143 smart defense bits       000000003f335734
+0144 defense bits             000000003ef850ca
+0145 smart defense bits       000000003f3271a5
+0146 defense bits             000000003ef5d51a
+0147 smart defense bits       000000003f318d3d
+0148 defense bits             000000003ef35fc5
+0149 smart defense bits       000000003f30a9f9
+0150 defense bits             000000003ef0f0bb
+0151 smart defense bits       000000003f2fc7d7
+0152 defense bits             000000003eee87ed
+0153 smart defense bits       000000003f2ee6d8
+0154 defense bits             000000003eec2549
+0155 smart defense bits       000000003f2e06f8
+0156 defense bits             000000003ee9c8c1
+0157 smart defense bits       000000003f2d2837
+0158 defense bits             000000003ee77244
+0159 smart defense bits       000000003f2c4a93
+0160 defense bits             000000003ee521c3
+0161 smart defense bits       000000003f2b6e0a
+0162 defense bits             000000003ee2d72f
+0163 smart defense bits       000000003f2a929c
+0164 defense bits             000000003ee09279
+0165 smart defense bits       000000003f29b847
+0166 defense bits             000000003ede5392
+0167 smart defense bits       000000003f28df09
+0168 defense bits             000000003edc1a6a
+0169 smart defense bits       000000003f2806e1
+0170 defense bits             000000003ed9e6f3
+0171 smart defense bits       000000003f272fce
+0172 defense bits             000000003ed7b91f
+0173 smart defense bits       000000003f2659ce
+0174 defense bits             000000003ed590de
+0175 smart defense bits       000000003f2584e1
+0176 defense bits             000000003ed36e24
+0177 smart defense bits       000000003f24b103
+0178 defense bits             000000003ed150e1
+0179 smart defense bits       000000003f23de35
+0180 defense bits             000000003ecf3907
+0181 smart defense bits       000000003f230c75
+0182 defense bits             000000003ecd268a
+0183 smart defense bits       000000003f223bc1
+0184 defense bits             000000003ecb195a
+0185 smart defense bits       000000003f216c19
+0186 defense bits             000000003ec9116b
+0187 smart defense bits       000000003f209d7a
+0188 defense bits             000000003ec70eb0
+0189 smart defense bits       000000003f1fcfe3
+0190 defense bits             000000003ec51119
+0191 smart defense bits       000000003f1f0354
+0192 defense bits             000000003ec3189c
+0193 smart defense bits       000000003f1e37cb
+0194 defense bits             000000003ec12529
+0195 smart defense bits       000000003f1d6d46
+0196 defense bits             000000003ebf36b6
+0197 smart defense bits       000000003f1ca3c4
+0198 defense bits             000000003ebd4d34
+0199 smart defense bits       000000003f1bdb45
+0200 defense bits             000000003ebb6897
+0201 smart defense bits       000000003f1b13c5
+0202 defense bits             000000003ebb6897
+0203 smart defense bits       000000003f1b13c5
+0204 defense bits             000000003f800000
+0205 smart defense bits       000000003f800000
+0206 defense bits             000000003f7d70a4
+0207 smart defense bits       000000003f7eb852
+0208 defense bits             000000003f7ae7d5
+0209 smart defense bits       000000003f7d7247
+0210 defense bits             000000003f786584
+0211 smart defense bits       000000003f7c2dde
+0212 defense bits             000000003f75e99f
+0213 smart defense bits       000000003f7aeb14
+0214 defense bits             000000003f737415
+0215 smart defense bits       000000003f79a9e7
+0216 defense bits             000000003f7104d8
+0217 smart defense bits       000000003f786a55
+0218 defense bits             000000003f6e9bd6
+0219 smart defense bits       000000003f772c5c
+0220 defense bits             000000003f6c38ff
+0221 smart defense bits       000000003f75effb
+0222 defense bits             000000003f69dc44
+0223 smart defense bits       000000003f74b52e
+0224 defense bits             000000003f678595
+0225 smart defense bits       000000003f737bf4
+0226 defense bits             000000003f6534e3
+0227 smart defense bits       000000003f72444b
+0228 defense bits             000000003f62ea1e
+0229 smart defense bits       000000003f710e31
+0230 defense bits             000000003f60a538
+0231 smart defense bits       000000003f6fd9a4
+0232 defense bits             000000003f5e6620
+0233 smart defense bits       000000003f6ea6a2
+0234 defense bits             000000003f5c2cc9
+0235 smart defense bits       000000003f6d7529
+0236 defense bits             000000003f59f923
+0237 smart defense bits       000000003f6c4537
+0238 defense bits             000000003f57cb20
+0239 smart defense bits       000000003f6b16ca
+0240 defense bits             000000003f55a2b2
+0241 smart defense bits       000000003f69e9e0
+0242 defense bits             000000003f537fc9
+0243 smart defense bits       000000003f68be77
+0244 defense bits             000000003f516259
+0245 smart defense bits       000000003f67948d
+0246 defense bits             000000003f4f4a53
+0247 smart defense bits       000000003f666c21
+0248 defense bits             000000003f4d37aa
+0249 smart defense bits       000000003f654530
+0250 defense bits             000000003f4b2a4e
+0251 smart defense bits       000000003f641fb9
+0252 defense bits             000000003f492234
+0253 smart defense bits       000000003f62fbb9
+0254 defense bits             000000003f471f4d
+0255 smart defense bits       000000003f61d930
+0256 defense bits             000000003f45218c
+0257 smart defense bits       000000003f60b81a
+0258 defense bits             000000003f4328e4
+0259 smart defense bits       000000003f5f9876
+0260 defense bits             000000003f413549
+0261 smart defense bits       000000003f5e7a42
+0262 defense bits             000000003f3f46ac
+0263 smart defense bits       000000003f5d5d7c
+0264 defense bits             000000003f3d5d01
+0265 smart defense bits       000000003f5c4223
+0266 defense bits             000000003f3b783c
+0267 smart defense bits       000000003f5b2835
+0268 defense bits             000000003f399850
+0269 smart defense bits       000000003f5a0fb0
+0270 defense bits             000000003f37bd30
+0271 smart defense bits       000000003f58f891
+0272 defense bits             000000003f35e6d1
+0273 smart defense bits       000000003f57e2d8
+0274 defense bits             000000003f341526
+0275 smart defense bits       000000003f56ce83
+0276 defense bits             000000003f324823
+0277 smart defense bits       000000003f55bb8f
+0278 defense bits             000000003f307fbc
+0279 smart defense bits       000000003f54a9fb
+0280 defense bits             000000003f2ebbe6
+0281 smart defense bits       000000003f5399c5
+0282 defense bits             000000003f2cfc94
+0283 smart defense bits       000000003f528aec
+0284 defense bits             000000003f2b41bc
+0285 smart defense bits       000000003f517d6d
+0286 defense bits             000000003f298b51
+0287 smart defense bits       000000003f507148
+0288 defense bits             000000003f27d948
+0289 smart defense bits       000000003f4f6679
+0290 defense bits             000000003f262b97
+0291 smart defense bits       000000003f4e5d00
+0292 defense bits             000000003f248232
+0293 smart defense bits       000000003f4d54db
+0294 defense bits             000000003f22dd0d
+0295 smart defense bits       000000003f4c4e08
+0296 defense bits             000000003f213c1f
+0297 smart defense bits       000000003f4b4886
+0298 defense bits             000000003f1f9f5c
+0299 smart defense bits       000000003f4a4452
+0300 defense bits             000000003f1e06ba
+0301 smart defense bits       000000003f49416b
+0302 defense bits             000000003f1c722e
+0303 smart defense bits       000000003f483fd0
+0304 defense bits             000000003f1ae1ad
+0305 smart defense bits       000000003f473f7e
+0306 defense bits             000000003f19552e
+0307 smart defense bits       000000003f464074
+0308 defense bits             000000003f17cca6
+0309 smart defense bits       000000003f4542b1
+0310 defense bits             000000003f16480b
+0311 smart defense bits       000000003f444633
+0312 defense bits             000000003f14c752
+0313 smart defense bits       000000003f434af8
+0314 defense bits             000000003f134a73
+0315 smart defense bits       000000003f4250fe
+0316 defense bits             000000003f11d162
+0317 smart defense bits       000000003f415845
+0318 defense bits             000000003f105c17
+0319 smart defense bits       000000003f4060c9
+0320 defense bits             000000003f0eea88
+0321 smart defense bits       000000003f3f6a8b
+0322 defense bits             000000003f0d7caa
+0323 smart defense bits       000000003f3e7588
+0324 defense bits             000000003f0c1275
+0325 smart defense bits       000000003f3d81be
+0326 defense bits             000000003f0aabe0
+0327 smart defense bits       000000003f3c8f2c
+0328 defense bits             000000003f0948e0
+0329 smart defense bits       000000003f3b9dd1
+0330 defense bits             000000003f07e96d
+0331 smart defense bits       000000003f3aadab
+0332 defense bits             000000003f068d7e
+0333 smart defense bits       000000003f39beb8
+0334 defense bits             000000003f053509
+0335 smart defense bits       000000003f38d0f7
+0336 defense bits             000000003f03e007
+0337 smart defense bits       000000003f37e467
+0338 defense bits             000000003f028e6d
+0339 smart defense bits       000000003f36f905
+0340 defense bits             000000003f014034
+0341 smart defense bits       000000003f360ed1
+0342 defense bits             000000003effeaa4
+0343 smart defense bits       000000003f3525c8
+0344 defense bits             000000003efd5b7e
+0345 smart defense bits       000000003f343de9
+0346 defense bits             000000003efad2e6
+0347 smart defense bits       000000003f335734
+0348 defense bits             000000003ef850ca
+0349 smart defense bits       000000003f3271a5
+0350 defense bits             000000003ef5d51a
+0351 smart defense bits       000000003f318d3d
+0352 defense bits             000000003ef35fc5
+0353 smart defense bits       000000003f30a9f9
+0354 defense bits             000000003ef0f0bb
+0355 smart defense bits       000000003f2fc7d7
+0356 defense bits             000000003eee87ed
+0357 smart defense bits       000000003f2ee6d8
+0358 defense bits             000000003eec2549
+0359 smart defense bits       000000003f2e06f8
+0360 defense bits             000000003ee9c8c1
+0361 smart defense bits       000000003f2d2837
+0362 defense bits             000000003ee77244
+0363 smart defense bits       000000003f2c4a93
+0364 defense bits             000000003ee521c3
+0365 smart defense bits       000000003f2b6e0a
+0366 defense bits             000000003ee2d72f
+0367 smart defense bits       000000003f2a929c
+0368 defense bits             000000003ee09279
+0369 smart defense bits       000000003f29b847
+0370 defense bits             000000003ede5392
+0371 smart defense bits       000000003f28df09
+0372 defense bits             000000003edc1a6a
+0373 smart defense bits       000000003f2806e1
+0374 defense bits             000000003ed9e6f3
+0375 smart defense bits       000000003f272fce
+0376 defense bits             000000003ed7b91f
+0377 smart defense bits       000000003f2659ce
+0378 defense bits             000000003ed590de
+0379 smart defense bits       000000003f2584e1
+0380 defense bits             000000003ed36e24
+0381 smart defense bits       000000003f24b103
+0382 defense bits             000000003ed150e1
+0383 smart defense bits       000000003f23de35
+0384 defense bits             000000003ecf3907
+0385 smart defense bits       000000003f230c75
+0386 defense bits             000000003ecd268a
+0387 smart defense bits       000000003f223bc1
+0388 defense bits             000000003ecb195a
+0389 smart defense bits       000000003f216c19
+0390 defense bits             000000003ec9116b
+0391 smart defense bits       000000003f209d7a
+0392 defense bits             000000003ec70eb0
+0393 smart defense bits       000000003f1fcfe3
+0394 defense bits             000000003ec51119
+0395 smart defense bits       000000003f1f0354
+0396 defense bits             000000003ec3189c
+0397 smart defense bits       000000003f1e37cb
+0398 defense bits             000000003ec12529
+0399 smart defense bits       000000003f1d6d46
+0400 defense bits             000000003ebf36b6
+0401 smart defense bits       000000003f1ca3c4
+0402 defense bits             000000003ebd4d34
+0403 smart defense bits       000000003f1bdb45
+0404 defense bits             000000003ebb6897
+0405 smart defense bits       000000003f1b13c5
+0406 defense bits             000000003ebb6897
+0407 smart defense bits       000000003f1b13c5
+0408 defense bits             000000003f800000
+0409 smart defense bits       000000003f800000
+0410 defense bits             000000003f7ae148
+0411 smart defense bits       000000003f7d70a4
+0412 defense bits             000000003f75dcc6
+0413 smart defense bits       000000003f7ae7d5
+0414 defense bits             000000003f70f1f5
+0415 smart defense bits       000000003f786584
+0416 defense bits             000000003f6c2052
+0417 smart defense bits       000000003f75e99f
+0418 defense bits             000000003f67675a
+0419 smart defense bits       000000003f737415
+0420 defense bits             000000003f62c691
+0421 smart defense bits       000000003f7104d8
+0422 defense bits             000000003f5e3d7a
+0423 smart defense bits       000000003f6e9bd6
+0424 defense bits             000000003f59cb9b
+0425 smart defense bits       000000003f6c38ff
+0426 defense bits             000000003f55707e
+0427 smart defense bits       000000003f69dc44
+0428 defense bits             000000003f512baf
+0429 smart defense bits       000000003f678595
+0430 defense bits             000000003f4cfcbb
+0431 smart defense bits       000000003f6534e3
+0432 defense bits             000000003f48e332
+0433 smart defense bits       000000003f62ea1e
+0434 defense bits             000000003f44dea7
+0435 smart defense bits       000000003f60a538
+0436 defense bits             000000003f40eeae
+0437 smart defense bits       000000003f5e6620
+0438 defense bits             000000003f3d12dd
+0439 smart defense bits       000000003f5c2cc9
+0440 defense bits             000000003f394acf
+0441 smart defense bits       000000003f59f923
+0442 defense bits             000000003f35961c
+0443 smart defense bits       000000003f57cb20
+0444 defense bits             000000003f31f464
+0445 smart defense bits       000000003f55a2b2
+0446 defense bits             000000003f2e6543
+0447 smart defense bits       000000003f537fc9
+0448 defense bits             000000003f2ae85b
+0449 smart defense bits       000000003f516259
+0450 defense bits             000000003f277d4f
+0451 smart defense bits       000000003f4f4a53
+0452 defense bits             000000003f2423c3
+0453 smart defense bits       000000003f4d37aa
+0454 defense bits             000000003f20db5e
+0455 smart defense bits       000000003f4b2a4e
+0456 defense bits             000000003f1da3c8
+0457 smart defense bits       000000003f492234
+0458 defense bits             000000003f1a7caa
+0459 smart defense bits       000000003f471f4d
+0460 defense bits             000000003f1765b1
+0461 smart defense bits       000000003f45218c
+0462 defense bits             000000003f145e8a
+0463 smart defense bits       000000003f4328e4
+0464 defense bits             000000003f1166e3
+0465 smart defense bits       000000003f413549
+0466 defense bits             000000003f0e7e6e
+0467 smart defense bits       000000003f3f46ac
+0468 defense bits             000000003f0ba4dc
+0469 smart defense bits       000000003f3d5d01
+0470 defense bits             000000003f08d9e2
+0471 smart defense bits       000000003f3b783c
+0472 defense bits             000000003f061d35
+0473 smart defense bits       000000003f399850
+0474 defense bits             000000003f036e8b
+0475 smart defense bits       000000003f37bd30
+0476 defense bits             000000003f00cd9c
+0477 smart defense bits       000000003f35e6d1
+0478 defense bits             000000003efc7447
+0479 smart defense bits       000000003f341526
+0480 defense bits             000000003ef767b6
+0481 smart defense bits       000000003f324823
+0482 defense bits             000000003ef274ff
+0483 smart defense bits       000000003f307fbc
+0484 defense bits             000000003eed9b9e
+0485 smart defense bits       000000003f2ebbe6
+0486 defense bits             000000003ee8db11
+0487 smart defense bits       000000003f2cfc94
+0488 defense bits             000000003ee432d8
+0489 smart defense bits       000000003f2b41bc
+0490 defense bits             000000003edfa277
+0491 smart defense bits       000000003f298b51
+0492 defense bits             000000003edb2975
+0493 smart defense bits       000000003f27d948
+0494 defense bits             000000003ed6c759
+0495 smart defense bits       000000003f262b97
+0496 defense bits             000000003ed27bae
+0497 smart defense bits       000000003f248232
+0498 defense bits             000000003ece4602
+0499 smart defense bits       000000003f22dd0d
+0500 defense bits             000000003eca25e3
+0501 smart defense bits       000000003f213c1f
+0502 defense bits             000000003ec61ae4
+0503 smart defense bits       000000003f1f9f5c
+0504 defense bits             000000003ec22497
+0505 smart defense bits       000000003f1e06ba
+0506 defense bits             000000003ebe4294
+0507 smart defense bits       000000003f1c722e
+0508 defense bits             000000003eba7473
+0509 smart defense bits       000000003f1ae1ad
+0510 defense bits             000000003eb6b9cd
+0511 smart defense bits       000000003f19552e
+0512 defense bits             000000003eb3123e
+0513 smart defense bits       000000003f17cca6
+0514 defense bits             000000003eaf7d66
+0515 smart defense bits       000000003f16480b
+0516 defense bits             000000003eabfae4
+0517 smart defense bits       000000003f14c752
+0518 defense bits             000000003ea88a5a
+0519 smart defense bits       000000003f134a73
+0520 defense bits             000000003ea52b6d
+0521 smart defense bits       000000003f11d162
+0522 defense bits             000000003ea1ddc2
+0523 smart defense bits       000000003f105c17
+0524 defense bits             000000003e9ea101
+0525 smart defense bits       000000003f0eea88
+0526 defense bits             000000003e9b74d2
+0527 smart defense bits       000000003f0d7caa
+0528 defense bits             000000003e9858e3
+0529 smart defense bits       000000003f0c1275
+0530 defense bits             000000003e954cde
+0531 smart defense bits       000000003f0aabe0
+0532 defense bits             000000003e925073
+0533 smart defense bits       000000003f0948e0
+0534 defense bits             000000003e8f6352
+0535 smart defense bits       000000003f07e96d
+0536 defense bits             000000003e8c852d
+0537 smart defense bits       000000003f068d7e
+0538 defense bits             000000003e89b5b6
+0539 smart defense bits       000000003f053509
+0540 defense bits             000000003e86f4a3
+0541 smart defense bits       000000003f03e007
+0542 defense bits             000000003e8441aa
+0543 smart defense bits       000000003f028e6d
+0544 defense bits             000000003e819c83
+0545 smart defense bits       000000003f014034
+0546 defense bits             000000003e7e09cd
+0547 smart defense bits       000000003effeaa4
+0548 defense bits             000000003e78f520
+0549 smart defense bits       000000003efd5b7e
+0550 defense bits             000000003e73fa77
+0551 smart defense bits       000000003efad2e6
+0552 defense bits             000000003e6f194b
+0553 smart defense bits       000000003ef850ca
+0554 defense bits             000000003e6a511c
+0555 smart defense bits       000000003ef5d51a
+0556 defense bits             000000003e65a168
+0557 smart defense bits       000000003ef35fc5
+0558 defense bits             000000003e6109b3
+0559 smart defense bits       000000003ef0f0bb
+0560 defense bits             000000003e5c8981
+0561 smart defense bits       000000003eee87ed
+0562 defense bits             000000003e58205b
+0563 smart defense bits       000000003eec2549
+0564 defense bits             000000003e53cdc9
+0565 smart defense bits       000000003ee9c8c1
+0566 defense bits             000000003e4f915a
+0567 smart defense bits       000000003ee77244
+0568 defense bits             000000003e4b6a9b
+0569 smart defense bits       000000003ee521c3
+0570 defense bits             000000003e47591d
+0571 smart defense bits       000000003ee2d72f
+0572 defense bits             000000003e435c73
+0573 smart defense bits       000000003ee09279
+0574 defense bits             000000003e3f7433
+0575 smart defense bits       000000003ede5392
+0576 defense bits             000000003e3b9ff5
+0577 smart defense bits       000000003edc1a6a
+0578 defense bits             000000003e37df51
+0579 smart defense bits       000000003ed9e6f3
+0580 defense bits             000000003e3431e4
+0581 smart defense bits       000000003ed7b91f
+0582 defense bits             000000003e30974b
+0583 smart defense bits       000000003ed590de
+0584 defense bits             000000003e2d0f26
+0585 smart defense bits       000000003ed36e24
+0586 defense bits             000000003e299916
+0587 smart defense bits       000000003ed150e1
+0588 defense bits             000000003e2634be
+0589 smart defense bits       000000003ecf3907
+0590 defense bits             000000003e22e1c5
+0591 smart defense bits       000000003ecd268a
+0592 defense bits             000000003e1f9fd0
+0593 smart defense bits       000000003ecb195a
+0594 defense bits             000000003e1c6e89
+0595 smart defense bits       000000003ec9116b
+0596 defense bits             000000003e194d9b
+0597 smart defense bits       000000003ec70eb0
+0598 defense bits             000000003e163cb2
+0599 smart defense bits       000000003ec51119
+0600 defense bits             000000003e133b7b
+0601 smart defense bits       000000003ec3189c
+0602 defense bits             000000003e1049a6
+0603 smart defense bits       000000003ec12529
+0604 defense bits             000000003e0d66e6
+0605 smart defense bits       000000003ebf36b6
+0606 defense bits             000000003e0a92eb
+0607 smart defense bits       000000003ebd4d34
+0608 defense bits             000000003e07cd6c
+0609 smart defense bits       000000003ebb6897
+0610 defense bits             000000003e07cd6c
+0611 smart defense bits       000000003ebb6897
+0612 defense bits             000000003f800000
+0613 smart defense bits       000000003f800000
+0614 defense bits             000000003f79db23
+0615 smart defense bits       000000003f7ced91
+0616 defense bits             000000003f73dc05
+0617 smart defense bits       000000003f79e493
+0618 defense bits             000000003f6e01c0
+0619 smart defense bits       000000003f76e4e7
+0620 defense bits             000000003f684b6f
+0621 smart defense bits       000000003f73ee72
+0622 defense bits             000000003f62b837
+0623 smart defense bits       000000003f710116
+0624 defense bits             000000003f5d4740
+0625 smart defense bits       000000003f6e1cb9
+0626 defense bits             000000003f57f7b7
+0627 smart defense bits       000000003f6b413e
+0628 defense bits             000000003f52c8d0
+0629 smart defense bits       000000003f686e8a
+0630 defense bits             000000003f4db9c1
+0631 smart defense bits       000000003f65a482
+0632 defense bits             000000003f48c9c6
+0633 smart defense bits       000000003f62e30c
+0634 defense bits             000000003f43f822
+0635 smart defense bits       000000003f602a0c
+0636 defense bits             000000003f3f4419
+0637 smart defense bits       000000003f5d796a
+0638 defense bits             000000003f3aacf5
+0639 smart defense bits       000000003f5ad10c
+0640 defense bits             000000003f363206
+0641 smart defense bits       000000003f5830d8
+0642 defense bits             000000003f31d29d
+0643 smart defense bits       000000003f5598b4
+0644 defense bits             000000003f2d8e12
+0645 smart defense bits       000000003f530889
+0646 defense bits             000000003f2963c0
+0647 smart defense bits       000000003f50803e
+0648 defense bits             000000003f255305
+0649 smart defense bits       000000003f4dffba
+0650 defense bits             000000003f215b44
+0651 smart defense bits       000000003f4b86e6
+0652 defense bits             000000003f1d7be5
+0653 smart defense bits       000000003f4915aa
+0654 defense bits             000000003f19b450
+0655 smart defense bits       000000003f46abee
+0656 defense bits             000000003f1603f4
+0657 smart defense bits       000000003f44499d
+0658 defense bits             000000003f126a42
+0659 smart defense bits       000000003f41ee9e
+0660 defense bits             000000003f0ee6af
+0661 smart defense bits       000000003f3f9adb
+0662 defense bits             000000003f0b78b3
+0663 smart defense bits       000000003f3d4e3f
+0664 defense bits             000000003f081fc9
+0665 smart defense bits       000000003f3b08b3
+0666 defense bits             000000003f04db70
+0667 smart defense bits       000000003f38ca22
+0668 defense bits             000000003f01ab2a
+0669 smart defense bits       000000003f369275
+0670 defense bits             000000003efd1cf6
+0671 smart defense bits       000000003f346199
+0672 defense bits             000000003ef709d6
+0673 smart defense bits       000000003f323777
+0674 defense bits             000000003ef11c08
+0675 smart defense bits       000000003f3013fc
+0676 defense bits             000000003eeb52a7
+0677 smart defense bits       000000003f2df712
+0678 defense bits             000000003ee5acd4
+0679 smart defense bits       000000003f2be0a7
+0680 defense bits             000000003ee029b5
+0681 smart defense bits       000000003f29d0a5
+0682 defense bits             000000003edac873
+0683 smart defense bits       000000003f27c6f9
+0684 defense bits             000000003ed5883f
+0685 smart defense bits       000000003f25c38f
+0686 defense bits             000000003ed0684e
+0687 smart defense bits       000000003f23c655
+0688 defense bits             000000003ecb67d9
+0689 smart defense bits       000000003f21cf38
+0690 defense bits             000000003ec68620
+0691 smart defense bits       000000003f1fde23
+0692 defense bits             000000003ec1c265
+0693 smart defense bits       000000003f1df306
+0694 defense bits             000000003ebd1bf0
+0695 smart defense bits       000000003f1c0dce
+0696 defense bits             000000003eb8920d
+0697 smart defense bits       000000003f1a2e68
+0698 defense bits             000000003eb4240c
+0699 smart defense bits       000000003f1854c3
+0700 defense bits             000000003eafd143
+0701 smart defense bits       000000003f1680cd
+0702 defense bits             000000003eab990a
+0703 smart defense bits       000000003f14b275
+0704 defense bits             000000003ea77abe
+0705 smart defense bits       000000003f12e9a8
+0706 defense bits             000000003ea375c0
+0707 smart defense bits       000000003f112658
+0708 defense bits             000000003e9f8974
+0709 smart defense bits       000000003f0f6871
+0710 defense bits             000000003e9bb542
+0711 smart defense bits       000000003f0dafe4
+0712 defense bits             000000003e97f896
+0713 smart defense bits       000000003f0bfca1
+0714 defense bits             000000003e9452e0
+0715 smart defense bits       000000003f0a4e97
+0716 defense bits             000000003e90c393
+0717 smart defense bits       000000003f08a5b6
+0718 defense bits             000000003e8d4a25
+0719 smart defense bits       000000003f0701ee
+0720 defense bits             000000003e89e610
+0721 smart defense bits       000000003f056330
+0722 defense bits             000000003e8696d0
+0723 smart defense bits       000000003f03c96c
+0724 defense bits             000000003e835be6
+0725 smart defense bits       000000003f023492
+0726 defense bits             000000003e8034d4
+0727 smart defense bits       000000003f00a495
+0728 defense bits             000000003e7a4242
+0729 smart defense bits       000000003efe32c8
+0730 defense bits             000000003e7440ab
+0731 smart defense bits       000000003efb25e2
+0732 defense bits             000000003e6e63fa
+0733 smart defense bits       000000003ef8225b
+0734 defense bits             000000003e68ab4f
+0735 smart defense bits       000000003ef52817
+0736 defense bits             000000003e6315ca
+0737 smart defense bits       000000003ef236f8
+0738 defense bits             000000003e5da294
+0739 smart defense bits       000000003eef4ee2
+0740 defense bits             000000003e5850da
+0741 smart defense bits       000000003eec6fbb
+0742 defense bits             000000003e531fce
+0743 smart defense bits       000000003ee99965
+0744 defense bits             000000003e4e0ea9
+0745 smart defense bits       000000003ee6cbc8
+0746 defense bits             000000003e491ca5
+0747 smart defense bits       000000003ee406c6
+0748 defense bits             000000003e444903
+0749 smart defense bits       000000003ee14a47
+0750 defense bits             000000003e3f9309
+0751 smart defense bits       000000003ede9630
+0752 defense bits             000000003e3afa01
+0753 smart defense bits       000000003edbea66
+0754 defense bits             000000003e367d38
+0755 smart defense bits       000000003ed946d2
+0756 defense bits             000000003e321c01
+0757 smart defense bits       000000003ed6ab58
+0758 defense bits             000000003e2dd5b3
+0759 smart defense bits       000000003ed417e1
+0760 defense bits             000000003e29a9a9
+0761 smart defense bits       000000003ed18c54
+0762 defense bits             000000003e259741
+0763 smart defense bits       000000003ecf0899
+0764 defense bits             000000003e219ddd
+0765 smart defense bits       000000003ecc8c97
+0766 defense bits             000000003e1dbce4
+0767 smart defense bits       000000003eca1837
+0768 defense bits             000000003e19f3c0
+0769 smart defense bits       000000003ec7ab62
+0770 defense bits             000000003e1641de
+0771 smart defense bits       000000003ec545ff
+0772 defense bits             000000003e12a6af
+0773 smart defense bits       000000003ec2e7f9
+0774 defense bits             000000003e0f21a9
+0775 smart defense bits       000000003ec09139
+0776 defense bits             000000003e0bb243
+0777 smart defense bits       000000003ebe41a8
+0778 defense bits             000000003e0857f8
+0779 smart defense bits       000000003ebbf930
+0780 defense bits             000000003e051246
+0781 smart defense bits       000000003eb9b7bb
+0782 defense bits             000000003e01e0ae
+0783 smart defense bits       000000003eb77d35
+0784 defense bits             000000003dfd856d
+0785 smart defense bits       000000003eb54987
+0786 defense bits             000000003df76fcb
+0787 smart defense bits       000000003eb31c9d
+0788 defense bits             000000003df17f8a
+0789 smart defense bits       000000003eb0f662
+0790 defense bits             000000003debb3c7
+0791 smart defense bits       000000003eaed6c1
+0792 defense bits             000000003de60b9f
+0793 smart defense bits       000000003eacbda6
+0794 defense bits             000000003de08639
+0795 smart defense bits       000000003eaaaafd
+0796 defense bits             000000003ddb22bf
+0797 smart defense bits       000000003ea89eb3
+0798 defense bits             000000003dd5e060
+0799 smart defense bits       000000003ea698b3
+0800 defense bits             000000003dd0be51
+0801 smart defense bits       000000003ea498ea
+0802 defense bits             000000003dcbbbcc
+0803 smart defense bits       000000003ea29f45
+0804 defense bits             000000003dc6d80f
+0805 smart defense bits       000000003ea0abb2
+0806 defense bits             000000003dc2125d
+0807 smart defense bits       000000003e9ebe1d
+0808 defense bits             000000003dbd69fc
+0809 smart defense bits       000000003e9cd675
+0810 defense bits             000000003db8de3a
+0811 smart defense bits       000000003e9af4a7
+0812 defense bits             000000003db46e65
+0813 smart defense bits       000000003e9918a1
+0814 defense bits             000000003db46e65
+0815 smart defense bits       000000003e9918a1
+0816 defense bits             000000003f800000
+0817 smart defense bits       000000003f800000
+0818 defense bits             000000003f7851ec
+0819 smart defense bits       000000003f7c28f6
+0820 defense bits             000000003f70ded3
+0821 smart defense bits       000000003f7860aa
+0822 defense bits             000000003f69a4f0
+0823 smart defense bits       000000003f74a6e5
+0824 defense bits             000000003f62a28d
+0825 smart defense bits       000000003f70fb6f
+0826 defense bits             000000003f5bd5fe
+0827 smart defense bits       000000003f6d5e10
+0828 defense bits             000000003f553da7
+0829 smart defense bits       000000003f69ce92
+0830 defense bits             000000003f4ed7f7
+0831 smart defense bits       000000003f664cc0
+0832 defense bits             000000003f48a368
+0833 smart defense bits       000000003f62d866
+0834 defense bits             000000003f429e81
+0835 smart defense bits       000000003f5f7150
+0836 defense bits             000000003f3cc7d4
+0837 smart defense bits       000000003f5c174b
+0838 defense bits             000000003f371dfe
+0839 smart defense bits       000000003f58ca25
+0840 defense bits             000000003f319fa7
+0841 smart defense bits       000000003f5589ac
+0842 defense bits             000000003f2c4b81
+0843 smart defense bits       000000003f5255b0
+0844 defense bits             000000003f272047
+0845 smart defense bits       000000003f4f2e01
+0846 defense bits             000000003f221cc0
+0847 smart defense bits       000000003f4c126f
+0848 defense bits             000000003f1d3fba
+0849 smart defense bits       000000003f4902cc
+0850 defense bits             000000003f18880e
+0851 smart defense bits       000000003f45feea
+0852 defense bits             000000003f13f49d
+0853 smart defense bits       000000003f43069c
+0854 defense bits             000000003f0f8451
+0855 smart defense bits       000000003f4019b6
+0856 defense bits             000000003f0b361b
+0857 smart defense bits       000000003f3d380c
+0858 defense bits             000000003f0708f6
+0859 smart defense bits       000000003f3a6172
+0860 defense bits             000000003f02fbe5
+0861 smart defense bits       000000003f3795be
+0862 defense bits             000000003efe1be0
+0863 smart defense bits       000000003f34d4c7
+0864 defense bits             000000003ef67c51
+0865 smart defense bits       000000003f321e63
+0866 defense bits             000000003eef174f
+0867 smart defense bits       000000003f2f7269
+0868 defense bits             000000003ee7eb17
+0869 smart defense bits       000000003f2cd0b1
+0870 defense bits             000000003ee0f5f5
+0871 smart defense bits       000000003f2a3915
+0872 defense bits             000000003eda3642
+0873 smart defense bits       000000003f27ab6d
+0874 defense bits             000000003ed3aa64
+0875 smart defense bits       000000003f252793
+0876 defense bits             000000003ecd50cc
+0877 smart defense bits       000000003f22ad62
+0878 defense bits             000000003ec727f9
+0879 smart defense bits       000000003f203cb3
+0880 defense bits             000000003ec12e75
+0881 smart defense bits       000000003f1dd564
+0882 defense bits             000000003ebb62d2
+0883 smart defense bits       000000003f1b774f
+0884 defense bits             000000003eb5c3b2
+0885 smart defense bits       000000003f192252
+0886 defense bits             000000003eb04fbf
+0887 smart defense bits       000000003f16d649
+0888 defense bits             000000003eab05ac
+0889 smart defense bits       000000003f149312
+0890 defense bits             000000003ea5e439
+0891 smart defense bits       000000003f12588b
+0892 defense bits             000000003ea0ea2d
+0893 smart defense bits       000000003f102694
+0894 defense bits             000000003e9c165a
+0895 smart defense bits       000000003f0dfd0a
+0896 defense bits             000000003e97679a
+0897 smart defense bits       000000003f0bdbcd
+0898 defense bits             000000003e92dcd0
+0899 smart defense bits       000000003f09c2bf
+0900 defense bits             000000003e8e74e9
+0901 smart defense bits       000000003f07b1be
+0902 defense bits             000000003e8a2ed7
+0903 smart defense bits       000000003f05a8ae
+0904 defense bits             000000003e860999
+0905 smart defense bits       000000003f03a76e
+0906 defense bits             000000003e820430
+0907 smart defense bits       000000003f01ade0
+0908 defense bits             000000003e7c3b53
+0909 smart defense bits       000000003eff77d1
+0910 defense bits             000000003e74aa2f
+0911 smart defense bits       000000003efba2d2
+0912 defense bits             000000003e6d5329
+0913 smart defense bits       000000003ef7dc89
+0914 defense bits             000000003e663481
+0915 smart defense bits       000000003ef424c0
+0916 defense bits             000000003e5f4c88
+0917 smart defense bits       000000003ef07b3d
+0918 defense bits             000000003e589998
+0919 smart defense bits       000000003eecdfca
+0920 defense bits             000000003e521a1b
+0921 smart defense bits       000000003ee95231
+0922 defense bits             000000003e4bcc86
+0923 smart defense bits       000000003ee5d23d
+0924 defense bits             000000003e45af59
+0925 smart defense bits       000000003ee25fba
+0926 defense bits             000000003e3fc120
+0927 smart defense bits       000000003edefa73
+0928 defense bits             000000003e3a0074
+0929 smart defense bits       000000003edba237
+0930 defense bits             000000003e346bf6
+0931 smart defense bits       000000003ed856d2
+0932 defense bits             000000003e2f0252
+0933 smart defense bits       000000003ed51814
+0934 defense bits             000000003e29c240
+0935 smart defense bits       000000003ed1e5cc
+0936 defense bits             000000003e24aa81
+0937 smart defense bits       000000003ecebfca
+0938 defense bits             000000003e1fb9de
+0939 smart defense bits       000000003ecba5df
+0940 defense bits             000000003e1aef2c
+0941 smart defense bits       000000003ec897dd
+0942 defense bits             000000003e164947
+0943 smart defense bits       000000003ec59596
+0944 defense bits             000000003e11c714
+0945 smart defense bits       000000003ec29edd
+0946 defense bits             000000003e0d6782
+0947 smart defense bits       000000003ebfb385
+0948 defense bits             000000003e092985
+0949 smart defense bits       000000003ebcd363
+0950 defense bits             000000003e050c1e
+0951 smart defense bits       000000003eb9fe4c
+0952 defense bits             000000003e010e50
+0953 smart defense bits       000000003eb73415
+0954 defense bits             000000003dfa5e53
+0955 smart defense bits       000000003eb47495
+0956 defense bits             000000003df2db7f
+0957 smart defense bits       000000003eb1bfa2
+0958 defense bits             000000003deb925a
+0959 smart defense bits       000000003eaf1514
+0960 defense bits             000000003de48129
+0961 smart defense bits       000000003eac74c3
+0962 defense bits             000000003ddda63f
+0963 smart defense bits       000000003ea9de88
+0964 defense bits             000000003dd6fffa
+0965 smart defense bits       000000003ea7523b
+0966 defense bits             000000003dd08cc7
+0967 smart defense bits       000000003ea4cfb8
+0968 defense bits             000000003dca4b1e
+0969 smart defense bits       000000003ea256d8
+0970 defense bits             000000003dc43981
+0971 smart defense bits       000000003e9fe776
+0972 defense bits             000000003dbe567f
+0973 smart defense bits       000000003e9d816e
+0974 defense bits             000000003db8a0b4
+0975 smart defense bits       000000003e9b249b
+0976 defense bits             000000003db316c3
+0977 smart defense bits       000000003e98d0dc
+0978 defense bits             000000003dadb75c
+0979 smart defense bits       000000003e96860b
+0980 defense bits             000000003da88138
+0981 smart defense bits       000000003e944409
+0982 defense bits             000000003da3731a
+0983 smart defense bits       000000003e920ab2
+0984 defense bits             000000003d9e8bcf
+0985 smart defense bits       000000003e8fd9e5
+0986 defense bits             000000003d99ca2c
+0987 smart defense bits       000000003e8db181
+0988 defense bits             000000003d952d12
+0989 smart defense bits       000000003e8b9167
+0990 defense bits             000000003d90b365
+0991 smart defense bits       000000003e897976
+0992 defense bits             000000003d8c5c18
+0993 smart defense bits       000000003e87698f
+0994 defense bits             000000003d882622
+0995 smart defense bits       000000003e856193
+0996 defense bits             000000003d841082
+0997 smart defense bits       000000003e836164
+0998 defense bits             000000003d801a41
+0999 smart defense bits       000000003e8168e4
+1000 defense bits             000000003d7884da
+1001 smart defense bits       000000003e7eefea
+1002 defense bits             000000003d711039
+1003 smart defense bits       000000003e7b1cf5
+1004 defense bits             000000003d69d4dc
+1005 smart defense bits       000000003e7758af
+1006 defense bits             000000003d62d108
+1007 smart defense bits       000000003e73a2df
+1008 defense bits             000000003d5c0315
+1009 smart defense bits       000000003e6ffb4f
+1010 defense bits             000000003d556963
+1011 smart defense bits       000000003e6c61c8
+1012 defense bits             000000003d4f0263
+1013 smart defense bits       000000003e68d613
+1014 defense bits             000000003d48cc8e
+1015 smart defense bits       000000003e6557fb
+1016 defense bits             000000003d42c66b
+1017 smart defense bits       000000003e61e74d
+1018 defense bits             000000003d42c66b
+1019 smart defense bits       000000003e61e74d
+1020 defense bits             000000003f800000
+1021 smart defense bits       000000003f800000
+1022 defense bits             000000003f7645a2
+1023 smart defense bits       000000003f7b22d1
+1024 defense bits             000000003f6ce9e6
+1025 smart defense bits       000000003f765d4a
+1026 defense bits             000000003f63e934
+1027 smart defense bits       000000003f71aef9
+1028 defense bits             000000003f5b4016
+1029 smart defense bits       000000003f6d176d
+1030 defense bits             000000003f52eb38
+1031 smart defense bits       000000003f689636
+1032 defense bits             000000003f4ae766
+1033 smart defense bits       000000003f642ae9
+1034 defense bits             000000003f43318d
+1035 smart defense bits       000000003f5fd51a
+1036 defense bits             000000003f3bc6b5
+1037 smart defense bits       000000003f5b9462
+1038 defense bits             000000003f34a405
+1039 smart defense bits       000000003f576859
+1040 defense bits             000000003f2dc6bf
+1041 smart defense bits       000000003f53509b
+1042 defense bits             000000003f272c40
+1043 smart defense bits       000000003f4f4cc5
+1044 defense bits             000000003f20d1fe
+1045 smart defense bits       000000003f4b5c76
+1046 defense bits             000000003f1ab589
+1047 smart defense bits       000000003f477f50
+1048 defense bits             000000003f14d486
+1049 smart defense bits       000000003f43b4f5
+1050 defense bits             000000003f0f2cb4
+1051 smart defense bits       000000003f3ffd0a
+1052 defense bits             000000003f09bbe7
+1053 smart defense bits       000000003f3c5735
+1054 defense bits             000000003f048006
+1055 smart defense bits       000000003f38c31f
+1056 defense bits             000000003efeee20
+1057 smart defense bits       000000003f354070
+1058 defense bits             000000003ef53e2b
+1059 smart defense bits       000000003f31ced4
+1060 defense bits             000000003eebec72
+1061 smart defense bits       000000003f2e6df8
+1062 defense bits             000000003ee2f561
+1063 smart defense bits       000000003f2b1d8b
+1064 defense bits             000000003eda5587
+1065 smart defense bits       000000003f27dd3d
+1066 defense bits             000000003ed20993
+1067 smart defense bits       000000003f24acbf
+1068 defense bits             000000003eca0e54
+1069 smart defense bits       000000003f218bc5
+1070 defense bits             000000003ec260ba
+1071 smart defense bits       000000003f1e7a03
+1072 defense bits             000000003ebafdd2
+1073 smart defense bits       000000003f1b772e
+1074 defense bits             000000003eb3e2c4
+1075 smart defense bits       000000003f1882ff
+1076 defense bits             000000003ead0cd7
+1077 smart defense bits       000000003f159d2e
+1078 defense bits             000000003ea67968
+1079 smart defense bits       000000003f12c575
+1080 defense bits             000000003ea025f2
+1081 smart defense bits       000000003f0ffb8f
+1082 defense bits             000000003e9a1006
+1083 smart defense bits       000000003f0d3f3b
+1084 defense bits             000000003e94354d
+1085 smart defense bits       000000003f0a9034
+1086 defense bits             000000003e8e9388
+1087 smart defense bits       000000003f07ee3b
+1088 defense bits             000000003e89288d
+1089 smart defense bits       000000003f055911
+1090 defense bits             000000003e83f246
+1091 smart defense bits       000000003f02d076
+1092 defense bits             000000003e7ddd66
+1093 smart defense bits       000000003f00542e
+1094 defense bits             000000003e7437cd
+1095 smart defense bits       000000003efbc7fa
+1096 defense bits             000000003e6af00c
+1097 smart defense bits       000000003ef6ff50
+1098 defense bits             000000003e620293
+1099 smart defense bits       000000003ef24deb
+1100 defense bits             000000003e596bf3
+1101 smart defense bits       000000003eedb35a
+1102 defense bits             000000003e5128df
+1103 smart defense bits       000000003ee92f2d
+1104 defense bits             000000003e49362a
+1105 smart defense bits       000000003ee4c0f7
+1106 defense bits             000000003e4190c8
+1107 smart defense bits       000000003ee0684f
+1108 defense bits             000000003e3a35c6
+1109 smart defense bits       000000003edc24ca
+1110 defense bits             000000003e332253
+1111 smart defense bits       000000003ed7f603
+1112 defense bits             000000003e2c53b5
+1113 smart defense bits       000000003ed3db94
+1114 defense bits             000000003e25c74f
+1115 smart defense bits       000000003ecfd51a
+1116 defense bits             000000003e1f7a9e
+1117 smart defense bits       000000003ecbe234
+1118 defense bits             000000003e196b34
+1119 smart defense bits       000000003ec80284
+1120 defense bits             000000003e1396bf
+1121 smart defense bits       000000003ec435ab
+1122 defense bits             000000003e0dfb01
+1123 smart defense bits       000000003ec07b4e
+1124 defense bits             000000003e0895d1
+1125 smart defense bits       000000003ebcd312
+1126 defense bits             000000003e03651d
+1127 smart defense bits       000000003eb93ca1
+1128 defense bits             000000003dfccdcf
+1129 smart defense bits       000000003eb5b7a3
+1130 defense bits             000000003df33288
+1131 smart defense bits       000000003eb243c4
+1132 defense bits             000000003de9f4b5
+1133 smart defense bits       000000003eaee0af
+1134 defense bits             000000003de110c9
+1135 smart defense bits       000000003eab8e15
+1136 defense bits             000000003dd88359
+1137 smart defense bits       000000003ea84ba3
+1138 defense bits             000000003dd0491c
+1139 smart defense bits       000000003ea5190c
+1140 defense bits             000000003dc85ee8
+1141 smart defense bits       000000003ea1f603
+1142 defense bits             000000003dc0c1b3
+1143 smart defense bits       000000003e9ee23c
+1144 defense bits             000000003db96e90
+1145 smart defense bits       000000003e9bdd6c
+1146 defense bits             000000003db262af
+1147 smart defense bits       000000003e98e74c
+1148 defense bits             000000003dab9b59
+1149 smart defense bits       000000003e95ff93
+1150 defense bits             000000003da515f5
+1151 smart defense bits       000000003e9325fb
+1152 defense bits             000000003d9ed001
+1153 smart defense bits       000000003e905a40
+1154 defense bits             000000003d98c713
+1155 smart defense bits       000000003e8d9c1f
+1156 defense bits             000000003d92f8da
+1157 smart defense bits       000000003e8aeb55
+1158 defense bits             000000003d8d631c
+1159 smart defense bits       000000003e8847a1
+1160 defense bits             000000003d8803b2
+1161 smart defense bits       000000003e85b0c3
+1162 defense bits             000000003d82d88c
+1163 smart defense bits       000000003e83267e
+1164 defense bits             000000003d7bbf5b
+1165 smart defense bits       000000003e80a894
+1166 defense bits             000000003d722e5b
+1167 smart defense bits       000000003e7c6d90
+1168 defense bits             000000003d68fa6b
+1169 smart defense bits       000000003e77a1c1
+1170 defense bits             000000003d602002
+1171 smart defense bits       000000003e72ed46
+1172 defense bits             000000003d579bb8
+1173 smart defense bits       000000003e6e4fad
+1174 defense bits             000000003d4f6a48
+1175 smart defense bits       000000003e69c888
+1176 defense bits             000000003d47888c
+1177 smart defense bits       000000003e655769
+1178 defense bits             000000003d3ff37c
+1179 smart defense bits       000000003e60fbe4
+1180 defense bits             000000003d38a82f
+1181 smart defense bits       000000003e5cb592
+1182 defense bits             000000003d31a3d8
+1183 smart defense bits       000000003e58840a
+1184 defense bits             000000003d2ae3c3
+1185 smart defense bits       000000003e5466e8
+1186 defense bits             000000003d246558
+1187 smart defense bits       000000003e505dc9
+1188 defense bits             000000003d1e261a
+1189 smart defense bits       000000003e4c684a
+1190 defense bits             000000003d1823a1
+1191 smart defense bits       000000003e48860d
+1192 defense bits             000000003d125b9f
+1193 smart defense bits       000000003e44b6b5
+1194 defense bits             000000003d0ccbda
+1195 smart defense bits       000000003e40f9e4
+1196 defense bits             000000003d07722f
+1197 smart defense bits       000000003e3d4f41
+1198 defense bits             000000003d024c91
+1199 smart defense bits       000000003e39b674
+1200 defense bits             000000003cfab208
+1201 smart defense bits       000000003e362f25
+1202 defense bits             000000003cf12b44
+1203 smart defense bits       000000003e32b900
+1204 defense bits             000000003ce8012d
+1205 smart defense bits       000000003e2f53b2
+1206 defense bits             000000003cdf303c
+1207 smart defense bits       000000003e2bfee8
+1208 defense bits             000000003cd6b50f
+1209 smart defense bits       000000003e28ba51
+1210 defense bits             000000003cce8c62
+1211 smart defense bits       000000003e2585a0
+1212 defense bits             000000003cc6b315
+1213 smart defense bits       000000003e226087
+1214 defense bits             000000003cbf2622
+1215 smart defense bits       000000003e1f4ab9
+1216 defense bits             000000003cb7e2a3
+1217 smart defense bits       000000003e1c43ee
+1218 defense bits             000000003cb0e5cd
+1219 smart defense bits       000000003e194bdb
+1220 defense bits             000000003caa2cf0
+1221 smart defense bits       000000003e166239
+1222 defense bits             000000003caa2cf0
+1223 smart defense bits       000000003e166239
+1224 population cap bits      000000003f800000
+1225 smart cap bits           000000003f800000
+1226 population cap bits      000000003f7645a2
+1227 smart cap bits           000000003f7b22d1
+1228 population cap bits      000000003f7645a2
+1229 smart cap bits           000000003f7b22d1
+1230 population cap bits      000000003f7645a2
+1231 smart cap bits           000000003f7b22d1
+1232 population cap bits      000000003f6ce9e6
+1233 smart cap bits           000000003f765d4a
+1234 population cap bits      000000003caa2cf0
+1235 smart cap bits           000000003e166239
+1236 population cap bits      000000003caa2cf0
+1237 smart cap bits           000000003e166239
+1238 population cap bits      000000003caa2cf0
+1239 smart cap bits           000000003e166239

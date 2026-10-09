@@ -425,7 +425,7 @@ int32_t EstFuelUse(FLEET *lpfl, int16_t iOrd, int16_t iWarp, int32_t dTravel, in
         } else {
             lpord = &lpfl->lpplord->rgord[iOrd];
             d = DGetDistance(lpord->pt.x, lpord->pt.y, lpord[1].pt.x, lpord[1].pt.y);
-            dTravel = (int16_t)LOWORD((int32_t)((long double)d + 0.9999));
+            dTravel = (int16_t)LOWORD(Sf80ToI32((Sf80Add(Sf80From64(d), Sf80From64(0.9999)))));
         }
     }
     lFuel = 0;
@@ -446,7 +446,7 @@ int32_t EstFuelUse(FLEET *lpfl, int16_t iOrd, int16_t iWarp, int32_t dTravel, in
                         if (wtMass < 200 || (lT < 500000 && wtMass < 4000) || (lT < 100000 && wtMass < 20000)) {
                             lFuel += (int32_t)(wtMass * lT) / 2000;
                         } else {
-                            lFuel = (int32_t)((long double)lT * wtMass / 2000.0) + lFuel;
+                            lFuel = Sf80ToI32((Sf80Div(Sf80Mul(Sf80FromI32(lT), Sf80FromI32(wtMass)), Sf80From64(2000.0)))) + lFuel;
                         }
                     }
                 } else if (rgieff[i] > iEffCur && rgieff[i] < iEffNext) {
@@ -617,7 +617,7 @@ static int16_t IWarpForWaypoint(FLEET *lpfl, ORDER *lpord, int16_t fFastest) {
     }
 LOptimizeSpeed:
     if (iWarp > 1 && lpord->grobj != grobjFleet) {
-        lDist = LOWORD((int32_t)DGetDistance(lpord->pt.x, lpord->pt.y, lpord[-1].pt.x, lpord[-1].pt.y));
+        lDist = LOWORD(Sf64ToI32(DGetDistance(lpord->pt.x, lpord->pt.y, lpord[-1].pt.x, lpord[-1].pt.y)));
         cSpeed = iWarp * iWarp;
         cTravel = (int16_t)(iWarp * iWarp + lDist - 1) / cSpeed;
         do {
@@ -671,10 +671,10 @@ int32_t LFuelUseToWaypoint(FLEET *lpfl, int16_t iwp, int16_t fMaxCargo) {
     for (i = 0; i < iwp; i++) {
         iWarp = lpord[i + 1].iWarp;
         if (iWarp > 0 && iWarp < 11) {
-            dbl = (double)((long double)DGetDistance(lpord[i].pt.x, lpord[i].pt.y, lpord[i + 1].pt.x, lpord[i + 1].pt.y) + 0.99999);
-            dist = LOWORD((int32_t)dbl);
-            dbl = (double)((long double)dbl / iWarp / iWarp);
-            cYears = LOWORD((int32_t)((long double)dbl + 0.9999));
+            dbl = Sf64From80((Sf80Add(Sf80From64(DGetDistance(lpord[i].pt.x, lpord[i].pt.y, lpord[i + 1].pt.x, lpord[i + 1].pt.y)), Sf80From64(0.99999))));
+            dist = LOWORD(Sf64ToI32(dbl));
+            dbl = Sf64From80((Sf80Div(Sf80Div(Sf80From64(dbl), Sf80FromI32(iWarp)), Sf80FromI32(iWarp))));
+            cYears = LOWORD(Sf80ToI32((Sf80Add(Sf80From64(dbl), Sf80From64(0.9999)))));
             l = EstFuelUse(lpfl, i, iWarp, -1, FALSE);
         } else {
             cYears = 1;
@@ -844,7 +844,7 @@ void FleetTransferCargoBalance(FLEET *pflNew1, FLEET *pflNew2) {
     for (i = 0; i < 2; i++) {
         if (rgFuelCapacity[i] != 0) {
             if (rgpflNew[i]->rgwtMin[4] > 45000 || rgFuelCapLoss[i] > 45000) {
-                lChg = (int32_t)((long double)rgpflNew[i]->rgwtMin[4] * rgFuelCapLoss[i] / rgFuelCapacity[i]);
+                lChg = Sf80ToI32((Sf80Div(Sf80Mul(Sf80FromI32(rgpflNew[i]->rgwtMin[4]), Sf80FromI32(rgFuelCapLoss[i])), Sf80FromI32(rgFuelCapacity[i]))));
             } else {
                 lChg = (int32_t)((int32_t)(rgpflNew[i]->rgwtMin[4] * rgFuelCapLoss[i]) / rgFuelCapacity[i]);
             }
@@ -856,7 +856,7 @@ void FleetTransferCargoBalance(FLEET *pflNew1, FLEET *pflNew2) {
                 wtCargoTot += rgpflNew[i]->rgwtMin[j];
             }
             if (wtCargoTot > 45000 || rgCargoCapLoss[i] > 45000) {
-                wtCargoXfer = (int32_t)((long double)wtCargoTot * rgCargoCapLoss[i] / rgCargoCapacity[i]);
+                wtCargoXfer = Sf80ToI32((Sf80Div(Sf80Mul(Sf80FromI32(wtCargoTot), Sf80FromI32(rgCargoCapLoss[i])), Sf80FromI32(rgCargoCapacity[i]))));
             } else {
                 wtCargoXfer = (int32_t)((int32_t)(wtCargoTot * rgCargoCapLoss[i]) / rgCargoCapacity[i]);
             }
@@ -864,7 +864,7 @@ void FleetTransferCargoBalance(FLEET *pflNew1, FLEET *pflNew2) {
             if (wtCargoXfer != 0 && wtCargoTot != 0) {
                 for (j = 0; j <= 3; j++) {
                     if (rgpflNew[i]->rgwtMin[j] > 45000 || wtCargoXfer > 45000) {
-                        l = (int32_t)((long double)rgpflNew[i]->rgwtMin[j] * wtCargoXfer / wtCargoTot);
+                        l = Sf80ToI32((Sf80Div(Sf80Mul(Sf80FromI32(rgpflNew[i]->rgwtMin[j]), Sf80FromI32(wtCargoXfer)), Sf80FromI32(wtCargoTot))));
                     } else {
                         l = (int32_t)((int32_t)(rgpflNew[i]->rgwtMin[j] * wtCargoXfer) / wtCargoTot);
                     }

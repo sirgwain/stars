@@ -1867,7 +1867,7 @@ int16_t FAttack(int16_t itokAttacker, int16_t init, BTLREC *lpbtlrec, uint16_t g
                             if (dpMain < 65536 && dp < 65536) {
                                 lValue = (int32_t)((int32_t)(dpMain * dp) / dpT);
                             } else {
-                                lValue = (int32_t)((long double)dpMain * dp / dpT);
+                                lValue = Sf80ToI32((Sf80Div(Sf80Mul(Sf80FromI32(dpMain), Sf80FromI32(dp)), Sf80FromI32(dpT))));
                             }
                             dpMain = dpMain - 1 < lValue ? dpMain - 1 : lValue;
                         } else {
@@ -2966,19 +2966,19 @@ void DoBombing() {
             if (lppl->iPlayer != lpfl->iPlayer && lppl->iPlayer != iplrNone && FAttackPlayer(lpfl, lppl->iPlayer) && !lppl->fStarbase &&
                 FCalcFleetBombDamage(lpfl, &dmgBombPeople, &dmgBombFloor, &dmgPeopleSmart, &dmgBombBldg, &pctTerra, &fMulti)) {
                 CalcPctSurvive(lppl, &pctSuccess, &pctSmart);
-                if ((long double)pctSuccess < (long double)1.0) {
+                if (Sf80Lt(Sf80From32(pctSuccess), Sf80From64(1.0))) {
                     if (dmgBombPeople > 0) {
-                        dmgBombPeople = (int32_t)((long double)dmgBombPeople * pctSuccess + 0.5);
+                        dmgBombPeople = Sf80ToI32((Sf80Add(Sf80Mul(Sf80FromI32(dmgBombPeople), Sf80From32(pctSuccess)), Sf80From64(0.5))));
                     }
                     if (dmgBombFloor > 0) {
-                        dmgBombFloor = (int32_t)((long double)dmgBombFloor * pctSuccess + 0.5);
+                        dmgBombFloor = Sf80ToI32((Sf80Add(Sf80Mul(Sf80FromI32(dmgBombFloor), Sf80From32(pctSuccess)), Sf80From64(0.5))));
                     }
                     if (dmgPeopleSmart > 0) {
-                        dmgPeopleSmart = (int32_t)((long double)dmgPeopleSmart * pctSmart + 0.5);
+                        dmgPeopleSmart = Sf80ToI32((Sf80Add(Sf80Mul(Sf80FromI32(dmgPeopleSmart), Sf80From32(pctSmart)), Sf80From64(0.5))));
                     }
                     if (dmgBombBldg > 0) {
-                        pctSuccessHalf = (double)(1.0 - ((long double)1.0 - pctSuccess) / 2.0);
-                        dmgBombBldg = (int32_t)((long double)dmgBombBldg * pctSuccessHalf + 0.5);
+                        pctSuccessHalf = Sf64From80((Sf80Sub(Sf80From64(1.0), Sf80Div((Sf80Sub(Sf80From64(1.0), Sf80From32(pctSuccess))), Sf80From64(2.0)))));
+                        dmgBombBldg = Sf80ToI32((Sf80Add(Sf80Mul(Sf80FromI32(dmgBombBldg), Sf80From64(pctSuccessHalf)), Sf80From64(0.5))));
                     }
                 }
                 cPPE = lppl->cMines + lppl->cFactories + (uint32_t)lppl->cDefenses;
@@ -3046,7 +3046,7 @@ void DoBombing() {
                 }
                 if (pctTerra > 0) {
                     pctTot = 0;
-                    pctTerra -= (int32_t)(((long double)1.0 - pctSuccess) * pctTerra / 2);
+                    pctTerra -= Sf80ToI32((Sf80Div(Sf80Mul((Sf80Sub(Sf80From64(1.0), Sf80From32(pctSuccess))), Sf80FromI32(pctTerra)), Sf80FromI32(2))));
                     if (pctTerra > 500) {
                         pctTerra = 500;
                     }
@@ -3088,7 +3088,7 @@ void DoBombing() {
                         goto GenericBombMsg;
                     }
                     if (cKillPeople > 0) {
-                        if ((long double)pctSuccess == (long double)1.0) {
+                        if (Sf80Eq(Sf80From32(pctSuccess), Sf80From64(1.0))) {
                         GenericBombMsg:
                             FSendPlrMsg(lpfl->iPlayer, idmSrc, lpfl->id | 0x8000, lpfl->id, lppl->id, LOWORD(cKillPeople), LOWORD(cPPE), 0, 0, 0);
                             FSendPlrMsg(lppl->iPlayer, idmDst, lppl->id, lpfl->id, lppl->id, LOWORD(cKillPeople), LOWORD(cPPE), 0, 0, 0);
@@ -3096,23 +3096,23 @@ void DoBombing() {
                             idmSrc += 5;
                             idmDst += 5;
                             FSendPlrMsg(lpfl->iPlayer, idmSrc, lpfl->id | 0x8000, lpfl->id, lppl->id, LOWORD(cKillPeople), LOWORD(cPPE),
-                                        (int32_t)(((long double)1.0 - pctSuccess) * 10000), 0, 0);
+                                        Sf80ToI32((Sf80Mul((Sf80Sub(Sf80From64(1.0), Sf80From32(pctSuccess))), Sf80FromI32(10000)))), 0, 0);
                             FSendPlrMsg(lppl->iPlayer, idmDst, lppl->id, lpfl->id, lppl->id, LOWORD(cKillPeople), LOWORD(cPPE),
-                                        (int32_t)(((long double)1.0 - pctSuccess) * 10000), 0, 0);
+                                        Sf80ToI32((Sf80Mul((Sf80Sub(Sf80From64(1.0), Sf80From32(pctSuccess))), Sf80FromI32(10000)))), 0, 0);
                         }
                     } else {
                         idmSrc -= 2;
                         idmDst -= 2;
-                        if ((long double)pctSuccess == (long double)1.0) {
+                        if (Sf80Eq(Sf80From32(pctSuccess), Sf80From64(1.0))) {
                             FSendPlrMsg(lpfl->iPlayer, idmSrc, lpfl->id | 0x8000, lpfl->id, lppl->id, LOWORD(cPPE), 0, 0, 0, 0);
                             FSendPlrMsg(lppl->iPlayer, idmDst, lppl->id, lpfl->id, lppl->id, LOWORD(cPPE), 0, 0, 0, 0);
                         } else {
                             idmSrc += 5;
                             idmDst += 5;
                             FSendPlrMsg(lpfl->iPlayer, idmSrc, lpfl->id | 0x8000, lpfl->id, lppl->id, LOWORD(cPPE),
-                                        (int32_t)(((long double)1.0 - pctSuccess) * 10000), 0, 0, 0);
-                            FSendPlrMsg(lppl->iPlayer, idmDst, lppl->id, lpfl->id, lppl->id, LOWORD(cPPE), (int32_t)(((long double)1.0 - pctSuccess) * 10000),
-                                        0, 0, 0);
+                                        Sf80ToI32((Sf80Mul((Sf80Sub(Sf80From64(1.0), Sf80From32(pctSuccess))), Sf80FromI32(10000)))), 0, 0, 0);
+                            FSendPlrMsg(lppl->iPlayer, idmDst, lppl->id, lpfl->id, lppl->id, LOWORD(cPPE),
+                                        Sf80ToI32((Sf80Mul((Sf80Sub(Sf80From64(1.0), Sf80From32(pctSuccess))), Sf80FromI32(10000)))), 0, 0, 0);
                         }
                     }
                 } else if (cKillPeople > 0) {

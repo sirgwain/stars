@@ -1,0 +1,8 @@
+0000 first attacked           0000000000000001
+0001 targets hit              0000000000000002
+0002 remaining ships          0000000000000000
+0003 remaining damage         0000000000000000
+0004 losses                   000000000000800a
+0005 remaining ships          0000000000000344
+0006 remaining damage         0000000000000164
+0007 losses                   00000000000080a4

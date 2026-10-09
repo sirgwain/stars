@@ -243,18 +243,18 @@ void DiaganolTextOut(HDC hdc, RECT *prc, char *psz, int16_t cLen) {
             plf->lfHeight += 2 <= (int16_t)(dyEstFont - dy) / 2 ? (int16_t)(dyEstFont - dy) / 2 : 2;
             goto TryAgain;
         }
-        angle = (double)atan2((double)(int16_t)(dy - dyEstFont), (double)dx);
-        rotate = (double)((long double)angle / 3.141592654 * 1800.0 + 0.5);
-        plf->lfEscapement = LOWORD((int32_t)rotate);
+        angle = Sf64Atan2(Sf64FromI32((int16_t)(dy - dyEstFont)), Sf64FromI32(dx));
+        rotate = Sf64From80((Sf80Add(Sf80Mul(Sf80Div(Sf80From64(angle), Sf80From64(3.141592654)), Sf80From64(1800.0)), Sf80From64(0.5))));
+        plf->lfEscapement = LOWORD(Sf64ToI32(rotate));
         hfont = CreateFontIndirect(plf);
         hfontSav = SelectObject(hdc, hfont);
         l = GetTextExtent(hdc, psz, cLen);
         dxText = LOWORD(l);
         dyText = HIWORD(l);
-        dsin = (double)sin(angle);
-        dcos = (double)cos(angle);
-        dxFlat = LOWORD((int32_t)((long double)dcos * dxText + (long double)dsin * dyText));
-        dyFlat = LOWORD((int32_t)((long double)dsin * dxText + (long double)dcos * dyText));
+        dsin = Sf64Sin(angle);
+        dcos = Sf64Cos(angle);
+        dxFlat = LOWORD(Sf80ToI32((Sf80Add(Sf80Mul(Sf80From64(dcos), Sf80FromI32(dxText)), Sf80Mul(Sf80From64(dsin), Sf80FromI32(dyText))))));
+        dyFlat = LOWORD(Sf80ToI32((Sf80Add(Sf80Mul(Sf80From64(dsin), Sf80FromI32(dxText)), Sf80Mul(Sf80From64(dcos), Sf80FromI32(dyText))))));
         if (dxFlat + 8 > dx || dyFlat + 8 > dy) {
             SelectObject(hdc, hfontSav);
             DeleteObject(hfont);
@@ -274,7 +274,7 @@ void DiaganolTextOut(HDC hdc, RECT *prc, char *psz, int16_t cLen) {
             goto TryAgain;
         }
         xStart = (int16_t)(dx - dxFlat) / 2 + prc->left;
-        yStart = prc->bottom - (int16_t)(dy - dyFlat) / 2 - LOWORD((int32_t)((long double)dcos * dyText));
+        yStart = prc->bottom - (int16_t)(dy - dyFlat) / 2 - LOWORD(Sf80ToI32((Sf80Mul(Sf80From64(dcos), Sf80FromI32(dyText)))));
         TextOut(hdc, xStart, yStart, psz, cLen);
         SelectObject(hdc, hfontSav);
         DeleteObject(hfont);

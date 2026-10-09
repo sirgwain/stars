@@ -513,9 +513,12 @@ void DrawPlanetStats(HDC hdc, TILE *ptile, OBJ obj) {
         }
         if (dRange != 0) {
             CalcPctSurvive(&sel.pl, &pct, NULL);
-            pct = (float)((long double)1.0 - pct);
-            c = wsprintf(szWork, PCTDXPCTDPCTPCT, LOWORD((int32_t)((long double)pct * 100)),
-                         LOWORD((int32_t)((pct - (long double)(int16_t)LOWORD((int32_t)((long double)pct * 100)) / 100.0) * 10000)));
+            pct = Sf32From80((Sf80Sub(Sf80From64(1.0), Sf80From32(pct))));
+            c = wsprintf(szWork, PCTDXPCTDPCTPCT, LOWORD(Sf80ToI32((Sf80Mul(Sf80From32(pct), Sf80FromI32(100))))),
+                         LOWORD(Sf80ToI32(
+                             (Sf80Mul((Sf80Sub(Sf80From32(pct), Sf80Div(Sf80FromI32((int16_t)LOWORD(Sf80ToI32((Sf80Mul(Sf80From32(pct), Sf80FromI32(100)))))),
+                                                                        Sf80From64(100.0)))),
+                                      Sf80FromI32(10000))))));
         } else {
             c = CchGetString(GetRaceStat(&rgplr[idPlayer], rsMajorAdv) == raMacintosh ? idsN : idsNone4, szWork);
             psz = szWork;

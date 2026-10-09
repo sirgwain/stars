@@ -1,2 +1,8 @@
 # Expected dump files: compare byte for byte, CRLF included.
 tests/unit/golden/** -text
+# Numerical references are portable line-oriented records, unlike dump bytes.
+tests/unit/golden/floating-*.txt text eol=lf -whitespace
+tests/unit/golden/floating-*.json text eol=lf
+# Preserve vendored upstream bytes, including original whitespace.
+third_party/softfloat/source/** -text -whitespace
+third_party/softfloat/COPYING.txt -text -whitespace

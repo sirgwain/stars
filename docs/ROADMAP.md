@@ -22,8 +22,11 @@ To keep in mind:
 
 - The Linux host must generate the same turns as the Windows build. The
   native regression baseline is the test: the Linux host's run must match
-  it. Watch the x87 rounding casts (`long double`), `qsort16` tie order and
+  it. Watch the software extended-precision rounding boundaries (`Sf80`), `qsort16` tie order and
   the RNG first.
+- Floating arithmetic now uses Berkeley SoftFloat, removing the native
+  x87 `long double` requirement. See [SOFTFLOAT-IMPLEMENTATION.md](SOFTFLOAT-IMPLEMENTATION.md)
+  for validation and remaining platform checks.
 - Each build shows its platform in its version name (done; see
   [VERSIONING.md](VERSIONING.md)).
 

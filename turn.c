@@ -976,7 +976,7 @@ void MoveThings(int16_t fPostProd) {
         MoveTh:
             ptSrc = lpth->pt;
             d = DGetDistance(ptSrc.x, ptSrc.y, ptDst.x, ptDst.y);
-            dLeft = LOWORD((int32_t)d);
+            dLeft = LOWORD(Sf64ToI32(d));
             if (dLeft <= dRange) {
             MadeItThere:
                 if (lpth->ith == ithMysteryTrader) {
@@ -1125,7 +1125,7 @@ void MoveThings(int16_t fPostProd) {
                 if (lppl->iPlayer == iplrNone)
                     goto LFreeThePacket;
                 CalcPctSurvive(lppl, &pct, NULL);
-                dmgRaw = (int32_t)((long double)pct * dmgRaw);
+                dmgRaw = Sf80ToI32((Sf80Mul(Sf80From32(pct), Sf80FromI32(dmgRaw))));
                 if (dmgRaw == 0 || GetRaceStat(&rgplr[lppl->iPlayer], rsMajorAdv) == raMacintosh) {
                 LAllSafe:
                     FSendPlrMsg(lppl->iPlayer,
@@ -1175,12 +1175,12 @@ void MoveThings(int16_t fPostProd) {
                 lpth--;
                 lpthMac--;
             } else {
-                dxRound = (double)(ptDst.x <= ptSrc.x ? (long double)-0.5 : (long double)0.5);
-                dyRound = (double)(ptDst.y <= ptSrc.y ? (long double)-0.5 : (long double)0.5);
-                if ((long double)d > (long double)0.0001 || (long double)d < (long double)-0.0001) {
-                    r = (double)((long double)dRange / d);
-                    ptSrc.x = LOWORD((int32_t)((long double)r * (int16_t)(ptDst.x - ptSrc.x) + dxRound)) + ptSrc.x;
-                    ptSrc.y = LOWORD((int32_t)((long double)r * (int16_t)(ptDst.y - ptSrc.y) + dyRound)) + ptSrc.y;
+                dxRound = Sf64From80((ptDst.x <= ptSrc.x ? Sf80From64(Sf64Neg(0.5)) : Sf80From64(0.5)));
+                dyRound = Sf64From80((ptDst.y <= ptSrc.y ? Sf80From64(Sf64Neg(0.5)) : Sf80From64(0.5)));
+                if (Sf80Lt(Sf80From64(0.0001), Sf80From64(d)) || Sf80Lt(Sf80From64(d), Sf80From64(Sf64Neg(0.0001)))) {
+                    r = Sf64From80((Sf80Div(Sf80FromI32(dRange), Sf80From64(d))));
+                    ptSrc.x = LOWORD(Sf80ToI32((Sf80Add(Sf80Mul(Sf80From64(r), Sf80FromI32((int16_t)(ptDst.x - ptSrc.x))), Sf80From64(dxRound))))) + ptSrc.x;
+                    ptSrc.y = LOWORD(Sf80ToI32((Sf80Add(Sf80Mul(Sf80From64(r), Sf80FromI32((int16_t)(ptDst.y - ptSrc.y))), Sf80From64(dyRound))))) + ptSrc.y;
                     if (ptSrc.x == ptDst.x && ptSrc.y == ptDst.y)
                         goto MadeItThere;
                     lpth->pt = ptSrc;
@@ -1419,7 +1419,7 @@ void MoveFleets() {
                                     }
                                 }
                             }
-                            dTravel = (int32_t)DGetDistance(ptBeg.x, ptBeg.y, ptEnd.x, ptEnd.y);
+                            dTravel = Sf64ToI32(DGetDistance(ptBeg.x, ptBeg.y, ptEnd.x, ptEnd.y));
                             if (!FStargateJump(lpfl, isbsSrc, isbsDst, LOWORD(dTravel)))
                                 continue;
                             lpfl->fHereAllTurn = FALSE;
@@ -1521,8 +1521,9 @@ void MoveFleets() {
                                 }
                             }
                             d = DGetDistance(ptBeg.x, ptBeg.y, ptEnd.x, ptEnd.y);
-                            dTravel =
-                                dTravel < (int16_t)LOWORD((int32_t)((long double)d + 0.9999)) ? dTravel : (int16_t)LOWORD((int32_t)((long double)d + 0.9999));
+                            dTravel = dTravel < (int16_t)LOWORD(Sf80ToI32((Sf80Add(Sf80From64(d), Sf80From64(0.9999)))))
+                                          ? dTravel
+                                          : (int16_t)LOWORD(Sf80ToI32((Sf80Add(Sf80From64(d), Sf80From64(0.9999)))));
                             if (dTravel > dRange) {
                                 lpfl->rgwtMin[4] = 0;
                                 wtFuelUsed = 1;
@@ -1540,7 +1541,7 @@ void MoveFleets() {
                                 lpfl->rgwtMin[4] = 0 <= lpfl->rgwtMin[4] - wtFuelUsed ? lpfl->rgwtMin[4] - wtFuelUsed : 0;
                             }
                             if (lpfl->rgwtMin[4] == 0 && wtFuelUsed > 0 &&
-                                (((long double)d - 0.99999 >= (long double)dTravel || dRange == 0) && !fGotEnufFuel)) {
+                                ((Sf80Le(Sf80FromI32(dTravel), Sf80Sub(Sf80From64(d), Sf80From64(0.99999))) || dRange == 0) && !fGotEnufFuel)) {
                                 i = 0;
                                 do {
                                     i++;
@@ -1567,7 +1568,7 @@ void MoveFleets() {
                                 lpfl->dirFltY = dy + 127;
                                 lpfl->iwarpFlt = lpfl->lpplord->rgord[1].iWarp;
                             }
-                            dActTravel = (int32_t)((long double)d - 0.99999);
+                            dActTravel = Sf80ToI32((Sf80Sub(Sf80From64(d), Sf80From64(0.99999))));
                             dMineTravel = dTravel < dActTravel ? LOWORD(dTravel) : LOWORD(dActTravel);
                             if (lpord[1].iWarp < 11 && !FTravelThroughMineFields(lpfl, &dMineTravel, NULL)) {
                                 lpfl->dMoveLeft = 0;
@@ -1608,12 +1609,16 @@ void MoveFleets() {
                                     }
                                 }
                             } else {
-                                dxRound = (double)(ptEnd.x <= ptBeg.x ? (long double)-0.5 : (long double)0.5);
-                                dyRound = (double)(ptEnd.y <= ptBeg.y ? (long double)-0.5 : (long double)0.5);
-                                if ((long double)d > (long double)0.0001 || (long double)d < (long double)-0.0001) {
-                                    r = (double)((long double)dTravel / d);
-                                    lpfl->pt.x = LOWORD((int32_t)((long double)r * (int16_t)(ptEnd.x - ptBeg.x) + dxRound)) + ptBeg.x;
-                                    lpfl->pt.y = LOWORD((int32_t)((long double)r * (int16_t)(ptEnd.y - ptBeg.y) + dyRound)) + ptBeg.y;
+                                dxRound = Sf64From80((ptEnd.x <= ptBeg.x ? Sf80From64(Sf64Neg(0.5)) : Sf80From64(0.5)));
+                                dyRound = Sf64From80((ptEnd.y <= ptBeg.y ? Sf80From64(Sf64Neg(0.5)) : Sf80From64(0.5)));
+                                if (Sf80Lt(Sf80From64(0.0001), Sf80From64(d)) || Sf80Lt(Sf80From64(d), Sf80From64(Sf64Neg(0.0001)))) {
+                                    r = Sf64From80((Sf80Div(Sf80FromI32(dTravel), Sf80From64(d))));
+                                    lpfl->pt.x =
+                                        LOWORD(Sf80ToI32((Sf80Add(Sf80Mul(Sf80From64(r), Sf80FromI32((int16_t)(ptEnd.x - ptBeg.x))), Sf80From64(dxRound))))) +
+                                        ptBeg.x;
+                                    lpfl->pt.y =
+                                        LOWORD(Sf80ToI32((Sf80Add(Sf80Mul(Sf80From64(r), Sf80FromI32((int16_t)(ptEnd.y - ptBeg.y))), Sf80From64(dyRound))))) +
+                                        ptBeg.y;
                                     lpfl->idPlanet = idPlanetDeepSpace;
                                 }
                                 if (cPass > 0 && lpfl->dMoveLeft > 0) {
@@ -1907,7 +1912,8 @@ LHitSkip1:
         if (!lpthHit) {
             dx = ptDst.x - ptSrc.x;
             dy = ptDst.y - ptSrc.y;
-            dTravel = LOWORD((int32_t)((long double)sqrt((double)((uint32_t)(dx * dx) + (uint32_t)(dy * (int16_t)(ptDst.y - ptSrc.y)))) + 0.5));
+            dTravel = LOWORD(Sf80ToI32(
+                (Sf80Add(Sf80From64(Sf64Sqrt(Sf64FromU32(((uint32_t)(dx * dx) + (uint32_t)(dy * (int16_t)(ptDst.y - ptSrc.y)))))), Sf80From64(0.5)))));
             ptAct.x = LMulDiv(dx, dEnd, dTravel) + ptSrc.x;
             ptAct.y = LMulDiv(dy, dEnd, dTravel) + ptSrc.y;
             if (cshDead != 0) {

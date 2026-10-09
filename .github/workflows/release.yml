@@ -42,6 +42,9 @@ jobs:
           mkdir -p dist/release
           cp dist/mingw-release/bin/stars.exe dist/release/
           cp 'res/stars!.hlp' dist/release/
+          if [[ -f dist/mingw-release/bin/SoftFloat-COPYING.txt ]]; then
+            cp dist/mingw-release/bin/SoftFloat-COPYING.txt dist/release/
+          fi
           version=$(sed -n 's/^#define STARS_VERSION_STRING "\(.*\)"$/\1/p' dist/mingw-release/generated/version.h)
           display=$(sed -n 's/^#define STARS_VERSION_DISPLAY "\(.*\)"$/\1/p' dist/mingw-release/generated/version.h)
           echo "Built Stars! $display"
@@ -54,7 +57,6 @@ jobs:
           fi
 
       # stars-host, the game's host without windows, for x86-64 Linux. The
-      # runner's gcc gives x87 long double, which turn generation needs.
       # It links statically so it runs on older glibc. Refs from before
       # 2.9 have no host preset and publish only stars.exe.
       - name: Build Linux stars-host
@@ -68,7 +70,11 @@ jobs:
           (cd dist/host-release && ctest --output-on-failure --timeout 300)
           file dist/host-release/bin/stars-host
           dist/host-release/bin/stars-host --version
-          tar -C dist/host-release/bin -czf dist/release/stars-host-linux-x64.tar.gz stars-host
+          host_files=(stars-host)
+          if [[ -f dist/host-release/bin/SoftFloat-COPYING.txt ]]; then
+            host_files+=(SoftFloat-COPYING.txt)
+          fi
+          tar -C dist/host-release/bin -czf dist/release/stars-host-linux-x64.tar.gz "${host_files[@]}"
           echo "STARS_HOST_ASSET=dist/release/stars-host-linux-x64.tar.gz" >> "$GITHUB_ENV"
 
       - name: Save build artifacts
@@ -78,6 +84,7 @@ jobs:
           path: |
             dist/release/stars.exe
             dist/release/stars!.hlp
+            dist/release/SoftFloat-COPYING.txt
           if-no-files-found: error
           retention-days: 30
 
@@ -97,6 +104,9 @@ jobs:
         run: |
           commit=$(git rev-parse HEAD)
           assets=(dist/release/stars.exe 'dist/release/stars!.hlp')
+          if [[ -f dist/release/SoftFloat-COPYING.txt ]]; then
+            assets+=(dist/release/SoftFloat-COPYING.txt)
+          fi
           if [[ -n "${STARS_HOST_ASSET:-}" ]]; then
             assets+=("$STARS_HOST_ASSET")
           fi

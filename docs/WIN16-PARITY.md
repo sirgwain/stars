@@ -76,8 +76,9 @@ results depend on them.
   (implemented in `native.c`), rebuilt from the Win16 CRT, so
   elements with equal keys end up in the same order. Native libc qsort
   orders ties differently.
-- **x87 precision:** floating arithmetic keeps the original's extended
-  precision. Casts that round an x87 result to double or float are preserved.
+- **x87 precision:** `sfnum.h` uses SoftFloat's extended format and preserves
+  the explicit narrowing to binary64/binary32. Native x87 instructions are
+  no longer required. See [SOFTFLOAT-IMPLEMENTATION.md](SOFTFLOAT-IMPLEMENTATION.md).
 
 ## Regression harness tolerances
 

@@ -865,7 +865,7 @@ int16_t IdTargetFreighter(FLEET *lpflFr, PLANET *lpplHome) {
                 dx = pt.x - rgptPlan[lppl->id].x;
                 dy = pt.y - rgptPlan[lppl->id].y;
                 l = (uint32_t)(dx * dx) + (uint32_t)(dy * dy);
-                l = ((int32_t)sqrt((double)l) + 24) / 25;
+                l = (Sf64ToI32(Sf64Sqrt(Sf64FromI32(l))) + 24) / 25;
                 if (l < 1) {
                     l = 1;
                 }
@@ -891,7 +891,7 @@ int16_t IdTargetFreighter(FLEET *lpflFr, PLANET *lpplHome) {
                     dx = pt.x - rgptPlan[lppl->id].x;
                     dy = pt.y - rgptPlan[lppl->id].y;
                     l = (uint32_t)(dx * dx) + (uint32_t)(dy * dy);
-                    l = ((int32_t)sqrt((double)l) + 24) / 25;
+                    l = (Sf64ToI32(Sf64Sqrt(Sf64FromI32(l))) + 24) / 25;
                     if (l == 0)
                         continue;
                     score = (int32_t)((int16_t)(20 * pctFull) / l);
@@ -925,7 +925,7 @@ int16_t IdTargetFreighter(FLEET *lpflFr, PLANET *lpplHome) {
                 dx = pt.x - rgptPlan[lppl->id].x;
                 dy = pt.y - rgptPlan[lppl->id].y;
                 l = (uint32_t)(dx * dx) + (uint32_t)(dy * dy);
-                l = ((int32_t)sqrt((double)l) + 24) / 25;
+                l = (Sf64ToI32(Sf64Sqrt(Sf64FromI32(l))) + 24) / 25;
                 if (l < 1) {
                     l = 1;
                 }
@@ -1083,7 +1083,7 @@ int16_t FSalvageTargetFreighter2(FLEET *lpflFr, int16_t fNeedy, int16_t iWorst, 
                         pctHere = 100 - pctFull;
                     }
                     l = (uint32_t)(dx * dx) + (uint32_t)(dy * dy);
-                    l = ((int32_t)sqrt((double)l) + 24) / 25;
+                    l = (Sf64ToI32(Sf64Sqrt(Sf64FromI32(l))) + 24) / 25;
                     if (l < 1) {
                         l = 1;
                     }
@@ -2823,7 +2823,7 @@ void IncreaseAIMinefieldSizes() {
     lpthMac = lpThings + cThing;
     for (; lpth < lpthMac; lpth++) {
         if (lpth->ith == ithMinefield) {
-            cMines = (int32_t)((long double)sqrt((double)lpth->thm.cMines) + 10.5);
+            cMines = Sf80ToI32((Sf80Add(Sf80From64(Sf64Sqrt(Sf64FromI32(lpth->thm.cMines))), Sf80From64(10.5))));
             lpth->thm.cMines = (uint32_t)(cMines * cMines);
         }
     }

@@ -69,7 +69,7 @@ int16_t CPlanetsInCircle(POINT16 pt, int32_t r2) {
     int16_t  dx;
     int16_t  xEnd;
 
-    r = LOWORD((int32_t)((long double)sqrt((double)r2) + 0.9999));
+    r = LOWORD(Sf80ToI32((Sf80Add(Sf80From64(Sf64Sqrt(Sf64FromI32(r2))), Sf80From64(0.9999)))));
     xStart = pt.x - r;
     xEnd = pt.x + r;
     yStart = pt.y - r;
