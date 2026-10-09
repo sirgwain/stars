@@ -111,7 +111,7 @@ int16_t InitMDIApp() {
 
 void CreateChildWindows() {
     char    szData[100];
-    POINT16 pt;
+    POINT16 pt = {10, 10}; // RefitFrameChildren sets the final pane sizes.
     char   *psz;
     char    szGame[15];
 
@@ -1237,8 +1237,10 @@ void CommandHandler(HWND hwnd, WPARAM wParam) {
                     strcat(szWork, ".x1");
                     remove(szWork);
                     DirtyGame(FALSE);
+                    hcurSav = GetCursor(); // Tutorial generation skips the normal cursor setup.
                     ShowProgressGauge();
                     dwTickBase = GetTickCount();
+                    dwTickCur = dwTickBase;
                     do {
                         UpdateProgressGauge((LOWORD(dwTickCur) - LOWORD(dwTickBase)) * 2);
                         dwTickCur = GetTickCount();

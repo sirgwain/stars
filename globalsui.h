@@ -344,7 +344,6 @@ extern uint32_t       rgcrPlrHistory[16];
 extern uint32_t       vtickTooltip1stVis;
 extern uint32_t       vtickTooltipLast;
 extern uint8_t       *lpb2k;
-extern uint8_t        _ctype[0];
 extern uint8_t        mpiTypeiItem[3];
 extern uint8_t        rghbrCacheUse[32];
 extern uint8_t        rgszSpeed[30];

@@ -804,7 +804,7 @@ int16_t IdTargetFreighter(FLEET *lpflFr, PLANET *lpplHome) {
     int16_t  iWorst2;
     int32_t  wtCargoFree;
     THING   *lpthBest;
-    int16_t  iWorst;
+    int16_t  iWorst = 0; // First mineral until the minimum search selects another.
     PLANET  *lpplBest;
     int16_t  ishFreighter;
     int16_t  pctHere;

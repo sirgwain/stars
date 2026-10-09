@@ -404,7 +404,7 @@ NoHdrDraw:
 }
 
 INT_PTR CALLBACK ScoreXDlg(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    int16_t     i;
+    int16_t     i = 0; // The close command has no score-dialog result.
     RECT        rc;
     HDC         hdc;
     PAINTSTRUCT ps;

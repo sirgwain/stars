@@ -1,10 +1,35 @@
 # Tutorial UI tests
 
-The suite runs AutoHotkey **v2.0.28** and the rebuilt Stars! executable inside the same isolated Wine prefix. It drives normal Windows controls, menus, keyboard shortcuts and mouse gestures. The test build adds a hidden, read-only observation window; it does not complete tasks or modify game orders.
+The suite runs AutoHotkey **v2.0.28** and the rebuilt Stars! executable directly on Windows, or inside the same isolated Wine prefix on Linux/macOS. It drives normal Windows controls, menus, keyboard shortcuts and mouse gestures. The test build adds a hidden, read-only observation window; it does not complete tasks or modify game orders.
 
 ## Run
 
-Install Wine, Python 3, CMake, Ninja and the x86_64 MinGW toolchain used by `mingw-debug`. 
+Install Python 3, CMake, Ninja and an x64 compiler (MinGW GCC, MSYS2 Clang or MSVC), plus Wine outside Windows.
+For MSVC, use an x64 Native Tools command prompt and pass
+`--build-preset msvc-debug` (or `msvc-release`). All compilers use the same
+observer and tutorial assertions. MSVC runtime-error dialogs are reported as
+test failures with their diagnostic text; the runner never dismisses them
+to continue a walkthrough.
+
+On Windows, from a shell with native Python, CMake, Ninja and MSYS2 GCC on PATH:
+
+```powershell
+python tests/scaffold/tutorial/run.py --ahk "C:/Program Files/AutoHotkey/v2/AutoHotkey64.exe"
+python tests/scaffold/tutorial/run.py --download-ahk --scenario reject-generate
+```
+
+The installed interpreter must match the pinned version. `--download-ahk`
+uses a verified portable copy. Clang users can select
+`--build-preset mingw-clang-debug` or `mingw-clang-release` from CLANG64.
+Native runs use Windows 10/11 DPI APIs and operate on your interactive desktop: leave mouse and keyboard
+idle and provide room for the 1280×960 game and its adjacent tutorial window
+(the Wine desktop is 1600×1200). Do not run multiple UI suites concurrently.
+Each test build reads and writes `Stars.ini` in its working directory;
+the runner stages that file beside the test game, leaving your Windows INI
+untouched. Rebuild older `--exe` tutorial binaries before using them natively.
+Native logs are named `autohotkey.log`, and cleanup checks the recorded
+game PID and executable path before terminating it. Native continuation
+attaches only to that retained game; close a retained game normally when done.
 
 ```sh
 make tutorial
@@ -17,14 +42,14 @@ make tutorial-reject
 python3 tests/scaffold/tutorial/run.py --ahk /path/to/AutoHotkey64.exe
 ```
 
-The runner builds `dist/tutorial-build/bin/stars.exe` with `STARS_TEST_TUTORIAL=ON` using `mingw-debug` by default. To test the optimized Release build, as the GitHub workflow does:
+The runner builds `dist/tutorial-mingw-debug/bin/stars.exe` with `STARS_TEST_TUTORIAL=ON` using `mingw-debug` by default. To test the optimized Release build, as the GitHub workflow does:
 
 ```sh
 make tutorial TUTORIAL_ARGS='--build-preset mingw-release'
 make tutorial-reject TUTORIAL_ARGS='--build-preset mingw-release'
 ```
 
-This uses `dist/tutorial-release-build/bin/stars.exe` and records the selected preset in `metadata.json`. The observer option defaults to OFF for normal builds. `--exe PATH` accepts a prebuilt executable with that option enabled. Each run copies the executable and scripts into a fresh directory and uses its own Wine prefix, INI settings and game files. Wine prefixes are created under `/tmp/stars-tutorial-*`, outside the repository so Wine’s filesystem symlinks are not scanned by workspace tools. The absolute prefix path is printed at startup and recorded as `wine_prefix` in `metadata.json`. The original registration and game files are never modified.
+This uses `dist/tutorial-mingw-release/bin/stars.exe` and records the selected preset in `metadata.json`. The observer option defaults to OFF for normal builds. `--exe PATH` accepts a prebuilt executable with that option enabled. Each run copies the executable and scripts into a fresh directory and uses its own INI settings and game files, plus a Wine prefix outside Windows. Wine prefixes are created under `/tmp/stars-tutorial-*`, outside the repository so Wine’s filesystem symlinks are not scanned by workspace tools. The absolute prefix path is printed at startup and recorded as `wine_prefix` in `metadata.json`. The original registration and game files are never modified.
 
 Linux runs need an X11 display. For unattended runs:
 
@@ -52,7 +77,7 @@ python3 tests/scaffold/tutorial/run.py --until-year 2403 --timeout 180
 
 An intentional early stop reports `partial`, produces a skipped JUnit case, and exits nonzero. It cannot be mistaken for full coverage. Unknown instructions, covered click targets, unexpected tutorial errors, stalls, crashes, syntax failures and timeouts also produce nonzero results.
 
-For debugging later actions without replaying every earlier year, launch with `--keep-game-on-failure`. After fixing the action, use `--continue-run /absolute/path/to/the/original/run --keep-game-on-failure` to attach to that live game in its existing prefix recorded in `metadata.json`. The prefix must still exist; clearing `/tmp` prevents continuation. Runs created before prefix paths were recorded require a fresh run. A continuation can report failures or `partial`; it cannot report a full walkthrough pass. It requires the game to remain running, and does not reopen a saved game. Finish debugging with a fresh normal run. To close a retained game explicitly, run `WINEPREFIX=/absolute/prefix/path/from/metadata.json wineserver -k`.
+For debugging later actions without replaying every earlier year, launch with `--keep-game-on-failure`. After fixing the action, use `--continue-run /absolute/path/to/the/original/run --keep-game-on-failure` to attach to that live game. Windows uses its recorded PID and executable path; Wine uses the existing prefix recorded in `metadata.json`. Wine prefixes must still exist; clearing `/tmp` prevents Wine continuation. Older runs without the required metadata need a fresh run. A continuation can report failures or `partial`; it cannot report a full walkthrough pass. It requires the game to remain running, and does not reopen a saved game. Finish debugging with a fresh normal run. Close a retained native game normally. Under Wine, run `WINEPREFIX=/absolute/prefix/path/from/metadata.json wineserver -k`.
 
 ## Artifacts
 
@@ -62,10 +87,10 @@ Each run is retained under `dist/scaffold/tutorial/<UTC timestamp>/`:
 - `events.jsonl`: instruction text, action times, queue contents and diagnostics.
 - `year-2400.txt`, etc.: live orders and state before each generation.
 - `last-state.txt` and `windows.txt`: observer snapshot and window/control inventory on failure.
-- `screenshots/`: BMP captures where supported by the Wine display driver.
-- `wine.log` and `metadata.json`: interpreter diagnostics, versions and executable/source hashes.
+- `screenshots/`: BMP captures of the Windows desktop, or where supported by the Wine display driver.
+- `wine.log` (Wine) or `autohotkey.log` (Windows), and `metadata.json`: interpreter diagnostics, versions and executable/source hashes.
 - `game/coverage.json`: required instruction inventory.
 
-By default, the runner closes only its own game and Wine server. The explicit debugging option retains a failed game. Prefixes contain registration data, remain in `/tmp` for debugging, and may be removed by the operating system; the GitHub workflow uploads diagnostic files only. It runs the full walkthrough and rejection check on pull requests and supports manual runs. 
+By default, the runner closes only its own game and, when used, its Wine server. The explicit debugging option retains a failed game. Prefixes contain registration data, remain in `/tmp` for debugging, and may be removed by the operating system; the GitHub workflow uploads diagnostic files only. It runs the full walkthrough and rejection check on pull requests and supports manual runs.
 
 A populated instruction dispatcher is a coverage inventory, not proof that every gesture works on every Wine driver. `result.json` is the runtime authority; a full walkthrough is validated only when it reports `passed` with 80 pages at the final year.

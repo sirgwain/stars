@@ -1,7 +1,7 @@
 // Native-port checks: player-message serialization and both readers,
 // legacy link bytes, recipient filtering, maximum text length, static-control
-// color dispatch, and the Win16 battle heap rollover boundary. CMake links
-// this test with --wrap for WriteRt, ReadRt, FCreateFile, StreamOpen,
+// color dispatch, and the Win16 battle heap rollover boundary. CMake supplies
+// test-only source variants for WriteRt, ReadRt, FCreateFile, StreamOpen,
 // StreamClose and DirtyGame.
 
 #include "acutest.h"

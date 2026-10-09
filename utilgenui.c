@@ -336,7 +336,7 @@ void StickyDlgPos(HWND hwnd, POINT16 *ppt, int16_t fInit) {
 }
 
 int32_t LDrawGauge(HDC hdc, RECT *prc, int16_t cSegs, int32_t *rgSize, HBRUSH *rghbr, int32_t cTot) {
-    int16_t fHuge;
+    int16_t fHuge = FALSE; // Empty gauges skip the scale calculation.
     int16_t i;
     int32_t lSum;
     int32_t dx;

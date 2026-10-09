@@ -82,6 +82,61 @@ This writes `dist/mingw-release/bin/stars.exe` with optimization enabled and
 debug data stripped. Test hooks are disabled in ordinary builds. The MinGW
 presets also build `stars-host.exe`.
 
+On Windows with MSYS2 GCC, run these presets from the UCRT64 or MINGW64
+environment, with CMake, Ninja and Python with PyYAML available. From
+PowerShell, put `C:\msys64\ucrt64\bin` (or `C:\msys64\mingw64\bin`) first
+on `PATH`. The toolchain uses MSYS2's unprefixed tools on Windows. Run
+`ctest --test-dir dist/mingw-debug --output-on-failure` to execute the unit
+tests directly on Windows.
+
+### Clang with MinGW (MSYS2)
+
+Use the MSYS2 **CLANG64** environment, with CMake, Ninja and Python with
+PyYAML available. From PowerShell, put `C:\msys64\clang64\bin` first on
+`PATH`. These presets use Clang's GNU Windows target and LLVM tools:
+
+```sh
+cmake --preset mingw-clang-debug
+cmake --build --preset mingw-clang-debug
+ctest --test-dir dist/mingw-clang-debug --output-on-failure
+```
+
+Use `mingw-clang-release` for Release. Each preset builds `stars.exe` and
+`stars-host.exe` in `dist/<preset>/bin/`, plus the Windows unit tests.
+GCC continues to use the `mingw-debug` and `mingw-release` presets, with
+separate build directories so the compilers can be used side by side.
+
+### Visual C++ (MSVC)
+
+Install Visual Studio 2022 (17.0 or newer) or newer Visual Studio with the
+Desktop development with C++ workload, CMake, Ninja, and Python with PyYAML.
+From an **x64 Native Tools Command Prompt**, run:
+
+```sh
+cmake --preset msvc-debug
+cmake --build --preset msvc-debug
+```
+
+This builds `dist/msvc-debug/bin/stars.exe` and `stars-host.exe`. Use
+`msvc-release` in both commands for an optimized build in
+`dist/msvc-release/bin/`. Visual Studio's Open Folder workflow can also
+select these presets and supply the x64 compiler environment.
+
+MSVC uses double precision for `long double`, so generated turns can differ
+from the MinGW regression baseline; CMake warns about this. Keep using MinGW
+when matching those turns is required. All Windows compilers build the same
+unit tests by default and support the tutorial observer and regression trace
+hooks. Test-only source variants replace calls without requiring GNU linker
+wrapping.
+
+Run `ctest --test-dir dist/msvc-debug --output-on-failure` for unit tests.
+The regression runner accepts either MSVC executable with `--exe`; compare
+against the unchanged native baseline to measure compiler differences.
+Run `python tests/scaffold/tutorial/run.py --build-preset msvc-debug --download-ahk`
+from the same developer prompt for the full tutorial. Use `--scenario
+reject-generate` for its rejection check. The equivalent GCC and Clang
+presets run the same tests.
+
 ### stars-host
 
 `stars-host` is the game's host without its windows: it creates universes,

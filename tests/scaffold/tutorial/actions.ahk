@@ -40,6 +40,8 @@ CheckDialogs() {
             continue
         title := WinGetTitle(hwnd)
         text := WinGetText(hwnd)
+        if title = "Microsoft Visual C++ Runtime Library"
+            throw Error("Compiler runtime failure: " text)
         if title = "Stars!" && (InStr(text, "Tutorial:") || InStr(text, "error") || InStr(text, "unable") || InStr(text, "corrupt"))
             throw Error("Unexpected game dialog: " text)
     }
@@ -61,6 +63,7 @@ WaitDialog(title, seconds := 10) {
 
 ; ClickControl clicks an initialized, visible and enabled control by HWND.
 ClickControl(control, modifier := "") {
+    global NativeWindows
     control := Integer(control)
     if !control || !DllCall("IsWindowVisible", "ptr", control) || !ControlGetEnabled(control)
         throw Error("Control is unavailable: " control)
@@ -73,7 +76,13 @@ ClickControl(control, modifier := "") {
             SendEvent "{" modifier " down}"
             Sleep 50
         }
-        ControlClick control
+        ; Standard buttons expose BM_CLICK; post it so modal dialogs do not
+        ; hold the automation thread inside the button notification.
+        if NativeWindows && WinGetClass(control) = "Button" {
+            PostMessage 0x00F5, 0, 0, , control
+            Sleep 100
+        } else
+            ControlClick control
     } finally {
         if modifier != ""
             SendEvent "{" modifier " up}"
@@ -85,6 +94,13 @@ ClickControl(control, modifier := "") {
 ; ClickId resolves a dialog resource control ID and clicks its current HWND.
 ClickId(dialog, id, modifier := "") {
     control := DllCall("GetDlgItem", "ptr", dialog, "int", id, "ptr")
+    ; Native Windows can give a message box's sole OK button IDCANCEL.
+    ; Match its label as well so a real Cancel button is never substituted.
+    if !control && id = Controls["IDOK"] && WinGetTitle(dialog) = "Stars!" {
+        candidate := DllCall("GetDlgItem", "ptr", dialog, "int", Controls["IDCANCEL"], "ptr")
+        if candidate && StrReplace(ControlGetText(candidate), "&") = "OK"
+            control := candidate
+    }
     ClickControl(control, modifier)
 }
 
@@ -140,16 +156,30 @@ Keys(keys) {
 
 ; ClientPoint converts a point in a specific surface to desktop coordinates.
 ClientPoint(hwnd, x, y) {
+    global NativeWindows
     point := Buffer(8)
     NumPut("int", Integer(x), "int", Integer(y), point)
-    if !DllCall("ClientToScreen", "ptr", Integer(hwnd), "ptr", point)
-        throw Error("Cannot translate client coordinates")
+    ; The observer reports the game's DPI-virtualized coordinates, whereas
+    ; AutoHotkey's mouse input uses desktop pixels. Convert in the game's
+    ; DPI context first, then map that result to physical screen pixels.
+    previous := 0
+    if NativeWindows
+        previous := DllCall("SetThreadDpiAwarenessContext", "ptr", DllCall("GetWindowDpiAwarenessContext", "ptr", Integer(hwnd), "ptr"), "ptr")
+    try {
+        if !DllCall("ClientToScreen", "ptr", Integer(hwnd), "ptr", point)
+            throw Error("Cannot translate client coordinates")
+        if NativeWindows && !DllCall("LogicalToPhysicalPointForPerMonitorDPI", "ptr", Integer(hwnd), "ptr", point)
+            throw Error("Cannot translate DPI-scaled coordinates")
+    } finally {
+        if previous
+            DllCall("SetThreadDpiAwarenessContext", "ptr", previous, "ptr")
+    }
     return [NumGet(point, 0, "int"), NumGet(point, 4, "int")]
 }
 
 ; ClickPoint performs a real mouse gesture at a named surface's client point.
 ClickPoint(hwnd, x, y, modifier := "", button := "Left", count := 1) {
-    global GamePid
+    global GamePid, NativeWindows
     owner := DllCall("GetAncestor", "ptr", Integer(hwnd), "uint", 2, "ptr")
     WinActivate owner
     if !WinWaitActive(owner, , 3) {
@@ -169,7 +199,17 @@ ClickPoint(hwnd, x, y, modifier := "", button := "Left", count := 1) {
             SendEvent "{" modifier " down}"
             Sleep 50
         }
-        MouseClick button, point[1], point[2], count, 0
+        if NativeWindows {
+            ; Custom controls track the held button in their own message loop.
+            ; Give that loop time to observe the press before releasing it.
+            Loop count {
+                MouseClick button, point[1], point[2], 1, 0, "D"
+                Sleep 100
+                MouseClick button, point[1], point[2], 1, 0, "U"
+                Sleep 50
+            }
+        } else
+            MouseClick button, point[1], point[2], count, 0
         if modifier != ""
             Sleep 100
     } finally {
@@ -465,7 +505,7 @@ ScannerMode(mode) {
 
 ; PopupChoice selects an exact native popup menu item by its visible text.
 PopupChoice(name) {
-    global GamePid
+    global GamePid, NativeWindows
     menuWindow := WinWait("ahk_class #32768 ahk_pid " GamePid, , 3)
     if !menuWindow
         throw Error("Popup menu did not open for " name)
@@ -482,6 +522,25 @@ PopupChoice(name) {
             y := (Integer(parts[2]) + Integer(parts[4])) // 2
             point := Buffer(8)
             NumPut("int", x, "int", y, point)
+            if NativeWindows {
+                ; Menu-item rectangles belong to the game's DPI context.
+                ; Map through the menu window's bounds in both contexts;
+                ; unlike the main window, they include off-frame popup items.
+                logical := Buffer(16), physical := Buffer(16)
+                previous := DllCall("SetThreadDpiAwarenessContext", "ptr", DllCall("GetWindowDpiAwarenessContext", "ptr", Integer(state["hwnd.frame"]), "ptr"), "ptr")
+                try {
+                    if !DllCall("GetWindowRect", "ptr", menuWindow, "ptr", logical)
+                        throw Error("Cannot read logical menu bounds")
+                } finally {
+                    if previous
+                        DllCall("SetThreadDpiAwarenessContext", "ptr", previous, "ptr")
+                }
+                if !DllCall("GetWindowRect", "ptr", menuWindow, "ptr", physical)
+                    throw Error("Cannot read physical menu bounds")
+                x := NumGet(physical, 0, "int") + Round((x - NumGet(logical, 0, "int")) * (NumGet(physical, 8, "int") - NumGet(physical, 0, "int")) / (NumGet(logical, 8, "int") - NumGet(logical, 0, "int")))
+                y := NumGet(physical, 4, "int") + Round((y - NumGet(logical, 4, "int")) * (NumGet(physical, 12, "int") - NumGet(physical, 4, "int")) / (NumGet(logical, 12, "int") - NumGet(logical, 4, "int")))
+                NumPut("int", x, "int", y, point)
+            }
             hit := DllCall("WindowFromPoint", "int64", NumGet(point, 0, "int64"), "ptr")
             LogEvent("menu-choice", name " at " x "," y " on " WinGetClass(hit))
             if WinGetClass(hit) != "#32768"
@@ -588,10 +647,23 @@ FinishDesign(name := "", nextImage := false) {
 
 ; ReportSort opens a report's live column menu and selects its sort entry.
 ReportSort(column, name, sub := "") {
+    global NativeWindows
     if !Integer(ReadState()["hwnd.report"])
         Keys("!rp")
     state := WaitFor((s) => s.Has("reportColumn." column), "report column " column)
-    WinMove 0, 0, 1280, 700, Integer(state["hwnd.report"])
+    previous := 0
+    if NativeWindows
+        previous := DllCall("SetThreadDpiAwarenessContext", "ptr", DllCall("GetWindowDpiAwarenessContext", "ptr", Integer(state["hwnd.report"]), "ptr"), "ptr")
+    try {
+        WinMove 0, 0, 1280, 700, Integer(state["hwnd.report"])
+    } finally {
+        if previous
+            DllCall("SetThreadDpiAwarenessContext", "ptr", previous, "ptr")
+    }
+    if NativeWindows {
+        WinGetPos &reportX, &reportY, &reportWidth, , Integer(state["hwnd.report"])
+        WinMove reportX + reportWidth + 2, reportY + 20, , , Integer(state["hwnd.tutor"])
+    }
     Sleep 50
     ClickRect("reportColumn." column, , "Right")
     PopupChoice(name)
@@ -874,7 +946,16 @@ DismissPopup() {
 
 ; ConfigureWindows positions the game and tutor on separate desktop surfaces.
 ConfigureWindows(state) {
-    WinMove 0, 0, 1280, 960, Integer(state["hwnd.frame"])
-    WinMove 1282, 20, , , Integer(state["hwnd.tutor"])
+    global NativeWindows
+    previous := 0
+    if NativeWindows
+        previous := DllCall("SetThreadDpiAwarenessContext", "ptr", DllCall("GetWindowDpiAwarenessContext", "ptr", Integer(state["hwnd.frame"]), "ptr"), "ptr")
+    try {
+        WinMove 0, 0, 1280, 960, Integer(state["hwnd.frame"])
+        WinMove 1282, 20, , , Integer(state["hwnd.tutor"])
+    } finally {
+        if previous
+            DllCall("SetThreadDpiAwarenessContext", "ptr", previous, "ptr")
+    }
     Sleep 100
 }

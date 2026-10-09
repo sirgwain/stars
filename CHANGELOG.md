@@ -43,6 +43,16 @@ produce different results from a 2.6j host for the same turn.
 
 ### Fixed
 
+- Regression `generate()` uses native paths for trace output on Windows;
+  it previously supplied a Wine drive path that prevented `trace.log` from
+  being created. Turn generation and regression baselines are unchanged.
+- Eight uninitialized reads from the original no longer stop MSVC Debug
+  builds: the mine pane size in `CreateChildWindows`, the tutorial progress
+  tick and saved cursor in `CommandHandler`, the dialog close results in
+  `ScoreXDlg` and `VCRDlg`, the mineral index in `IdTargetFreighter`, the
+  scale flag for empty gauges in `LDrawGauge`, and the mine-laying message
+  ID that `DrawShipWayPtOrders` uses to choose its text color. Turn
+  generation and saved files are unchanged.
 - The scanner no longer leaves a band drawn out of place when it scrolls
   while a redraw is still pending (`ScrollScanner`), as after a wheel zoom
   followed at once by a trackpad scroll. The original drew the pending

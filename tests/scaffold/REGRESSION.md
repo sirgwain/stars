@@ -1,6 +1,10 @@
 # Fixed-seed AI regression runs
 
-This harness runs the native game under Wine with a fixed seed. It keeps
+The runner's Windows/Wine routing and tutorial cleanup checks can be run
+without a desktop or Wine: `python tests/scaffold/test_runners.py`.
+
+This harness runs the game directly on Windows and under Wine on other
+platforms with a fixed seed. It keeps
 separate saves at creation and turns 1, 10, 25, 50, 80, 100, and 150, then
 compares decrypted records with the standalone CLI in `tests/savecli/`.
 `make regression` runs it against the checked-in baseline.
@@ -57,8 +61,8 @@ bits. The runner passes the run's seed on every launch, so any build of
 
 ## Build and stage
 
-Run from the repository root. Python 3, Go, MinGW, CMake, Ninja, and Wine
-are needed. `make regression` does all of this; by hand:
+Run from the repository root. Python 3, Go, a Windows C compiler, CMake, Ninja, and Wine
+are needed (Wine only outside Windows). `make regression` does all of this; by hand:
 
 ```sh
 cmake --preset mingw-release
@@ -70,8 +74,20 @@ python3 tests/scaffold/regression.py prepare --seed 12345 \
   --work dist/scaffold/regression/native
 ```
 
+On Windows, Go builds the helper with `cd tests/savecli` followed by
+`go build -o ../../dist/stars-save.exe .`. Use native Windows Python to run
+the commands above; no Wine installation is required. The default helper
+path includes `.exe` on Windows. CMake, Ninja and the chosen compiler
+must be on PATH. MSVC runs use an x64 Native Tools command prompt and
+`msvc-release`; Clang runs use `mingw-clang-release`. Pass each build's
+`stars.exe` or `stars-host.exe` to `prepare --exe`, with a separate work
+directory for each compiler and executable. Compare all runs against the
+same native baseline; a compiler difference is a test result, not a reason
+to change that baseline. PowerShell does not need `make` for these individual commands.
+
 Choose a **fresh output directory** for each run; staging never overwrites
-prior results. The runner uses Wine's `Z:` host-filesystem mapping. Keep work
+prior results. The runner uses native paths on Windows and Wine's `Z:`
+host-filesystem mapping elsewhere. Keep work
 paths free of spaces because the Stars! parser cannot quote them. Staging
 writes CRLF definitions and absolute Windows paths for the race and output
 files, and records the executable's hash, the seed and the fixture hashes in
@@ -147,8 +163,9 @@ and diagnostic logs are not treated as game-state files.
 
 `make regression-host` runs the same scenarios and launches through
 `stars-host` built with the native compiler, without Wine, and compares
-them with the same baseline. `regression.py` runs an executable without an
-`.exe` suffix directly and gives it POSIX paths. On Apple silicon the
+them with the same baseline. On Windows all executables run directly;
+elsewhere `regression.py` runs executables without an `.exe` suffix directly
+and gives them POSIX paths. On Apple silicon the
 target builds `stars-host` for x86_64 (Rosetta), because turn generation
 needs x87 extended precision: a native arm64 build diverges in the
 Cybertron AI from turn 1 (`IdGetBestScannerDest` truncates

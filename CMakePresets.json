@@ -7,6 +7,27 @@
   },
   "configurePresets": [
     {
+      "name": "msvc-debug",
+      "displayName": "MSVC (Debug)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/dist/msvc-debug",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "architecture": { "value": "x64", "strategy": "external" },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "msvc-release",
+      "inherits": "msvc-debug",
+      "displayName": "MSVC (Release)",
+      "binaryDir": "${sourceDir}/dist/msvc-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
       "name": "mingw-debug",
       "displayName": "MinGW / Wine (Debug)",
       "generator": "Ninja",
@@ -21,6 +42,26 @@
       "inherits": "mingw-debug",
       "displayName": "MinGW / Wine (Release)",
       "binaryDir": "${sourceDir}/dist/mingw-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "mingw-clang-debug",
+      "displayName": "MSYS2 Clang / MinGW (Debug)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/dist/mingw-clang-debug",
+      "toolchainFile": "${sourceDir}/toolchains/mingw-clang.cmake",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "mingw-clang-release",
+      "inherits": "mingw-clang-debug",
+      "displayName": "MSYS2 Clang / MinGW (Release)",
+      "binaryDir": "${sourceDir}/dist/mingw-clang-release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
@@ -64,6 +105,16 @@
   ],
   "buildPresets": [
     {
+      "name": "msvc-debug",
+      "displayName": "Build stars.exe and stars-host.exe (MSVC Debug)",
+      "configurePreset": "msvc-debug"
+    },
+    {
+      "name": "msvc-release",
+      "displayName": "Build stars.exe and stars-host.exe (MSVC Release)",
+      "configurePreset": "msvc-release"
+    },
+    {
       "name": "mingw-debug",
       "displayName": "Build stars.exe (MinGW Debug)",
       "configurePreset": "mingw-debug"
@@ -72,6 +123,16 @@
       "name": "mingw-release",
       "displayName": "Build stars.exe (MinGW Release)",
       "configurePreset": "mingw-release"
+    },
+    {
+      "name": "mingw-clang-debug",
+      "displayName": "Build stars.exe and stars-host.exe (Clang MinGW Debug)",
+      "configurePreset": "mingw-clang-debug"
+    },
+    {
+      "name": "mingw-clang-release",
+      "displayName": "Build stars.exe and stars-host.exe (Clang MinGW Release)",
+      "configurePreset": "mingw-clang-release"
     },
     {
       "name": "run-wine",

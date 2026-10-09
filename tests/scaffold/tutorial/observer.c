@@ -3,6 +3,16 @@
 #include "win.h"
 
 int16_t __real_InitInstance(int16_t nCmdShow);
+int16_t __real_CchGetString(StringId ids, char *psz);
+
+// Test builds keep settings beside the staged game, never in Windows/Stars.ini.
+int16_t __wrap_CchGetString(StringId ids, char *psz) {
+    if (ids == idsStarsIni) {
+        strcpy(psz, ".\\Stars.ini");
+        return 11;
+    }
+    return __real_CchGetString(ids, psz);
+}
 
 static HWND      stateWindow;
 static HWND      stateEdit;

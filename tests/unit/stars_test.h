@@ -24,7 +24,7 @@
 #endif
 
 // The game's message boxes are recorded here instead of shown, so nothing
-// waits for a click: through --wrap=AlertSz on Windows, and IdAlertBox in
+// waits for a click: through a test-only AlertSz replacement on Windows, and IdAlertBox in
 // the native tests.
 extern int  cStarsTestAlert;
 extern char szStarsTestAlert[512];

@@ -9,6 +9,7 @@
 global GamePid := 0, StateHwnd := 0, Stage := A_Args[1], Artifacts := A_Args[2]
 global UntilYear := Integer(A_Args[3]), Scenario := A_Args[4], StepName := "startup", StepCount := 0
 global Continuation := Integer(A_Args[5]), KeepGame := Integer(A_Args[6])
+global NativeWindows := Integer(A_Args[9])
 global SeenPages := Map(), StepVisits := Map(), StartTime := A_TickCount
 DetectHiddenWindows true
 SetTitleMatchMode 2
@@ -25,14 +26,18 @@ try {
     if A_AhkVersion != "2.0.28"
         throw Error("Expected pinned AutoHotkey 2.0.28, got " A_AhkVersion)
     if Continuation {
-        StateHwnd := WinWait("Stars Tutorial Test State ahk_class StarsTutorialObserver", , 5)
+        StateHwnd := WinWait("Stars Tutorial Test State ahk_class StarsTutorialObserver" (A_Args[7] != "0" ? " ahk_pid " A_Args[7] : ""), , 5)
         if !StateHwnd
-            throw Error("No retained live tutorial game in this Wine prefix")
+            throw Error("No matching retained live tutorial game")
+        if A_Args[7] != "0" && StrLower(WinGetProcessPath(StateHwnd)) != StrLower(A_Args[8])
+            throw Error("Retained PID belongs to a different executable")
         GamePid := WinGetPID(StateHwnd)
     } else {
         Run('"' Stage '\stars.exe"', Stage, , &GamePid)
+        FileOpen(Artifacts "\game.pid", "w", "UTF-8-RAW").Write(GamePid)
         StateHwnd := WinWait("Stars Tutorial Test State ahk_pid " GamePid, , 20)
     }
+    FileOpen(Artifacts "\game.pid", "w", "UTF-8-RAW").Write(GamePid)
     if !StateHwnd
         throw Error("No tutorial observer; build with STARS_TEST_TUTORIAL=ON")
     if Continuation {

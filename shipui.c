@@ -397,7 +397,8 @@ void DrawShipWayPtOrders(HDC hdc, TILE *ptile, OBJ obj) {
                 ids = idsWarningFleetHasMineLayingPods;
                 goto LDisplayMsg;
             }
-            pszT = PszGetCompressedString(idsFleetCanLayLdMinesPerYear);
+            ids = idsFleetCanLayLdMinesPerYear;
+            pszT = PszGetCompressedString(ids);
             wsprintf(szWork, pszT, l);
             psz = szWork;
             goto LDisplayMsg2;

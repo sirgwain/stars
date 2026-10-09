@@ -468,7 +468,6 @@ uint32_t       rgcrPlrHistory[16] = {4190448, 255,     65280,   16711680, 65535,
 uint32_t       vtickTooltip1stVis = 0;
 uint32_t       vtickTooltipLast = 0;
 uint8_t       *lpb2k = 0;
-uint8_t        _ctype[0];
 uint8_t        mpiTypeiItem[3] = {iminesMineDispenser40, iminesHeavyDispenser50, iminesSpeedTrap20};
 uint8_t        rghbrCacheUse[32] = {0};
 uint8_t        rgszSpeed[30] = {45, 45, 0, 189, 0, 0, 190, 0, 0, 49, 0, 0, 49, 188, 0, 49, 189, 0, 49, 190, 0, 50, 0, 0, 50, 188, 0, 50, 189};

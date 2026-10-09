@@ -1,5 +1,5 @@
 // Regression trace, linked into native builds configured with
-// -DSTARS_TEST_TRACE=ON. The linker's --wrap routes calls from other object
+// -DSTARS_TEST_TRACE=ON. Test source variants route calls from other object
 // files to these wrappers, which call the original unchanged and, when the
 // STARS_TRACE environment variable names a file, log one tagged line per call:
 //
@@ -12,6 +12,13 @@
 
 #include <stdlib.h>
 #include "win.h"
+
+#ifdef _MSC_VER
+#include <intrin.h>
+#define STARS_TEST_RETURN_ADDRESS() _ReturnAddress()
+#else
+#define STARS_TEST_RETURN_ADDRESS() __builtin_return_address(0)
+#endif
 
 int16_t __real_Random(int16_t c);
 int16_t __real_PctPlanetCapacity(PLANET *lppl);
@@ -56,7 +63,7 @@ int16_t __wrap_Random(int16_t c) {
     lSeed2 = lRandSeed2;
     r = __real_Random(c);
     snprintf(szSeeds, sizeof(szSeeds), " %ld %ld", (long)lSeed1, (long)lSeed2);
-    TraceCall('R', c, r, __builtin_return_address(0), szSeeds);
+    TraceCall('R', c, r, STARS_TEST_RETURN_ADDRESS(), szSeeds);
     return r;
 }
 
@@ -65,6 +72,6 @@ int16_t __wrap_PctPlanetCapacity(PLANET *lppl) {
     int16_t pct;
 
     pct = __real_PctPlanetCapacity(lppl);
-    TraceCall('P', lppl->id, pct, __builtin_return_address(0), "");
+    TraceCall('P', lppl->id, pct, STARS_TEST_RETURN_ADDRESS(), "");
     return pct;
 }

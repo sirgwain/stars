@@ -252,7 +252,7 @@ int16_t SetVCRBoard(int16_t iStep) {
 
 INT_PTR CALLBACK VCRDlg(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     HDC         hdc;
-    int16_t     i;
+    int16_t     i = 0; // The close command has no battle-replay result.
     int16_t     ibtn;
     RECT        rc;
     int16_t     dyFrame;

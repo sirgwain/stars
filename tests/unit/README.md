@@ -1,9 +1,9 @@
 # Unit tests
 
 Each `test_<name>.c` here is an [acutest](https://github.com/mity/acutest)
-program linked with the game code (the `stars_core` and `stars_ui` object
-libraries) and its resources. They build as Windows console programs with
-the normal MinGW build, and CTest runs them through Wine:
+program linked with the game core, Windows UI and resources. They build as Windows console programs with
+GCC, Clang/MinGW or MSVC. CTest runs them directly on Windows and through
+Wine when cross-compiling:
 
 ```sh
 make test-unit                           # build mingw-debug and run them all
@@ -20,7 +20,7 @@ make test-host CTEST_ARGS='-R test_turn'
 ```
 
 The native build leaves out what needs Windows: `test_native_ports.c`
-(`--wrap` is GNU ld's) and the dialog tests in `test_battle.c` and
+(it also tests Windows controls) and the dialog tests in `test_battle.c` and
 `test_race.c` (`#ifdef _WIN32`). Use `szDirSep` for paths and `getcwd` for
 the working directory so a test builds on both.
 
@@ -60,6 +60,22 @@ A bug fix in [docs/ROADMAP.md](../../docs/ROADMAP.md) step 5 adds a test that
 fails on the code before the fix. Name the test after the behavior it
 checks and put it in the file for the source file that holds the fix.
 The game's message boxes are recorded in `cStarsTestAlert`/`szStarsTestAlert`
-instead of shown (Yes/No boxes answer Yes): on Windows every test links with
-`--wrap=AlertSz`, and natively `stars_test.c` supplies `IdAlertBox`. `test_native_ports.c` also wraps file I/O (see
-`CMakeLists.txt`); give other tests that need wraps the same treatment.
+instead of shown (Yes/No boxes answer Yes): on Windows every test replaces
+cross-file calls to `AlertSz`, and natively
+`stars_test.c` supplies `IdAlertBox`. `test_native_ports.c` also replaces file
+I/O. `cmake/test-hooks.cmake` generates test-only translation units that rename
+real functions and their same-file calls; the harness supplies the public
+names. This preserves GNU `--wrap` semantics without depending on a linker.
+Product objects are unchanged. Register new replacements in that CMake helper
+and select them for the appropriate target in `CMakeLists.txt`.
+
+For MSVC, run in an x64 Native Tools command prompt:
+
+```sh
+cmake --preset msvc-debug -DSTARS_BUILD_TESTS=ON
+cmake --build --preset msvc-debug
+ctest --test-dir dist/msvc-debug --output-on-failure
+```
+
+Use `mingw-debug` or `mingw-clang-debug` in the corresponding compiler environment
+for the same suites, or the matching `-release` preset to test optimized code.

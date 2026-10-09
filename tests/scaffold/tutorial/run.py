@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and run the AutoHotkey v2 tutorial walkthrough in an isolated Wine prefix."""
+"""Run the AutoHotkey walkthrough on Windows or in an isolated Wine prefix."""
 
 import argparse
 import configparser
@@ -24,6 +24,33 @@ import textgen  # noqa: E402
 AHK_VERSION = "2.0.28"
 AHK_SHA256 = "b63be7548792b4ad0dfe424d91cc69376694ed2f758245b7a75a0c77d693b478"
 AHK_URL = f"https://github.com/AutoHotkey/AutoHotkey/releases/download/v{AHK_VERSION}/AutoHotkey_{AHK_VERSION}.zip"
+
+
+def stop_windows_game(run, executable):
+    """Stop only the recorded game, checking its image path against PID reuse."""
+    import ctypes
+    from ctypes import wintypes
+
+    pid_file = run / "game.pid"
+    if not pid_file.is_file():
+        return
+    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+    kernel.OpenProcess.restype = wintypes.HANDLE
+    kernel.QueryFullProcessImageNameW.argtypes = [wintypes.HANDLE, wintypes.DWORD, wintypes.LPWSTR, ctypes.POINTER(wintypes.DWORD)]
+    kernel.TerminateProcess.argtypes = [wintypes.HANDLE, wintypes.UINT]
+    kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+    handle = kernel.OpenProcess(0x1001, False, int(pid_file.read_text()))
+    if not handle:
+        return
+    try:
+        name = ctypes.create_unicode_buffer(32768)
+        length = wintypes.DWORD(len(name))
+        if kernel.QueryFullProcessImageNameW(handle, 0, name, ctypes.byref(length)):
+            if os.path.normcase(name.value) == os.path.normcase(str(executable.resolve())):
+                kernel.TerminateProcess(handle, 1)
+    finally:
+        kernel.CloseHandle(handle)
 
 
 def prepare_runtime(path, download):
@@ -114,12 +141,13 @@ def stage_ini(source, destination):
 
 
 def main():
-    """main prepares a unique run, supervises Wine, and requires an explicit test result."""
+    """main prepares a unique run and requires an explicit test result."""
+    use_wine = sys.platform != "win32"
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--ahk", help="Portable AutoHotkey64.exe (requires v2.0.28)")
     parser.add_argument("--download-ahk", action="store_true", help="Download and verify the pinned official runtime")
     parser.add_argument("--exe", type=Path, help="Existing STARS_TEST_TUTORIAL=ON executable; otherwise build one")
-    parser.add_argument("--build-preset", choices=("mingw-debug", "mingw-release"), default="mingw-debug",
+    parser.add_argument("--build-preset", choices=("mingw-debug", "mingw-release", "mingw-clang-debug", "mingw-clang-release", "msvc-debug", "msvc-release"), default="mingw-debug",
                         help="CMake preset for the test build (default: mingw-debug)")
     parser.add_argument("--ini", type=Path, help="Stars.ini supplying registration; other settings are reset")
     parser.add_argument("--work", type=Path, default=ROOT / "dist/scaffold/tutorial", help="Parent directory for retained, unique runs")
@@ -132,26 +160,37 @@ def main():
     if args.timeout <= 0:
         parser.error("--timeout must be positive")
     previous_metadata = None
+    prefix = None
+    retained_pid = 0
+    retained_executable = None
     if args.continue_run:
         metadata_path = args.continue_run / "metadata.json"
         if not metadata_path.is_file():
             parser.error("--continue-run must name a retained run with metadata.json")
         previous_metadata = json.loads(metadata_path.read_text())
-        prefix_path = previous_metadata.get("wine_prefix")
-        if not isinstance(prefix_path, str) or not prefix_path or not Path(prefix_path).is_absolute():
-            parser.error("--continue-run metadata must contain an absolute wine_prefix path")
-        prefix = Path(prefix_path)
-        if not prefix.is_dir():
-            parser.error(f"Retained Wine prefix is missing: {prefix}; /tmp may have been cleared")
+        if previous_metadata.get("platform", "wine") != ("wine" if use_wine else "windows"):
+            parser.error("Cannot continue a run from a different platform")
+        if use_wine:
+            prefix_path = previous_metadata.get("wine_prefix")
+            if not isinstance(prefix_path, str) or not prefix_path or not Path(prefix_path).is_absolute():
+                parser.error("--continue-run metadata must contain an absolute wine_prefix path")
+            prefix = Path(prefix_path)
+            if not prefix.is_dir():
+                parser.error(f"Retained Wine prefix is missing: {prefix}; /tmp may have been cleared")
+        else:
+            retained_pid = int((args.continue_run / "game.pid").read_text())
+            retained_executable = Path(previous_metadata["game_executable"])
+            if retained_pid <= 0 or not retained_executable.is_absolute():
+                parser.error("Invalid retained game identity")
     if args.continue_run and args.scenario != "walkthrough":
         parser.error("Live continuation is only available for the walkthrough")
-    for command in ("wine", "wineboot", "winepath", "wineserver"):
+    for command in (("wine", "wineboot", "winepath", "wineserver") if use_wine else ()):
         if not shutil.which(command):
             parser.error(f"Required command is missing: {command}")
     interpreter = prepare_runtime(args.ahk, args.download_ahk)
     executable = args.exe
     if executable is None:
-        build = ROOT / ("dist/tutorial-release-build" if args.build_preset == "mingw-release" else "dist/tutorial-build")
+        build = ROOT / "dist" / f"tutorial-{args.build_preset}"
         subprocess.run(["cmake", "--preset", args.build_preset, "-B", str(build), "-DSTARS_TEST_TUTORIAL=ON"], cwd=ROOT, check=True)
         subprocess.run(["cmake", "--build", str(build), "--parallel", "4"], check=True)
         executable = build / "bin/stars.exe"
@@ -168,31 +207,42 @@ def main():
         shutil.copy2(script, stage / script.name)
     shutil.copy2(executable, stage / "stars.exe")
     generate_catalog(stage)
-    if not args.continue_run:
+    if use_wine and not args.continue_run:
         prefix = Path(tempfile.mkdtemp(prefix="stars-tutorial-", dir="/tmp")).resolve()
-    environment = dict(os.environ, WINEPREFIX=str(prefix), WINEDEBUG="-all", MVK_CONFIG_LOG_LEVEL="0")
+    environment = dict(os.environ)
+    if use_wine:
+        environment.update(WINEPREFIX=str(prefix), WINEDEBUG="-all", MVK_CONFIG_LOG_LEVEL="0")
+    stage_ini(args.ini, stage / "Stars.ini")
     print(f"Tutorial run: {run}", flush=True)
-    print(f"Wine prefix: {prefix}", flush=True)
-    with (run / "wine.log").open("w") as log:
-        if not args.continue_run:
+    if use_wine:
+        print(f"Wine prefix: {prefix}", flush=True)
+    log_path = run / ("wine.log" if use_wine else "autohotkey.log")
+    with log_path.open("w") as log:
+        if use_wine and not args.continue_run:
             subprocess.run(["wineboot", "-u"], env=environment, stdout=log, stderr=log, check=True, timeout=120)
+            # Older --exe builds still read the Wine prefix's INI.
             stage_ini(args.ini, prefix / "drive_c/windows/Stars.ini")
         # winepath must share the run's prefix, not the user's default prefix.
         def convert(path):
             """convert translates one staged path using the isolated run environment."""
-            return subprocess.check_output(["winepath", "-w", str(path)], env=environment, text=True, stderr=log).strip()
-        if not args.continue_run:
+            if use_wine:
+                return subprocess.check_output(["winepath", "-w", str(path)], env=environment, text=True, stderr=log).strip()
+            return str(path.resolve())
+        if use_wine and not args.continue_run:
             for key, value, data in [(r"HKCU\Software\Wine\Explorer", "Desktop", "StarsTutorial"),
                                      (r"HKCU\Software\Wine\Explorer\Desktops", "StarsTutorial", "1600x1200")]:
                 subprocess.run(["wine", "reg", "add", key, "/v", value, "/d", data, "/f"],
                                env=environment, stdout=log, stderr=log, check=True, timeout=30)
-        command = ["wine", str(interpreter), "/ErrorStdOut",
+        command = (["wine"] if use_wine else []) + [str(interpreter), "/ErrorStdOut",
                    convert(stage / "tutorial.ahk"), convert(stage), convert(run),
-                   str(args.until_year or 2437), args.scenario, str(int(bool(args.continue_run))), str(int(args.keep_game_on_failure))]
-        metadata = {"ahk": AHK_VERSION, "wine": subprocess.check_output(["wine", "--version"], text=True).strip(),
+                   str(args.until_year or 2437), args.scenario, str(int(bool(args.continue_run))), str(int(args.keep_game_on_failure)),
+                   str(retained_pid), str(retained_executable or ""), str(int(not use_wine))]
+        metadata = {"ahk": AHK_VERSION, "platform": "wine" if use_wine else "windows",
+                    "game_executable": str(retained_executable or stage / "stars.exe"),
+                    "wine": subprocess.check_output(["wine", "--version"], text=True).strip() if use_wine else None,
                     "build_preset": (previous_metadata.get("build_preset") if args.continue_run
                                      else args.build_preset if args.exe is None else None),
-                    "wine_prefix": str(prefix),
+                    "wine_prefix": str(prefix) if use_wine else None,
                     "executable_sha256": (previous_metadata["executable_sha256"]
                                           if args.continue_run else hashlib.sha256(executable.read_bytes()).hexdigest()),
                     "scenario": args.scenario, "until_year": args.until_year, "started": time.time(),
@@ -204,11 +254,14 @@ def main():
         deadline = time.monotonic() + args.timeout
         try:
             while not (run / "result.json").exists():
-                if " ==> " in (run / "wine.log").read_text(errors="replace"):
-                    raise RuntimeError(f"AutoHotkey could not compile the walkthrough; see {run / 'wine.log'}")
+                if " ==> " in log_path.read_text(errors="replace"):
+                    raise RuntimeError(f"AutoHotkey could not compile the walkthrough; see {log_path}")
                 status = process.poll()
                 if status is not None:
-                    raise RuntimeError(f"Wine exited with status {status}; see {run / 'wine.log'}")
+                    # Finish writes its result immediately before exiting.
+                    if (run / "result.json").exists():
+                        break
+                    raise RuntimeError(f"AutoHotkey exited with status {status}; see {log_path}")
                 if time.monotonic() >= deadline:
                     raise RuntimeError(f"Tutorial timed out after {args.timeout}s; see {run}")
                 time.sleep(0.25)
@@ -217,12 +270,15 @@ def main():
         finally:
             retained_failure = (args.keep_game_on_failure and (run / "result.json").is_file()
                                 and json.loads((run / "result.json").read_text())["status"] == "failed")
-            if not retained_failure:
+            if not retained_failure and use_wine:
                 subprocess.run(["wineserver", "-k"], env=environment, stdout=log, stderr=log, timeout=15, check=False)
             try:
                 process.wait(timeout=15)
             except subprocess.TimeoutExpired:
                 process.kill()
+                process.wait(timeout=15)
+            if not retained_failure and not use_wine:
+                stop_windows_game(run, retained_executable or stage / "stars.exe")
         result = json.loads((run / "result.json").read_text())
     print(json.dumps(result, indent=2))
     print(f"Artifacts: {run}")

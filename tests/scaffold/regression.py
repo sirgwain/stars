@@ -14,6 +14,7 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
+SAVE_CLI = ROOT / "dist" / ("stars-save.exe" if sys.platform == "win32" else "stars-save")
 SCENARIOS = ("noai", "oneai1", "oneai2", "oneai3", "oneai4", "oneai5", "oneai6", "smallai4", "smallai6")
 CHECKPOINTS = (0, 1, 10, 25, 50, 80, 100, 150)
 SAVE_NAME = re.compile(r"game\.(xy|hst|[mhx](?:[1-9]|1[0-6]))$", re.I)
@@ -77,9 +78,8 @@ def windows_path(path):
 
 
 def runs_in_wine(exe):
-    """runs_in_wine tells a Windows executable (run under Wine) from a native
-    stars-host built with the host presets."""
-    return Path(exe).suffix.lower() == ".exe"
+    """Windows runs all binaries directly; other hosts use Wine for .exe files."""
+    return sys.platform != "win32" and Path(exe).suffix.lower() == ".exe"
 
 
 def game_path(exe, path, filename):
@@ -362,7 +362,7 @@ def generate(work, manifest, scenario, source, turns, timeout, trace=False):
     command, cwd = launch_command(Path(manifest["exe"]), manifest["seed"], directory, end, start)
     env = dict(os.environ)
     if trace:
-        env["STARS_TRACE"] = windows_path(directory) + "\\trace.log"
+        env["STARS_TRACE"] = game_path(Path(manifest["exe"]), directory, "trace.log")
     print(f"{scenario}: turn {start} -> {end} from {source}: {' '.join(command)}", flush=True)
     with (directory / "run.log").open("w") as log:
         process = subprocess.run(command, cwd=cwd, stdout=log, stderr=subprocess.STDOUT,
@@ -477,13 +477,13 @@ def main():
     execute.add_argument("--resume", action="store_true", help="restore the latest checkpoint and continue; preserve current saves")
     execute.add_argument("--baseline", type=Path, help="start from this run's creation checkpoint to test turn generation separately")
     execute.add_argument("--timeout", type=int, default=900, help="seconds per game launch")
-    execute.add_argument("--cli", type=Path, default=ROOT / "dist/stars-save", help="stars-save CLI used to update the human player")
+    execute.add_argument("--cli", type=Path, default=SAVE_CLI, help="stars-save CLI used to update the human player")
     diff = sub.add_parser("compare")
     diff.add_argument("left", type=Path)
     diff.add_argument("right", type=Path)
     diff.add_argument("--scenario", choices=SCENARIOS, action="append")
     diff.add_argument("--through", type=int, choices=CHECKPOINTS, default=150)
-    diff.add_argument("--cli", type=Path, default=ROOT / "dist/stars-save")
+    diff.add_argument("--cli", type=Path, default=SAVE_CLI)
     diff.add_argument("--report", type=Path, default=ROOT / "tests/scaffold/fixtures/regression/regression-comparison.json")
     save = sub.add_parser("export", help="store a completed run as a checked-in baseline fixture")
     save.add_argument("--work", type=Path, required=True, help="completed run to export")
@@ -497,7 +497,7 @@ def main():
     feed.add_argument("--turns", type=int, required=True, help="turns to generate in one launch (-gN)")
     feed.add_argument("--expect", type=Path, help="directory of saves to compare the generated turn against")
     feed.add_argument("--timeout", type=int, default=900, help="seconds for the game launch")
-    feed.add_argument("--cli", type=Path, default=ROOT / "dist/stars-save")
+    feed.add_argument("--cli", type=Path, default=SAVE_CLI)
     feed.add_argument("--report", type=Path, help="comparison report (default: comparison.json in the output)")
     feed.add_argument("--trace", action="store_true", help="write trace.log (native built with -DSTARS_TEST_TRACE=ON)")
     search = sub.add_parser("bisect", help="find the first turn where two runs' executables diverge")
@@ -507,7 +507,7 @@ def main():
     search.add_argument("--input", type=Path, required=True, help="directory of saves both runs start from")
     search.add_argument("--turns", type=int, required=True, help="the launch span to search (-gN)")
     search.add_argument("--timeout", type=int, default=900, help="seconds per game launch")
-    search.add_argument("--cli", type=Path, default=ROOT / "dist/stars-save")
+    search.add_argument("--cli", type=Path, default=SAVE_CLI)
     search.add_argument("--trace", action="store_true", help="write trace.log for native launches")
     annotate = sub.add_parser("trace", help="annotate a trace.log with caller source lines")
     annotate.add_argument("file", type=Path)

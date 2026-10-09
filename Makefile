@@ -6,7 +6,10 @@ CMAKE       ?= cmake
 CLANG_FORMAT ?= clang-format
 PYTHON      ?= python3
 GO          ?= go
-SAVE_CLI    := $(abspath $(DIST_DIR))/stars-save
+ifeq ($(OS),Windows_NT)
+EXE_SUFFIX := .exe
+endif
+SAVE_CLI    := $(abspath $(DIST_DIR))/stars-save$(EXE_SUFFIX)
 MINGW_CC    ?= x86_64-w64-mingw32-gcc
 MINGW_RC    ?= x86_64-w64-mingw32-windres
 FILES       ?= $(wildcard *.c)
@@ -140,7 +143,7 @@ host:
 # without Wine.
 regression-host: save-cli host
 	rm -rf "$(HOST_WORK)"
-	$(PYTHON) tests/scaffold/regression.py prepare --seed $(SEED) --exe "$(DIST_DIR)/$(HOST_PRESET)/bin/stars-host" --work "$(HOST_WORK)"
+	$(PYTHON) tests/scaffold/regression.py prepare --seed $(SEED) --exe "$(DIST_DIR)/$(HOST_PRESET)/bin/stars-host$(EXE_SUFFIX)" --work "$(HOST_WORK)"
 	$(PYTHON) tests/scaffold/regression.py run --cli "$(SAVE_CLI)" --work "$(HOST_WORK)" $(REGRESSION_ARGS)
 	$(PYTHON) tests/scaffold/regression.py compare "$(BASELINE_DIR)" "$(HOST_WORK)" $(REGRESSION_ARGS) --report "$(DIST_DIR)/scaffold/regression/host-comparison.json"
 

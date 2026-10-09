@@ -3,12 +3,11 @@ cmake_minimum_required(VERSION 3.23)
 # come from git; see cmake/version.cmake and docs/VERSIONING.md.
 project(stars VERSION 2.9.0 LANGUAGES C)
 
-# The MinGW presets build the Windows game (stars.exe), stars-host.exe and
-# the unit tests. Any other compiler builds only stars-host, the game's host
-# without windows (the host presets).
+# Windows builds the game (stars.exe) and stars-host.exe with MinGW or MSVC.
+# Other platforms build only stars-host, the game's host without windows.
 if(WIN32)
-    if(NOT MINGW)
-        message(FATAL_ERROR "On Windows, configure using the MinGW toolchain: cmake --preset mingw-debug or cmake --preset mingw-release")
+    if(NOT MINGW AND NOT MSVC)
+        message(FATAL_ERROR "The Windows build requires MinGW or MSVC.")
     endif()
     enable_language(RC)
 endif()
@@ -139,21 +138,34 @@ target_sources(stars_core PRIVATE
 
 # The game's headers are found for #include "..." only (-iquote): strings.h
 # is the game's string table, and glibc's <string.h> includes the system
-# <strings.h>. The resource compiler takes them as include directories.
+# <strings.h>. MSVC has no -iquote or conflicting system strings.h; it and
+# the resource compiler take ordinary include directories.
 foreach(STARS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/res" "${STARS_GENERATED_DIR}")
-    target_compile_options(stars_options INTERFACE "$<$<COMPILE_LANGUAGE:C>:SHELL:-iquote ${STARS_INCLUDE_DIR}>")
-    target_include_directories(stars_options INTERFACE "$<$<COMPILE_LANGUAGE:RC>:${STARS_INCLUDE_DIR}>")
+    if(MSVC)
+        target_include_directories(stars_options INTERFACE "${STARS_INCLUDE_DIR}")
+    else()
+        target_compile_options(stars_options INTERFACE "$<$<COMPILE_LANGUAGE:C>:SHELL:-iquote \"${STARS_INCLUDE_DIR}\">")
+        target_include_directories(stars_options INTERFACE "$<$<COMPILE_LANGUAGE:RC>:${STARS_INCLUDE_DIR}>")
+    endif()
 endforeach()
 
 # Match the existing MinGW compile-analysis flags. Plain char is signed, as
 # in the original MSC build; the decompiler relies on it to drop char casts.
-target_compile_options(stars_options INTERFACE
-    $<$<COMPILE_LANGUAGE:C>:-Wno-pointer-sign>
-    $<$<COMPILE_LANGUAGE:C>:-fsigned-char>
-)
+if(MSVC)
+    # MSVC's plain char is signed by default. Keep the existing CRT calls;
+    # the _s alternatives are not portable replacements for their semantics.
+    target_compile_definitions(stars_options INTERFACE _CRT_SECURE_NO_WARNINGS _CRT_NONSTDC_NO_WARNINGS)
+else()
+    target_compile_options(stars_options INTERFACE
+        $<$<COMPILE_LANGUAGE:C>:-Wno-pointer-sign>
+        $<$<COMPILE_LANGUAGE:C>:-fsigned-char>
+    )
+endif()
 
 if(NOT WIN32)
     target_link_libraries(stars_options INTERFACE m)
+endif()
+if(NOT WIN32 OR MSVC)
     # Turn generation rounds through long double as the original's x87 code
     # did (docs/NATIVE-PORT.md). Without x87 extended precision (a 64-bit
     # mantissa), as on Apple silicon or other ARM, some turns differ from
@@ -166,9 +178,12 @@ if(NOT WIN32)
         #endif
         int main(void) { return 0; }" STARS_X87_LONG_DOUBLE)
     if(NOT STARS_X87_LONG_DOUBLE)
-        message(WARNING "long double is not x87 extended precision here, so stars-host's turns can differ "
-                        "from the Windows game's. On Apple silicon, use the macos-host presets (x86_64, run by Rosetta).")
+        message(WARNING "long double is not x87 extended precision here, so generated turns can differ "
+                        "from the MinGW game's. MSVC uses double precision for long double. "
+                        "On Apple silicon, use the macos-host presets (x86_64, run by Rosetta).")
     endif()
+endif()
+if(NOT WIN32)
     # Unit tests (tests/unit) that need no windows, with hostui.c for the
     # user interface. The Windows build below runs them all under Wine.
     option(STARS_BUILD_TESTS "Build the unit tests in tests/unit" ON)
@@ -178,8 +193,7 @@ if(NOT WIN32)
         file(MAKE_DIRECTORY "${STARS_TEST_DIR}/data")
         configure_file(tests/scaffold/fixtures/newgame/tiny/humanoid.r1 "${STARS_TEST_DIR}/data/humanoid.r1" COPYONLY)
         file(GLOB STARS_UNIT_TESTS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/test_*.c")
-        # test_native_ports replaces the game's file I/O with --wrap, which
-        # only GNU ld on Windows provides.
+        # test_native_ports also exercises Windows controls and UI state.
         list(REMOVE_ITEM STARS_UNIT_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/test_native_ports.c")
         foreach(STARS_UNIT_TEST ${STARS_UNIT_TESTS})
             get_filename_component(STARS_TEST_NAME "${STARS_UNIT_TEST}" NAME_WE)
@@ -208,22 +222,35 @@ set_target_properties(stars PROPERTIES
 )
 
 # MinGW runtime objects can contain debug data even in a Release build.
-target_link_options(stars PRIVATE
-    $<$<CONFIG:Release>:LINKER:--strip-debug>
-)
-
-# The tutorial runner reads this observer to drive real UI controls.
-option(STARS_TEST_TUTORIAL "Expose read-only tutorial state for AutoHotkey tests" OFF)
-if(STARS_TEST_TUTORIAL)
-    target_sources(stars PRIVATE tests/scaffold/tutorial/observer.c)
-    target_link_options(stars PRIVATE "LINKER:--wrap=InitInstance,--wrap=ScannerWndProc")
+if(MINGW)
+    target_link_options(stars PRIVATE
+        $<$<CONFIG:Release>:LINKER:--strip-debug>
+    )
 endif()
 
-# Trace builds wrap cross-file calls and log when STARS_TRACE names a file.
+# Portable test replacements preserve --wrap's cross-file semantics: only the
+# source defining a hook renames it (including its internal calls). Other
+# objects call the replacement supplied by the harness. Product objects stay
+# unchanged, and all Windows compilers exercise the same test hooks.
+include(cmake/test-hooks.cmake)
+option(STARS_BUILD_TESTS "Build the unit tests in tests/unit" ON)
+option(STARS_TEST_TUTORIAL "Expose read-only tutorial state for AutoHotkey tests" OFF)
 option(STARS_TEST_TRACE "Log Random and other selected calls to $STARS_TRACE for regression tests" OFF)
+
+set(STARS_GAME_HOOKS)
+if(STARS_TEST_TUTORIAL)
+    list(APPEND STARS_GAME_HOOKS InitInstance ScannerWndProc CchGetString)
+    target_sources(stars PRIVATE tests/scaffold/tutorial/observer.c)
+endif()
 if(STARS_TEST_TRACE)
+    list(APPEND STARS_GAME_HOOKS Random PctPlanetCapacity)
     target_sources(stars PRIVATE tests/scaffold/regression_trace.c)
-    target_link_options(stars PRIVATE "LINKER:--wrap=Random,--wrap=PctPlanetCapacity")
+endif()
+if(STARS_GAME_HOOKS)
+    stars_test_variant(stars_game_core stars_core ${STARS_GAME_HOOKS})
+    stars_test_variant(stars_game_ui stars_ui ${STARS_GAME_HOOKS})
+    set_property(TARGET stars PROPERTY LINK_LIBRARIES stars_game_core stars_game_ui)
+    stars_test_hooks(stars ${STARS_GAME_HOOKS})
 endif()
 
 # Recompile resources when an embedded bitmap, icon, cursor, or data file changes.
@@ -255,19 +282,25 @@ endif()
 # Unit tests (tests/unit): one acutest executable per test_*.c, linked with
 # the game code and its resources. They are Windows console programs; CTest
 # runs them through Wine when it is available.
-option(STARS_BUILD_TESTS "Build the unit tests in tests/unit" ON)
 if(STARS_BUILD_TESTS)
     enable_testing()
     set(STARS_TEST_DIR "${CMAKE_BINARY_DIR}/tests")
     file(MAKE_DIRECTORY "${STARS_TEST_DIR}/data")
     configure_file(tests/scaffold/fixtures/newgame/tiny/humanoid.r1 "${STARS_TEST_DIR}/data/humanoid.r1" COPYONLY)
     file(GLOB STARS_UNIT_TESTS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/test_*.c")
+    stars_test_variant(stars_unit_core stars_core AlertSz)
+    stars_test_variant(stars_ports_core stars_core AlertSz WriteRt ReadRt FCreateFile StreamOpen StreamClose DirtyGame)
     foreach(STARS_UNIT_TEST ${STARS_UNIT_TESTS})
         get_filename_component(STARS_TEST_NAME "${STARS_UNIT_TEST}" NAME_WE)
         add_executable(${STARS_TEST_NAME} "${STARS_UNIT_TEST}" tests/unit/stars_test.c res/stars.rc)
-        target_link_libraries(${STARS_TEST_NAME} PRIVATE stars_core stars_ui)
+        if(STARS_TEST_NAME STREQUAL "test_native_ports")
+            target_link_libraries(${STARS_TEST_NAME} PRIVATE stars_ports_core stars_ui)
+            stars_test_hooks(${STARS_TEST_NAME} WriteRt ReadRt FCreateFile StreamOpen StreamClose DirtyGame)
+        else()
+            target_link_libraries(${STARS_TEST_NAME} PRIVATE stars_unit_core stars_ui)
+        endif()
         # Message boxes would wait for a click; stars_test.c records them.
-        target_link_options(${STARS_TEST_NAME} PRIVATE "LINKER:--wrap=AlertSz")
+        stars_test_hooks(${STARS_TEST_NAME} AlertSz)
         target_include_directories(${STARS_TEST_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit")
         target_compile_definitions(${STARS_TEST_NAME} PRIVATE STARS_TEST_GOLDEN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/golden")
         set_target_properties(${STARS_TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${STARS_TEST_DIR}")
@@ -281,11 +314,8 @@ if(STARS_BUILD_TESTS)
     endforeach()
     # Games to open by hand (tests/scenarios, make scenario).
     add_executable(stars_scenario tests/scenarios/scenarios.c tests/unit/stars_test.c res/stars.rc)
-    target_link_libraries(stars_scenario PRIVATE stars_core stars_ui)
-    target_link_options(stars_scenario PRIVATE "LINKER:--wrap=AlertSz")
+    target_link_libraries(stars_scenario PRIVATE stars_unit_core stars_ui)
+    stars_test_hooks(stars_scenario AlertSz)
     target_include_directories(stars_scenario PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit")
     set_target_properties(stars_scenario PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${STARS_TEST_DIR}")
-    # The native-port test replaces file I/O with in-memory records.
-    target_link_options(test_native_ports PRIVATE
-        "LINKER:--wrap=WriteRt,--wrap=ReadRt,--wrap=FCreateFile,--wrap=StreamOpen,--wrap=StreamClose,--wrap=DirtyGame")
 endif()
