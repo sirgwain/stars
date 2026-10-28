@@ -3,7 +3,7 @@ name: Stars native regression
 on:
   pull_request:
   push:
-    branches: [main, '2.8']
+    branches: [main, '2.6j-linux']
   workflow_dispatch:
 
 permissions:

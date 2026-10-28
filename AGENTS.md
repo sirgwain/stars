@@ -8,7 +8,7 @@ reconstruction is finished: it is tagged `2.6jrc3` and kept on the `2.6j`
 branch, which still follows the reconstruction rules in its own `AGENTS.md`
 (`git show 2.6j:AGENTS.md`).
 
-This is the `2.8` branch: the released 2.8 line (tag `v2.8.0`). It fixes
+This is the `2.6j-linux` branch: the former 2.8 line (tag `v2.8.0`). It fixes
 the original's bugs and turns the Win16 shims into native Win32 code, while
 staying a game that plays like 2.6j and reads its files. The branch takes
 bug fixes for patch releases (`v2.8.1`, ...) only: no restructuring, new
