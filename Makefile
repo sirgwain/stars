@@ -103,7 +103,7 @@ text-unreferenced:
 version-header:
 	@mkdir -p "$(VERSION_DIR)"
 	@$(CMAKE) -DSOURCE_DIR="$(CURDIR)" -DOUTPUT="$(VERSION_DIR)/version.h" \
-		-DVERSION_BASE=$$(sed -n 's/^project(stars VERSION \([0-9.]*\).*/\1/p' CMakeLists.txt) \
+		-DVERSION_BASE=$$(sed -n 's/^set(STARS_VERSION_BASE "\([^"]*\)").*/\1/p' CMakeLists.txt) \
 		-P cmake/version.cmake
 
 compile-check: version-header text-header data-header

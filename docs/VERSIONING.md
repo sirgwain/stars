@@ -1,66 +1,55 @@
 # Versioning
 
-Stars! has two version numbers, and only one of them changes on `main`.
+Stars! has a product version and a separate file format version.
 
 ## Product version
 
-The version of the executable, stored in its `VERSIONINFO` resource and
-shown to players. `cmake/version.cmake` generates it from git into
-`<build>/generated/version.h` on every build:
+`main` uses the original-style revision letters. The next release is
+`2.6k-x64`, tagged `v2.6k-x64`. Later releases advance the letter:
+`v2.6l-x64`, `v2.6m-x64`, and so on. Earlier tags (`v2.8.0`, `v2.8.1`,
+`v2.9.0`) remain historical releases. The former `2.8` maintenance branch
+is named `2.6j-linux`.
 
-| Checkout | Version | Shown as | Build |
-| --- | --- | --- | --- |
-| Clean checkout of tag `v2.8.0` | `2.8.0` | `2.8x64` | 0 |
-| Clean checkout of tag `v2.8.1` | `2.8.1` | `2.8.1x64` | 0 |
-| 12 commits after `v2.8.0` | `2.8.1-dev.12+g1a2b3c4` | `2.8x64 (2.8.1-dev.12+g1a2b3c4)` | 12 |
-| Same, with uncommitted changes | `2.8.1-dev.12+g1a2b3c4.dirty` | `2.8x64 (2.8.1-dev.12+g1a2b3c4.dirty)` | 12 |
-| Before the first `v` tag | `2.8.0-dev.N+g…`, N counted from `2.6jrc3` | `2.8x64 (2.8.0-dev.N+g…)` | N |
+`cmake/version.cmake` generates `<build>/generated/version.h` on every build.
+`STARS_VERSION_STRING` is the exact product version; `STARS_VERSION_DISPLAY`
+adds the build platform for a non-Windows host. Examples:
 
-The version (`STARS_VERSION_STRING`) is what tags, `FileVersion` and the
-release check use; it never names a platform (a semver `-` suffix would
-make it a pre-release). The name shown (`STARS_VERSION_DISPLAY`) adds the
-platform: the Windows build keeps the `x64` players know, `2.8x64` for
-2.8.0 and `2.8.1x64` for 2.8.1, and other builds of `stars-host` name
-theirs after the version: `2.9 linux-x64`, `2.9 macos-x64`,
-`2.9 macos-arm64`. CMake passes the platform (`STARS_VERSION_PLATFORM`,
-`os-arch`) to `cmake/version.cmake`. Development builds append the full
-version in parentheses. It appears in the About box, on the splash screen
-and in report headers (`SzVersion` in `util.c`), in `ProductVersion`, in
-release titles and in `stars-host --version`.
+| Checkout | Version string | Windows display | Linux host display | Build |
+| --- | --- | --- | --- | --- |
+| Clean `v2.6k-x64` tag | `2.6k-x64` | `2.6k-x64` | `2.6k-linux-x64` | 0 |
+| 12 commits after `v2.6k-x64` | `2.6l-x64-dev.12+g1a2b3c` | `2.6l-x64 (2.6l-x64-dev.12+g1a2b3c)` | `2.6l-linux-x64 (2.6l-x64-dev.12+g1a2b3c)` | 12 |
+| Same, with tracked changes | `2.6l-x64-dev.12+g1a2b3c.dirty` | `2.6l-x64 (2.6l-x64-dev.12+g1a2b3c.dirty)` | `2.6l-linux-x64 (2.6l-x64-dev.12+g1a2b3c.dirty)` | 12 |
+| Before the first lettered tag | `2.6k-x64-dev.N+g…` | `2.6k-x64 (2.6k-x64-dev.N+g…)` | `2.6k-linux-x64 (2.6k-x64-dev.N+g…)` | N, counted from `v2.9.0` |
 
-A development build is numbered toward the next version: the patch after the
-last `vX.Y.Z` tag, or `project(stars VERSION …)` in `CMakeLists.txt` if that
-is higher. To start a new minor version (2.9.0), raise the `project()`
-version; patch releases need no version commit. `VERSIONINFO` carries
-`MAJOR,MINOR,PATCH,BUILD`.
+The Windows `VERSIONINFO` numeric fields are `2,6,11,BUILD` for revision k;
+the third field advances with the letter. The string fields carry the
+original-style name. `SzVersion` shows it in the About box, splash screen
+and report headers. `stars-host --version` uses the host display string.
+The platform name is supplied by CMake as `STARS_VERSION_PLATFORM`.
 
-Source archives without git history build as `X.Y.Z-dev.0+gunknown`; set
-`STARS_VERSION=2.8.0` in the environment to stamp them.
-
-Patch releases of 2.8 are tagged on the `2.8` branch (`v2.8.1`), whose
-builds count toward 2.8.1. `main` has `project()` at 2.9.0, so its builds
-read `2.9.0-dev.N+g…`, counted from `v2.8.0`.
+For a source archive without Git history, set `STARS_VERSION=2.6k-x64` in
+the environment to stamp a release build. Without that setting, the version
+is `2.6k-x64-dev.0+gunknown`.
 
 ## Releasing
 
+After the release commit is on `main`:
+
 ```sh
-git tag v2.8.0
-git push origin v2.8.0
+git tag v2.6k-x64
+git push origin v2.6k-x64
 ```
 
-The release workflow builds the tag, checks that it produced exactly
-`2.8.0`, and publishes "Stars! 2.8x64" with `stars.exe` and `stars!.hlp`.
-Every push to `main` updates the rolling `latest` prerelease, whose title
-shows the name of the build. Other tags (such as `2.6jrc3` on the `2.6j`
-branch) still publish releases named after the tag.
+The release workflow checks that the tag builds the exact version string
+`2.6k-x64` and publishes the Windows executable, help file and Linux host.
+Every push to `main` updates the rolling `latest` prerelease. The legacy
+tags and the `2.6j-linux` branch remain available.
 
 ## File format version
 
 Saves, turn files and race files carry their own version in `RTBOF`
 (`verMajor`/`verMinor`/`verInc`). The original wrote 2.83 (`save.c`) and
-refused files from 2.84 or later (`file.c`, `mdi.c`, `save.c`). 2.8 writes
-2.84 and reads 2.49 through 2.84: it picks up games, turns and races from
-2.6j/2.7, while 2.6j/2.7 refuse files written by 2.8 instead of playing on
-with different rules. The records themselves are unchanged. It is not tied
-to the product version; change it only together with a real file-format
-change, and expect older versions to reject the files.
+refused files from 2.84 or later (`file.c`, `mdi.c`, `save.c`). The native
+builds write 2.84 and read 2.49 through 2.84: they pick up games, turns
+and races from 2.6j/2.7, while 2.6j/2.7 refuse the newer files. The records
+themselves are unchanged. This number is independent of the product name.

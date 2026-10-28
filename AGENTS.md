@@ -8,18 +8,18 @@ reconstruction is finished: it is tagged `2.6jrc3` and kept on the `2.6j`
 branch, which still follows the reconstruction rules in its own `AGENTS.md`
 (`git show 2.6j:AGENTS.md`).
 
-2.8 is released (tag `v2.8.0`): it fixes the original's bugs and turns the
-Win16 shims into native Win32 code, while staying a game that plays like
-2.6j and reads its files. The `2.8` branch takes bug fixes for 2.8 patch
-releases. `main` is the 2.9 line, which splits the game into core, UI and
-host builds so the host can run on Linux; see `docs/ROADMAP.md`. These
-rules carry over from 2.8.
+The historical 2.8 release (tag `v2.8.0`) fixes the original's bugs and
+turns the Win16 shims into native Win32 code, while staying a game that
+plays like 2.6j and reads its files. Its maintenance branch is now
+`2.6j-linux`. `main` is the `2.6k-x64` line, which splits the game into
+core, UI and host builds so the host can run on Linux; see
+`docs/ROADMAP.md`. These rules carry over from 2.8.
 
 When goals conflict, apply them in this order:
 
 1. **Compatibility:** save, turn, history and race files from Stars!
    2.6j/2.7 (file format version 2.83) stay readable. 2.8 writes version
-   2.84, which 2.6j/2.7 refuse, so 2.8 files are for 2.8 only. On-disk
+   2.84, which 2.6j/2.7 refuse, so newer files are for the native builds only. On-disk
    formats and record sizes do not change.
 2. **Behavior:** game behavior changes only on purpose. Each intentional
    change is its own commit, moves the native regression baseline in that
@@ -75,7 +75,7 @@ When goals conflict, apply them in this order:
   Windows UI and `hostui.c` implement. Put dialogs, drawing and window
   state in the UI files (`*ui.c` and the others in `STARS_UI_SOURCES`,
   which include `win.h`); when a game file needs one, add a `ui.h` call.
-- A file split for 2.9 keeps its game logic under its original name, and
+- A file split on `main` keeps its game logic under its original name, and
   its window code moves to `<name>ui.c`.
 - The game's text (strings, messages, tutorial, planet names) is in
   `text/*.txt`; `text/textgen.py` builds the ID enums (`textids.h`) and the
@@ -110,9 +110,9 @@ When goals conflict, apply them in this order:
 
 ## Versioning
 
-- The product version comes from git: release tags are `vMAJOR.MINOR.PATCH`
-  (`v2.8.0`), and builds between tags are numbered from the last tag. CMake
-  generates `version.h`; see `docs/VERSIONING.md`.
+- The product version comes from git: release tags on `main` are
+  `v2.6<letter>-x64` (`v2.6k-x64`), and builds between tags are numbered
+  from the last tag. CMake generates `version.h`; see `docs/VERSIONING.md`.
 - The file format version written to saves is separate: 2.84. 2.8 reads
   2.49 through 2.84.
 

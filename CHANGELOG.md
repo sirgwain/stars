@@ -34,6 +34,9 @@ produce different results from a 2.6j host for the same turn.
 
 ### Changed
 
+- The next product release uses the original-style name `2.6k-x64` and tag
+  `v2.6k-x64`; later releases advance the letter. The former `2.8` branch
+  is named `2.6j-linux`. File version 2.84 and game behavior are unchanged.
 - The game's text and static data are now built from source files rather
   than checked-in C tables: the strings, messages, tutorial and planet names
   from `text/*.txt`, and the hulls, parts, starting designs, predefined and

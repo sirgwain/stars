@@ -1,26 +1,11 @@
 # Generates version.h from git. Run at build time with:
-#   cmake -DSOURCE_DIR=... -DOUTPUT=... -DVERSION_BASE=X.Y.Z
+#   cmake -DSOURCE_DIR=... -DOUTPUT=... -DVERSION_BASE=2.6k
 #         [-DPLATFORM=os-arch] -P version.cmake
 #
-# A clean checkout of a vX.Y.Z tag is release X.Y.Z, build 0. Any other commit
-# is a development build of the next version, numbered by its distance from
-# the last vX.Y.Z tag (or from 2.6jrc3 before the first one):
-#   2.8.0-dev.12+g1a2b3c4        12 commits after the last release
-#   2.8.0-dev.12+g1a2b3c4.dirty  with uncommitted changes
-# The next version is VERSION_BASE, or the last tag's patch + 1 if that is
-# higher, so a release never needs a version bump commit.
-# Set STARS_VERSION in the environment to override (for source archives).
-#
-# The name shown to players includes the patch for a patch release, omits
-# .0 for an initial release, and appends the full version for development builds:
-#   2.8x64                                  release 2.8.0
-#   2.8.1x64                                release 2.8.1
-#   2.8x64 (2.8.1-dev.12+g1a2b3c4)          development build
-# The Windows game (PLATFORM windows-x64) keeps the x64 suffix players know.
-# Other builds name their platform after the version:
-#   2.9 linux-x64, 2.9 macos-x64, 2.9 macos-arm64
-# The platform never enters the version itself (STARS_VERSION_STRING); a
-# semver pre-release (-...) would sort before the release.
+# A clean v2.6k-x64 tag builds as 2.6k-x64. After a lettered tag, builds
+# count toward the next letter (2.6l-x64-dev.N+gSHA). Before the first
+# lettered tag, they count from v2.9.0. STARS_VERSION overrides git when
+# building a source archive without history.
 
 cmake_minimum_required(VERSION 3.23)
 
@@ -38,13 +23,16 @@ function(stars_git out)
     endif()
 endfunction()
 
-string(REGEX MATCH "^([0-9]+)\\.([0-9]+)\\.([0-9]+)$" match "${VERSION_BASE}")
+string(REGEX MATCH "^2\\.6([a-z])$" match "${VERSION_BASE}")
 if(NOT match)
-    message(FATAL_ERROR "VERSION_BASE must be X.Y.Z, got '${VERSION_BASE}'")
+    message(FATAL_ERROR "VERSION_BASE must be 2.6 followed by a revision letter, got '${VERSION_BASE}'")
 endif()
-set(major ${CMAKE_MATCH_1})
-set(minor ${CMAKE_MATCH_2})
-set(patch ${CMAKE_MATCH_3})
+set(letter "${CMAKE_MATCH_1}")
+set(alphabet "abcdefghijklmnopqrstuvwxyz")
+string(FIND "${alphabet}" "${letter}" letter_index)
+math(EXPR patch "${letter_index} + 1")
+set(major 2)
+set(minor 6)
 set(build 0)
 set(commit "unknown")
 set(release FALSE)
@@ -52,12 +40,15 @@ set(dirty "")
 
 if(DEFINED ENV{STARS_VERSION} AND NOT "$ENV{STARS_VERSION}" STREQUAL "")
     set(text "$ENV{STARS_VERSION}")
-    if(NOT text MATCHES "^([0-9]+)\\.([0-9]+)\\.([0-9]+)")
-        message(FATAL_ERROR "STARS_VERSION must start with X.Y.Z, got '${text}'")
+    if(NOT text MATCHES "^2\\.6([a-z])-x64($|-dev\\.[0-9]+\\+g[0-9a-z]+(\\.dirty)?$)")
+        message(FATAL_ERROR "STARS_VERSION must be a 2.6 lettered x64 version, got '${text}'")
     endif()
-    set(major ${CMAKE_MATCH_1})
-    set(minor ${CMAKE_MATCH_2})
-    set(patch ${CMAKE_MATCH_3})
+    set(letter "${CMAKE_MATCH_1}")
+    string(FIND "${alphabet}" "${letter}" letter_index)
+    math(EXPR patch "${letter_index} + 1")
+    if(text MATCHES "-dev\\.([0-9]+)\\+g")
+        set(build "${CMAKE_MATCH_1}")
+    endif()
 else()
     stars_git(head rev-parse --short=7 HEAD)
     if(head)
@@ -66,55 +57,51 @@ else()
         if(status)
             set(dirty ".dirty")
         endif()
-        stars_git(described describe --tags --long --abbrev=7 --match "v[0-9]*.[0-9]*.[0-9]*" HEAD)
-        if(described MATCHES "^v([0-9]+)\\.([0-9]+)\\.([0-9]+)-([0-9]+)-g[0-9a-f]+$")
-            set(tag_version "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.${CMAKE_MATCH_3}")
-            set(build ${CMAKE_MATCH_4})
+        stars_git(described describe --tags --long --abbrev=7 --match "v2.6[a-z]-x64" HEAD)
+        if(described MATCHES "^v2\\.6([a-z])-x64-([0-9]+)-g[0-9a-f]+$")
+            set(tag_letter "${CMAKE_MATCH_1}")
+            set(build "${CMAKE_MATCH_2}")
             if(build EQUAL 0 AND NOT dirty)
+                set(letter "${tag_letter}")
                 set(release TRUE)
-                set(major ${CMAKE_MATCH_1})
-                set(minor ${CMAKE_MATCH_2})
-                set(patch ${CMAKE_MATCH_3})
             else()
-                math(EXPR next_patch "${CMAKE_MATCH_3} + 1")
-                set(next "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.${next_patch}")
-                if(next VERSION_GREATER VERSION_BASE)
-                    set(major ${CMAKE_MATCH_1})
-                    set(minor ${CMAKE_MATCH_2})
-                    set(patch ${next_patch})
+                string(FIND "${alphabet}" "${tag_letter}" tag_index)
+                math(EXPR next_index "${tag_index} + 1")
+                if(next_index GREATER 25)
+                    message(FATAL_ERROR "No revision letter follows 2.6z")
+                endif()
+                if(next_index GREATER letter_index)
+                    string(SUBSTRING "${alphabet}" ${next_index} 1 letter)
                 endif()
             endif()
         else()
-            stars_git(count rev-list --count 2.6jrc3..HEAD)
+            stars_git(count rev-list --count v2.9.0..HEAD)
             if(count STREQUAL "")
                 stars_git(count rev-list --count HEAD)
             endif()
             if(NOT count STREQUAL "")
-                set(build ${count})
+                set(build "${count}")
             endif()
         endif()
     endif()
     if(release)
-        set(text "${major}.${minor}.${patch}")
+        set(text "2.6${letter}-x64")
     else()
-        set(text "${major}.${minor}.${patch}-dev.${build}+g${commit}${dirty}")
+        set(text "2.6${letter}-x64-dev.${build}+g${commit}${dirty}")
     endif()
 endif()
 
+string(FIND "${alphabet}" "${letter}" letter_index)
+math(EXPR patch "${letter_index} + 1")
 if(NOT DEFINED PLATFORM OR PLATFORM STREQUAL "")
     set(PLATFORM "windows-x64")
 endif()
 if(PLATFORM STREQUAL "windows-x64")
-    set(label "x64")
+    set(display "2.6${letter}-x64")
 else()
-    set(label " ${PLATFORM}")
+    set(display "2.6${letter}-${PLATFORM}")
 endif()
-set(display "${major}.${minor}${label}")
-if(text STREQUAL "${major}.${minor}.${patch}")
-    if(NOT patch EQUAL 0)
-        set(display "${major}.${minor}.${patch}${label}")
-    endif()
-else()
+if(NOT text STREQUAL "2.6${letter}-x64")
     set(display "${display} (${text})")
 endif()
 

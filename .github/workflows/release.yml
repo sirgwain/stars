@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           persist-credentials: false
-          # cmake/version.cmake numbers builds from the last vX.Y.Z tag.
+          # cmake/version.cmake numbers builds from the last v2.6<letter>-x64 tag.
           fetch-depth: 0
           fetch-tags: true
 
@@ -47,7 +47,7 @@ jobs:
           echo "Built Stars! $display"
           echo "STARS_VERSION=$version" >> "$GITHUB_ENV"
           echo "STARS_DISPLAY=$display" >> "$GITHUB_ENV"
-          if [[ "$GITHUB_REF_TYPE" == tag && "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ \
+          if [[ "$GITHUB_REF_TYPE" == tag && "$GITHUB_REF_NAME" =~ ^v2\.6[a-z]-x64$ \
                 && "v$version" != "$GITHUB_REF_NAME" ]]; then
             echo "::error::tag $GITHUB_REF_NAME built version $version"
             exit 1
@@ -56,7 +56,7 @@ jobs:
       # stars-host, the game's host without windows, for x86-64 Linux. The
       # runner's gcc gives x87 long double, which turn generation needs.
       # It links statically so it runs on older glibc. Refs from before
-      # 2.9 have no host preset and publish only stars.exe.
+      # The historical 2.8 tags have no host preset and publish only stars.exe.
       - name: Build Linux stars-host
         run: |
           if ! cmake --list-presets | grep -q '"host-release"'; then
@@ -153,7 +153,7 @@ jobs:
             gh release upload "$tag" "${assets[@]}" --clobber
           else
             title="$tag"
-            if [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            if [[ "$tag" =~ ^v2\.6[a-z]-x64$ ]]; then
               title="Stars! $STARS_DISPLAY"
             fi
             gh release create "$tag" --verify-tag --title "$title" --generate-notes \

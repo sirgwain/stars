@@ -11,12 +11,12 @@ The original 2.6jrc3 stars.exe included ~1MB of debug symbols with function name
 - `2.6j` (tag `2.6jrc3`): the faithful reconstruction, original bugs
   included. It matches the original game turn for turn in the fixed-seed
   regression.
-- `2.8` (tag `v2.8.0`): the released 2.8 line, bug fixes only. It fixes
+- `2.6j-linux` (historical tag `v2.8.0`): the former 2.8 line, bug fixes only. It fixes
   original bugs and replaces the Win16 shims with native code. It reads
   2.6j files and writes the same formats, marked as version 2.84 so that
   2.6j doesn't load them.
-- `main`: the 2.9 line, splitting the game into core, UI and host builds so
-  the host (`stars-host`) runs on Linux and macOS.
+- `main`: the `2.6k-x64` line. The core, UI and host split lets the host
+  (`stars-host`) run on Linux and macOS.
 
 ## Documentation
 
@@ -26,8 +26,8 @@ The original 2.6jrc3 stars.exe included ~1MB of debug symbols with function name
   what the Win32/Win64 build changes, and the original behavior it reproduces.
 - [Known bugs](docs/KNOWN-BUGS.md): the original release bug list, mapped to
   source.
-- [Roadmap](docs/ROADMAP.md): the 2.9 split and the bug fixes still open.
-- [Changelog](CHANGELOG.md) and [versioning](docs/VERSIONING.md): what 2.8
+- [Roadmap](docs/ROADMAP.md): the core, UI and host split and the bug fixes still open.
+- [Changelog](CHANGELOG.md) and [versioning](docs/VERSIONING.md): what the native port
   changes from 2.6j, and how versions and build numbers are assigned.
 
 ## Build
@@ -123,15 +123,15 @@ directory. `stars-host-linux-x64.tar.gz` holds `stars-host` for x86-64 Linux,
 built with gcc and linked statically after its unit tests pass. Superseded
 main builds remain available as workflow artifacts.
 
-Pushing a version tag (for example `v2.8.0`) builds that tag's source, checks
+Pushing a version tag (for example `v2.6k-x64`) builds that tag's source, checks
 that it reports exactly that version, and publishes a release with the same
-files (tags from before 2.9 have no `stars-host`). Other tags (such as `2.6jrc3`) publish releases named after the
+files (the historical 2.8 tags have no `stars-host`). Other tags (such as `2.6jrc3`) publish releases named after the
 tag. The rolling `latest` tag is excluded. See
 [versioning](docs/VERSIONING.md) for how build numbers are derived:
 
 ```sh
-git tag v2.8.0
-git push origin v2.8.0
+git tag v2.6k-x64
+git push origin v2.6k-x64
 ```
 
 Pull requests build and run the complete tutorial and the unfinished-turn

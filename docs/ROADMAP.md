@@ -1,11 +1,11 @@
 # Roadmap
 
 The `2.6jrc3` tag is the faithful reconstruction, original bugs included, and
-the `2.6j` branch keeps it. 2.8 is released (tag `v2.8.0`, branch `2.8` for
-patch releases). 2.9 is released (tag `v2.9.0`); `main` is the 2.9 line,
-and its builds count toward 2.9.1.
+the `2.6j` branch keeps it. The historical 2.8 release (tag `v2.8.0`) is
+maintained on `2.6j-linux`. The 2.9 release (tag `v2.9.0`) completed the
+host split; `main` now builds toward `2.6k-x64`.
 
-## 2.9
+## Core, UI and host split (released under 2.9)
 
 Split the game into separate builds so the host can run on Linux:
 
@@ -45,7 +45,7 @@ The release workflow publishes `stars-host-linux-x64.tar.gz`, linked
 statically, beside `stars.exe`. 2.9.0 is released (tag `v2.9.0`).
 
 The 2.8 reproduce-first items (5.3 below) still apply; fix them on `main`
-and cherry-pick to `2.8`.
+and cherry-pick to `2.6j-linux`.
 
 ## 2.8 (released)
 

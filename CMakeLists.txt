@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.23)
-# The version this line is building toward. Tags (vX.Y.Z) and build numbers
-# come from git; see cmake/version.cmake and docs/VERSIONING.md.
-project(stars VERSION 2.9.0 LANGUAGES C)
+# Windows VERSIONINFO needs numeric fields; revision k is 11.
+# The product version and build number come from git; see docs/VERSIONING.md.
+project(stars VERSION 2.6.11 LANGUAGES C)
+set(STARS_VERSION_BASE "2.6k")
 
 # The MinGW presets build the Windows game (stars.exe), stars-host.exe and
 # the unit tests. Any other compiler builds only stars-host, the game's host
@@ -81,7 +82,7 @@ set(STARS_VERSION_COMMAND "${CMAKE_COMMAND}"
     -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
     -DPLATFORM=${STARS_PLATFORM}
     -DOUTPUT=${STARS_GENERATED_DIR}/version.h
-    -DVERSION_BASE=${PROJECT_VERSION}
+    -DVERSION_BASE=${STARS_VERSION_BASE}
     -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.cmake")
 file(MAKE_DIRECTORY "${STARS_GENERATED_DIR}")
 execute_process(COMMAND ${STARS_VERSION_COMMAND})
