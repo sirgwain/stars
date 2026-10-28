@@ -55,6 +55,15 @@ static void test_UpdateShdefCost_rs_armor_overflow(void) {
     TEST_CHECK_(shdef.hul.dp == 250 + 18000, "dp %u", shdef.hul.dp);
 }
 
+static void test_PszPlayerName_all_spaces(void) {
+    PLAYER plr;
+
+    TEST_ASSERT(FStarsTestInit());
+    memset(&plr, 0, sizeof(plr));
+    strcpy(plr.szName, "   ");
+    TEST_CHECK(strcmp(PszPlayerName(0, FALSE, FALSE, FALSE, 0, &plr), "No Name") == 0);
+}
+
 // AddPursuer adds a player-0 fleet in deep space at pt whose second waypoint
 // pursues fleet idTarget, last seen at ptTarget.
 static FLEET *AddPursuer(int16_t ish, POINT16 pt, int16_t idTarget, POINT16 ptTarget) {
@@ -128,4 +137,5 @@ static void test_ValidateWaypoints_pursuers_take_heaviest(void) {
 TEST_LIST = {{"ValidateWaypoints pursuers take the heaviest fleet", test_ValidateWaypoints_pursuers_take_heaviest},
              {"UpdateShdefCost armor", test_UpdateShdefCost_armor},
              {"UpdateShdefCost RS armor overflow", test_UpdateShdefCost_rs_armor_overflow},
+             {"PszPlayerName all spaces", test_PszPlayerName_all_spaces},
              {NULL, NULL}};

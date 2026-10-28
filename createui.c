@@ -11,7 +11,7 @@ void NewGameWizard(HWND hwnd, int16_t fReadOnly) {
     char    szFile[256];
     AiRace  idAi;
     int16_t fEasy;
-    char    szFileLocal[208];
+    char    szFileLocal[16 * sizeof(szRaceFile)];
     int16_t j;
     RECT    rgrcStack[20];
     PLAYER  rgplrLocal[16];
@@ -92,7 +92,7 @@ void NewGameWizard(HWND hwnd, int16_t fReadOnly) {
         if (rgplr[i].fInclude) {
             vrgplrTypeNew[i] = i << 2 | 2;
             vrgplrNew[i] = rgplr[i];
-            vrgszFileNew[i * 13] = 0;
+            vrgszFileNew[i * sizeof(szRaceFile)] = 0;
         } else {
             vrgplrTypeNew[i] = 25;
         }
@@ -595,7 +595,8 @@ INT_PTR CALLBACK NewGameDlg(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
                 game.fClumping = IsDlgButtonChecked(hwnd, IDC_NEW_GAME_GALAXY_CLUMPING);
                 i = GetWindowText(GetDlgItem(hwnd, IDC_NEW_GAME_NAME), game.szName, 32);
                 if (i == 0) {
-                    strcpy(game.szName, szBase);
+                    strncpy(game.szName, szBase, sizeof(game.szName) - 1);
+                    game.szName[sizeof(game.szName) - 1] = 0;
                 }
             }
             StickyDlgPos(hwnd, &ptStickyNewDlg, FALSE);
@@ -774,7 +775,7 @@ INT_PTR CALLBACK NewGameDlg2(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
                         }
                     }
                     vrgplrNew[iNewVal] = vplr;
-                    strcpy(vrgszFileNew + iNewVal * 13, szRaceFile);
+                    strcpy(vrgszFileNew + iNewVal * sizeof(szRaceFile), szRaceFile);
                     iNewVal = iNewVal << 2 | 2;
                 }
             } else if (iPopMenuSel == 2) {
@@ -784,7 +785,7 @@ INT_PTR CALLBACK NewGameDlg2(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
                     wsprintf(vplr.szNames, "%ss", vplr.szName);
                 } else {
                     vplr = vrgplrNew[iCurVal >> 2];
-                    strcpy(szRaceFile, vrgszFileNew + (iCurVal >> 2) * 13);
+                    strcpy(szRaceFile, vrgszFileNew + (iCurVal >> 2) * sizeof(szRaceFile));
                 }
                 lSaltCur = vplr.lSalt;
                 lSaltLast = 0;
@@ -798,10 +799,10 @@ INT_PTR CALLBACK NewGameDlg2(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
                 prcSav = vrgrcRCW;
                 if (RaceCreationWizard(hwnd, FALSE, FALSE) != 0) {
                     vrgrcRCW = prcSav;
-                    if ((iCurVal & 3) == 1 || strcmp(szRaceFile, vrgszFileNew + (iCurVal >> 2) * 13) != 0)
+                    if ((iCurVal & 3) == 1 || strcmp(szRaceFile, vrgszFileNew + (iCurVal >> 2) * sizeof(szRaceFile)) != 0)
                         goto PlaceNew;
                     vrgplrNew[iCurVal >> 2] = vplr;
-                    strcpy(vrgszFileNew + (iCurVal >> 2) * 13, szRaceFile);
+                    strcpy(vrgszFileNew + (iCurVal >> 2) * sizeof(szRaceFile), szRaceFile);
                     iNewVal = iCurVal;
                     iCurVal = -1;
                 }
@@ -913,12 +914,12 @@ void DrawNewGame2(HWND hwnd, HDC hdc, int16_t iDraw) {
             wsprintf(szWork, szT, PszGetCompressedString(idsHumanoid + iPlr));
             break;
         case 2:
-            if (!fRCWReadOnly && gd.fNoHostNames && vrgszFileNew[iPlr * 13] != 0) {
-                wsprintf(szWork, " %s", vrgszFileNew + iPlr * 13);
+            if (!fRCWReadOnly && gd.fNoHostNames && vrgszFileNew[iPlr * sizeof(szRaceFile)] != 0) {
+                wsprintf(szWork, " %s", vrgszFileNew + iPlr * sizeof(szRaceFile));
                 break;
             }
-            if (vrgszFileNew[iPlr * 13] != 0) {
-                wsprintf(szWork, PszGetCompressedString(!fRCWReadOnly ? idsSS2 : idsS), vrgplrNew[iPlr].szNames, vrgszFileNew + iPlr * 13);
+            if (vrgszFileNew[iPlr * sizeof(szRaceFile)] != 0) {
+                wsprintf(szWork, PszGetCompressedString(!fRCWReadOnly ? idsSS2 : idsS), vrgplrNew[iPlr].szNames, vrgszFileNew + iPlr * sizeof(szRaceFile));
                 break;
             }
             wsprintf(szWork, PszGetCompressedString(idsS), vrgplrNew[iPlr].szNames);

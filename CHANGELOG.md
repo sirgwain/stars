@@ -46,6 +46,18 @@ produce different results from a 2.6j host for the same turn.
 
 ### Fixed
 
+- `PszPlayerName` now trims an all-space name without moving its pointer
+  before the start of the local buffer. Such a name displays the usual
+  fallback, `No Name`. Turn generation and file formats are unchanged.
+- `BattlePlansDlg` no longer reads before a battle plan's name when copying
+  one with fewer than three characters. It still adds the usual ` (2)`
+  suffix. Turn generation and file formats are unchanged.
+- `NewGameDlg` now truncates a long file-derived default title to fit the
+  32-byte game name when its name box is blank. Turn generation and file
+  formats are unchanged.
+- `NewGameWizard` now gives each temporary race file name the full 16 bytes
+  accepted by the race dialogs. A 13- to 15-character name previously ran
+  into the next player's slot. Turn generation and file formats are unchanged.
 - `UnpackBattlePlan` no longer reads past its stack buffer when a record
   claims a compressed name longer than the bytes the buffer holds. Valid
   names, turn generation and file formats are unchanged.

@@ -363,11 +363,11 @@ char *PszPlayerName(int16_t iPlayer, int16_t fCapital, int16_t fPlural, int16_t 
         } else {
             strcat(szName, pplr->szName);
         }
-        pchEnd = &szName[strlen(szName) - 1];
-        while (*pchEnd == ' ' && pchEnd >= szName) {
-            *pchEnd-- = 0;
+        pchEnd = szName + strlen(szName);
+        while (pchEnd > szName && pchEnd[-1] == ' ') {
+            *--pchEnd = 0;
         }
-        if (pchEnd < szName) {
+        if (pchEnd == szName) {
             CchGetString(idsName, szName);
         }
         if (fPlural && pplr->szNames[0] == 0) {

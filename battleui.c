@@ -309,7 +309,7 @@ INT_PTR CALLBACK BattlePlansDlg(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
             iPlanSelDlg = rgcbtlplan[idPlayer]++;
             cLen = strlen(btlplan.szName);
             if (cLen <= 27) {
-                if (btlplan.szName[cLen - 1] != ')' || isdigit(btlplan.szName[cLen - 2]) == 0 || btlplan.szName[cLen - 3] != '(') {
+                if (cLen < 3 || btlplan.szName[cLen - 1] != ')' || isdigit(btlplan.szName[cLen - 2]) == 0 || btlplan.szName[cLen - 3] != '(') {
                     strcpy(&btlplan.szName[cLen], " (2)");
                 } else if (btlplan.szName[cLen - 2] == '9') {
                     btlplan.szName[cLen - 2] = '0';
